@@ -166,6 +166,47 @@ can be published either through the Pages Git integration or entirely from CI.
 
 ---
 
+## Registering a domain
+
+While the site lives on `*.pages.dev`, its age belongs to Cloudflare. Search engines date a site
+from the domain, and domain age is not something that can be bought or backfilled later — it only
+starts counting from the day of registration. That is the whole argument for registering early
+rather than after the content is good.
+
+Availability and price below were read from Cloudflare Registrar's live registry check
+(`POST /accounts/{account_id}/registrar/domain-check`), which is authoritative and at-cost — the
+registrar charges the registry fee with no markup. Prices are USD per year and were current when
+recorded:
+
+| Domain | Register | Renew | Notes |
+| --- | --- | --- | --- |
+| `vps-deals.com` | 10.46 | 10.46 | exact match to `brand`; flat renewal |
+| `vps-deals-radar.com` | 10.46 | 10.46 | matches the current Pages project name |
+| `vps-deals.org` | 8.50 | 11.20 | cheaper first year, dearer to keep |
+| `vps-deals.net` | 11.86 | 11.86 | |
+| `vps-deals.io` | 32.00 | 50.00 | renewal is the real price |
+
+Every `vpsdeals.*` without the hyphen (`vpsdeals.com`, `.net`, `.org`, `.co`) is already
+registered by someone else, as is `vpsradar.com`. The hyphenated form is the one that is free.
+
+Two things block an automated registration, and both need a human:
+
+1. **The account has no billing profile.** `GET /accounts/{account_id}/billing/profile` returns
+   `1324 Your billing profile could not be loaded`. A payment method must be added at
+   `https://dash.cloudflare.com/{account_id}/billing/payment-info` first. Registration charges
+   that card and, per the API, **all successful registrations are non-refundable**.
+2. **Registrant contact details.** A `.com` registration requires
+   `contacts.registrant` with `phone`, `email` and `postal_info`. Those are the owner's real
+   details and are not something this project should invent.
+
+Once registered, the domain needs a DNS record pointing at the Pages project, and then every
+canonical, Open Graph URL and `sitemap.xml` entry must switch from `*.pages.dev` to the new
+domain. `base_url` is derived from `domain` in `.ilang/site.ilang`, so that is a one-line change
+followed by a rebuild — but it must happen in the same step as the DNS cutover, or the site will
+be serving canonicals that point at the old host.
+
+---
+
 ## A note on affiliate links
 
 Some outbound links may become affiliate links once a provider's published partner programme
