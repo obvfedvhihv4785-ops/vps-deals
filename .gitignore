@@ -10,6 +10,9 @@ _probe*.py
 _candidates.json
 _cache_*.txt
 
+# Wrangler's local deploy cache — machine state, never part of the site
+.wrangler/
+
 # OS noise
 .DS_Store
 Thumbs.db
