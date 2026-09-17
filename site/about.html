@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Method &amp; data sources — VPS Deals Radar</title>
+<meta name="description" content="How every price on this site is collected, what happens when a source cannot be read, and what is deliberately never done.">
+<link rel="canonical" href="https://vps-deals.pages.dev/about.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="VPS Deals Radar">
+<meta property="og:title" content="Method &amp; data sources — VPS Deals Radar">
+<meta property="og:description" content="How every price on this site is collected, what happens when a source cannot be read, and what is deliberately never done.">
+<meta property="og:url" content="https://vps-deals.pages.dev/about.html">
+<meta property="og:locale" content="en-US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Method &amp; data sources — VPS Deals Radar">
+<meta name="twitter:description" content="How every price on this site is collected, what happens when a source cannot be read, and what is deliberately never done.">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Where do these prices come from?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Every price is read from the provider's own public pricing or VPS page at build time. Each one is shown next to the exact sentence it was taken from, and the page it came from is linked. Nothing is typed in by hand."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why do some providers show no price?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Some pages render their prices with client-side JavaScript, and some refuse automated requests. In those cases no number is published at all, because a guessed or remembered price would be worse than none."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How often is this page updated?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The pipeline runs every 6 hours on a scheduled job. Each run re-reads every source page and commits whatever changed."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does 'stale' mean?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It means a refresh attempt failed for that provider, so the last successfully verified price is still shown together with the date it was verified. It is never presented as current."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you get paid for the links?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Some outbound links may become affiliate links once a provider's published programme accepts this site. That never changes which price is shown, and the price always comes from the provider's own page."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://vps-deals.pages.dev/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "About",
+      "item": "https://vps-deals.pages.dev/about.html"
+    }
+  ]
+}
+</script>
+
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">
+      <span class="brand-mark">VPS</span>
+      <span class="brand-text">VPS Deals Radar</span>
+    </a>
+    <nav class="site-nav">
+      <a href="/">Providers</a>
+      <a href="/compare.html">Compare</a>
+      <a href="/about.html" class="on">Method</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="hero">
+    <h1>Method and data sources</h1>
+    <p class="lede">
+      Everything on VPS Deals Radar is produced by a small, fully deterministic pipeline. No model
+      runs at page-generation time, no API key is used, and no number is ever typed in by hand.
+      This page explains exactly what happens, so you can check it instead of trusting it.
+    </p>
+  </div>
+
+  <div class="prose">
+    <h2>Where the data comes from</h2>
+    <p>
+      Each provider's <em>own</em> public pricing or VPS page is fetched over plain HTTP on a
+      schedule. Only publicly reachable pages are read: nothing behind a login, nothing requiring
+      a bypass of anti-bot protection, and <code>robots.txt</code> is honoured. The pipeline reads
+      15 source pages per run and tracks 15 providers.
+    </p>
+    <p>
+      This site is not a scraper of other comparison sites. There is no second-hand data. If a
+      provider's page cannot be read, the entry says so.
+    </p>
+
+    <h2>How a price is chosen</h2>
+    <p>
+      From each page the pipeline extracts every monthly-looking figure together with the literal
+      text around it. It then discards anything that is clearly not a plan price — hourly rates,
+      annual rates, backup add-ons, extra IP addresses, minimum spend figures — and publishes the
+      cheapest survivor.
+    </p>
+    <p>
+      The discarded figures are not thrown away. They are listed on each provider page with the
+      reason they were rejected, so the filtering can be audited rather than believed.
+    </p>
+
+    <h2>What happens when something fails</h2>
+    <div class="rulebox">
+      <ul>
+        <li><strong>Page blocks the request</strong> — no price is published. The entry is marked
+          as blocked and links to the provider instead.</li>
+        <li><strong>Price only exists in JavaScript</strong> — no price is published, because the
+          pipeline only reads what the server actually returns.</li>
+        <li><strong>A refresh fails after a previous success</strong> — the last verified price is
+          kept but explicitly labelled <em>stale</em>, with the date it was verified.</li>
+        <li><strong>The page states an end date that has passed</strong> — the offer is kept for
+          the record and marked expired, never shown as live.</li>
+      </ul>
+    </div>
+
+    <h2>What this pipeline never does</h2>
+    <div class="rulebox">
+      <ul>
+        <li>It never invents a price, a discount, a rating, or a review count.</li>
+        <li>It never estimates a missing figure from a similar provider.</li>
+        <li>It never carries a number forward without marking it stale and dating it.</li>
+        <li>It never buys traffic, follows, or engagement.</li>
+        <li>It never publishes structured data for a price it cannot quote.</li>
+      </ul>
+    </div>
+    <p>
+      Those rules are not documentation written after the fact. They are declared in the
+      repository's configuration file, which the code reads at build time.
+    </p>
+
+    <h2>How often it updates</h2>
+    <p>
+      A scheduled job runs every 6 hours. It re-reads every source
+      page, rebuilds the site, and commits whatever changed. The date shown on each entry is the
+      date that specific provider's page was last read — not the date of the most recent run in
+      general.
+    </p>
+
+    <h2>Money</h2>
+    <p>
+      This site sells nothing and takes no payment. Some outbound links may be affiliate links
+      once a provider's published partner programme accepts this site. Affiliate status never
+      influences which price appears, because the price is not chosen by a person — it is whatever
+      the extraction step returns. Where an affiliate link is in use, it replaces the plain link to
+      the same destination.
+    </p>
+
+    <h2>Questions</h2>
+
+    <h3>Where do these prices come from?</h3>
+    <p>Every price is read from the provider&#x27;s own public pricing or VPS page at build time. Each one is shown next to the exact sentence it was taken from, and the page it came from is linked. Nothing is typed in by hand.</p>
+
+    <h3>Why do some providers show no price?</h3>
+    <p>Some pages render their prices with client-side JavaScript, and some refuse automated requests. In those cases no number is published at all, because a guessed or remembered price would be worse than none.</p>
+
+    <h3>How often is this page updated?</h3>
+    <p>The pipeline runs every 6 hours on a scheduled job. Each run re-reads every source page and commits whatever changed.</p>
+
+    <h3>What does &#x27;stale&#x27; mean?</h3>
+    <p>It means a refresh attempt failed for that provider, so the last successfully verified price is still shown together with the date it was verified. It is never presented as current.</p>
+
+    <h3>Do you get paid for the links?</h3>
+    <p>Some outbound links may become affiliate links once a provider&#x27;s published programme accepts this site. That never changes which price is shown, and the price always comes from the provider&#x27;s own page.</p>
+
+
+    <h2>Check it yourself</h2>
+    <p>
+      Every entry on this site links to the exact page its number came from. Open the link, search
+      the page for the quoted text, and see whether the figure is there. If it is not, the entry is
+      wrong and should be reported.
+    </p>
+    <p class="sub">Last pipeline run: 17 Sep 2026, 22:37 UTC.</p>
+  </div>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p class="foot-note">
+      <strong>VPS Deals Radar</strong> tracks 15 VPS providers.
+      14 have a machine-readable monthly price. Every price is quoted from the
+      provider's own public page and shown with the exact text it came from.
+      Last pipeline run 17 Sep 2026, 22:37 UTC.
+    </p>
+    <p class="foot-note dim">
+      Prices are read automatically and can change at any time — always confirm on the
+      provider's site before buying. Some outbound links may be affiliate links; this never
+      affects which price is shown. No price on this site is estimated, remembered, or typed
+      in by hand.
+    </p>
+    <p class="foot-note dim">
+      <a href="/about.html">Method &amp; data sources</a> ·
+      <a href="/sitemap.xml">Sitemap</a>
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>

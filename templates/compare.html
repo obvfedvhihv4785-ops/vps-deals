@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="{{ site.locale }}">
+<head>
+{% include "partials/head.html" %}</head>
+<body>
+{% include "partials/header.html" %}
+<main class="wrap">
+
+  <div class="hero">
+    <h1>VPS price comparison</h1>
+    <p class="lede">
+      Every provider this pipeline tracks, with the lowest monthly price it could read from that
+      provider's own page. Prices are grouped by currency and were all captured on
+      {{ site.generated_display }}.
+    </p>
+    <div class="stats">
+      <div class="stat"><b>{{ stats.priced }}</b><span>priced providers</span></div>
+      <div class="stat"><b>{{ stats.tracked }}</b><span>tracked in total</span></div>
+      <div class="stat"><b>{{ stats.sources }}</b><span>source pages read</span></div>
+    </div>
+  </div>
+
+  <section>
+    <h2>Side by side</h2>
+    <p class="sub">
+      "From" is the cheapest monthly figure stated on the provider's page. Currencies are not
+      converted — no exchange rate is applied, because that would make the numbers less true, not
+      more.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th><th>Provider</th><th>From</th><th>Advertised discount</th>
+            <th>Status</th><th>Last verified</th><th></th>
+          </tr>
+        </thead>
+        <tbody>
+{% for o in offers %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>
+              <a href="/provider/{{ o.slug }}.html">{{ o.provider }}</a>
+              <p class="sub">{{ o.status_label }}</p>
+            </td>
+            <td class="num">{% if o.show_price %}{{ o.price_display }}<span class="sub">/mo</span>{% else %}—{% endif %}</td>
+            <td>{% if o.discount_label %}{{ o.discount_label }}{% else %}—{% endif %}</td>
+            <td>
+{% if o.show_price %}<span class="badge ok">verified</span>
+{% else %}<span class="badge warn">no price</span>
+{% endif %}
+{% if o.stale %}<span class="badge warn">stale</span>{% endif %}
+{% if o.expired %}<span class="badge stop">expired</span>{% endif %}
+            </td>
+            <td>{{ o.last_verified_display }}</td>
+            <td><a href="{{ o.cta_url }}" rel="nofollow noopener" target="_blank">Open ↗</a></td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>What this comparison does not do</h2>
+    <div class="rulebox">
+      <ul>
+        <li>It does not rank providers by quality — only by the price their own page states.</li>
+        <li>It does not normalise specs. A $2 plan and a $40 plan are not the same product, and the
+          cheapest figure is usually a small entry plan.</li>
+        <li>It does not convert currencies. USD and EUR entries are listed as published.</li>
+        <li>It does not fill gaps. A provider with no readable price shows a dash, never an
+          estimate.</li>
+      </ul>
+    </div>
+    <p class="sub"><a href="/about.html">Read the full method →</a></p>
+  </section>
+
+</main>
+{% include "partials/footer.html" %}
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="{{ site.locale }}">
+<head>
+{% include "partials/head.html" %}</head>
+<body>
+{% include "partials/header.html" %}
+<main class="wrap">
+
+  <nav class="crumbs"><a href="/">Home</a> › Providers › {{ o.provider }}</nav>
+
+  <div class="hero">
+    <h1>{{ o.provider }} VPS pricing</h1>
+    <p class="lede">
+{% if o.show_price %}
+      The lowest monthly price currently readable in {{ o.provider }}'s own HTML is
+      <strong>{{ o.price_display }}</strong>. Below is the full set of plan prices the page
+      stated, together with the exact text each one was taken from.
+{% else %}
+      {{ o.provider }}'s page could not be read as a number on the last run. Rather than publish a
+      guess, this entry carries no price. The provider's own page is linked below.
+{% endif %}
+    </p>
+    <div class="facts">
+      <div class="fact"><span>Lowest readable price</span><b>{% if o.show_price %}{{ o.price_display }}/mo{% else %}not available{% endif %}</b></div>
+      <div class="fact"><span>Status</span><b>{{ o.status_label }}</b></div>
+      <div class="fact"><span>Last verified</span><b>{{ o.last_verified_display }}</b></div>
+      <div class="fact"><span>Source page</span><b><a href="{{ o.offer_url }}" rel="nofollow noopener" target="_blank">open ↗</a></b></div>
+    </div>
+    <div class="cta-row">
+      <a class="btn" href="{{ o.cta_url }}" rel="nofollow noopener" target="_blank">{{ o.provider }} official pricing ↗</a>
+      <a class="btn ghost" href="/deal/{{ o.slug }}.html">Deal details</a>
+    </div>
+  </div>
+
+{% if o.stale %}
+  <section>
+    <p class="note">
+      The most recent refresh of {{ o.provider }} failed ({{ o.fetch_status }}), so the price above
+      is the last one we verified, on {{ o.last_verified_display }}. It is shown as stale rather
+      than silently refreshed from memory.
+    </p>
+  </section>
+{% endif %}
+{% if not o.show_price %}
+  <section>
+    <p class="note">{{ o.note }}</p>
+  </section>
+{% endif %}
+{% if o.expired %}
+  <section>
+    <p class="note">
+      The page stated this offer ends {{ o.valid_until }}, which has passed. It is kept for the
+      record but is not presented as a live offer.
+    </p>
+  </section>
+{% endif %}
+
+{% if o.has_price %}
+  <section>
+    <h2>Where this number came from</h2>
+    <p class="sub">
+      Read from <a href="{{ o.offer_url }}" rel="nofollow noopener" target="_blank">{{ o.offer_url }}</a>
+      on {{ o.fetched_display }}.
+    </p>
+    <p class="evidence-label">Quoted page text</p>
+    <p class="evidence">{{ o.price_evidence }}</p>
+  </section>
+
+  <section>
+    <h2>All plan prices found on the page</h2>
+    <p class="sub">
+      Figures the pipeline rejected are listed too, with the reason — so you can check the
+      filtering rather than trust it.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Price</th><th>Billing basis</th><th>Used?</th><th>Text it came from</th></tr>
+        </thead>
+        <tbody>
+{% for c in o.candidates %}
+          <tr>
+            <td class="num">{{ c.display }}</td>
+            <td>{{ c.context }}</td>
+            <td>{% if c.eligible %}yes{% else %}no — {{ c.tier }}{% endif %}</td>
+            <td><span class="evidence">{{ c.evidence }}</span></td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+{% endif %}
+
+{% if o.summary %}
+  <section>
+    <h2>{{ o.provider }}'s own summary of this page</h2>
+    <p class="sub">Meta description published by {{ o.provider }}, quoted verbatim.</p>
+    <p class="evidence">{{ o.summary }}</p>
+  </section>
+{% endif %}
+
+  <section>
+    <h2>Compare with other providers</h2>
+    <p class="sub">
+      <a href="/compare.html">See all tracked providers side by side →</a>
+    </p>
+  </section>
+
+</main>
+{% include "partials/footer.html" %}
+</body>
+</html>

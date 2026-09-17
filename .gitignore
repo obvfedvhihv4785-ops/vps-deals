@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local scratch / one-off probes — not part of the pipeline
+*.local
+
+# OS noise
+.DS_Store
+Thumbs.db
+desktop.ini

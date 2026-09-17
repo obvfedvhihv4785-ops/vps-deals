@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="{{ site.locale }}">
+<head>
+{% include "partials/head.html" %}</head>
+<body>
+{% include "partials/header.html" %}
+<main class="wrap">
+
+  <nav class="crumbs">
+    <a href="/">Home</a> › <a href="/provider/{{ o.slug }}.html">{{ o.provider }}</a> › Deal
+  </nav>
+
+  <div class="hero">
+{% if o.show_price %}
+    <h1>{{ o.provider }} VPS — {{ o.price_display }}/month</h1>
+    <p class="lede">
+      This is the cheapest monthly price the pipeline could find in {{ o.provider }}'s own HTML,
+      captured {{ o.last_verified_display }}.
+{% if o.discount_label %} The same page also advertises <strong>{{ o.discount_label }}</strong>.{% endif %}
+      Check the provider's page before buying — hosting prices change often.
+    </p>
+{% else %}
+    <h1>{{ o.provider }} VPS</h1>
+    <p class="lede">
+      No machine-readable monthly price was available for {{ o.provider }} on the last run
+      ({{ o.status_label }}). This page therefore carries no figure at all. Use the link below to
+      check the provider directly.
+    </p>
+{% endif %}
+
+    <div class="facts">
+      <div class="fact"><span>Price</span><b>{% if o.show_price %}{{ o.price_display }}/mo {{ o.price_currency }}{% else %}not published{% endif %}</b></div>
+      <div class="fact"><span>Provider</span><b>{{ o.provider }}</b></div>
+      <div class="fact"><span>Verified</span><b>{{ o.last_verified_display }}</b></div>
+{% if o.valid_until %}
+      <div class="fact"><span>Offer ends</span><b>{{ o.valid_until }}</b></div>
+{% endif %}
+    </div>
+
+    <div class="cta-row">
+      <a class="btn" href="{{ o.cta_url }}" rel="nofollow noopener" target="_blank">
+        {% if o.show_price %}Get this plan at {{ o.provider }} ↗{% else %}Check {{ o.provider }} pricing ↗{% endif %}
+      </a>
+      <a class="btn ghost" href="/provider/{{ o.slug }}.html">Full {{ o.provider }} profile</a>
+    </div>
+  </div>
+
+{% if o.expired %}
+  <section>
+    <p class="note">
+      The provider stated this offer ends {{ o.valid_until }}, and that date has passed. It is
+      recorded here for reference only and is not a live offer.
+    </p>
+  </section>
+{% endif %}
+{% if o.stale %}
+  <section>
+    <p class="note">
+      The latest refresh failed, so this is the last successfully verified price, from
+      {{ o.last_verified_display }}. Treat it as historical rather than current.
+    </p>
+  </section>
+{% endif %}
+{% if not o.show_price %}
+  <section>
+    <p class="note">{{ o.note }}</p>
+  </section>
+{% endif %}
+
+{% if o.has_price %}
+  <section>
+    <h2>The evidence</h2>
+    <p class="sub">
+      Taken from <a href="{{ o.offer_url }}" rel="nofollow noopener" target="_blank">{{ o.offer_url }}</a>
+      on {{ o.fetched_display }}. This is the literal text the figure was read from.
+    </p>
+    <p class="evidence-label">Quoted page text</p>
+    <p class="evidence">{{ o.price_evidence }}</p>
+  </section>
+{% endif %}
+
+{% if o.discount_label %}
+  <section>
+    <h2>Advertised discount</h2>
+    <p class="sub">Quoted from the same page.</p>
+    <p class="evidence-label">Quoted page text</p>
+    <p class="evidence">{{ o.discount_evidence }}</p>
+  </section>
+{% endif %}
+
+  <section>
+    <h2>Before you buy</h2>
+    <div class="rulebox">
+      <ul>
+        <li>Prices on hosting sites change frequently and intro rates usually renew higher.
+          Confirm the current price, term, and renewal rate on {{ o.provider }}'s own page.</li>
+        <li>The figure above is the lowest one stated on the page — it may be a small plan or a
+          promotional first term, not the plan you actually want.</li>
+        <li>{{ site.name }} takes no payment and sells nothing. Some outbound links may be
+          affiliate links, which never changes the price shown.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Other providers</h2>
+    <p class="sub"><a href="/compare.html">Compare every tracked provider →</a></p>
+  </section>
+
+</main>
+{% include "partials/footer.html" %}
+</body>
+</html>

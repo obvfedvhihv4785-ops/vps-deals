@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="{{ site.locale }}">
+<head>
+{% include "partials/head.html" %}</head>
+<body>
+{% include "partials/header.html" %}
+<main class="wrap">
+
+  <div class="hero">
+    <h1>VPS prices, read straight off the providers' own pages</h1>
+    <p class="lede">
+      {{ site.name }} re-reads {{ stats.tracked }} hosting providers' public pricing pages on a
+      schedule and publishes the lowest monthly price it can actually find in the HTML. Every
+      figure below is quoted from the provider's own page — the exact sentence it came from is
+      shown on each entry. Nothing here is estimated or hand-typed.
+    </p>
+    <div class="stats">
+      <div class="stat"><b>{{ stats.tracked }}</b><span>providers tracked</span></div>
+      <div class="stat"><b>{{ stats.priced }}</b><span>with a real price</span></div>
+      <div class="stat"><b>{{ site.update_interval_hours }}h</b><span>refresh cycle</span></div>
+      <div class="stat"><b>{{ site.generated_display }}</b><span>last run</span></div>
+    </div>
+  </div>
+
+  <section id="providers">
+    <h2>Cheapest verified plan at each provider</h2>
+    <p class="sub">
+      Sorted by price within each currency. Providers whose pricing pages are JavaScript-only or
+      refuse automated requests are listed separately — with no number, because a guess would be
+      worse than a blank.
+    </p>
+    <div class="cards">
+{% for o in offers %}
+      <article class="card">
+        <div class="card-head">
+          <h3><a href="/provider/{{ o.slug }}.html">{{ o.provider }}</a></h3>
+{% if o.show_price %}
+          <div class="price">{{ o.price_display }}<small>/mo</small></div>
+{% else %}
+          <div class="price none">no readable price</div>
+{% endif %}
+        </div>
+        <div class="card-meta">
+{% if o.show_price %}
+          <span class="badge ok">verified {{ o.fetched_display }}</span>
+{% else %}
+          <span class="badge warn">{{ o.status_label }}</span>
+{% endif %}
+{% if o.discount_label %}
+          <span class="badge deal">{{ o.discount_label }}</span>
+{% endif %}
+{% if o.stale %}
+          <span class="badge warn">stale</span>
+{% endif %}
+{% if o.expired %}
+          <span class="badge stop">offer expired</span>
+{% endif %}
+        </div>
+{% if o.summary %}
+        <p class="sum">{{ o.summary }}</p>
+{% endif %}
+        <div class="actions">
+          <a href="/deal/{{ o.slug }}.html">Deal details →</a>
+          <a href="{{ o.cta_url }}" rel="nofollow noopener" target="_blank">Official page ↗</a>
+        </div>
+      </article>
+{% endfor %}
+    </div>
+  </section>
+
+  <section>
+    <h2>How to read this table</h2>
+    <div class="rulebox">
+      <ul>
+        <li><strong>verified</strong> — the number was in the page's HTML on the date shown, and the
+          quoted text is displayed on the entry.</li>
+        <li><strong>stale</strong> — the last refresh failed for this provider. The previously
+          verified price is kept and labelled with the date it was verified. It is never shown as
+          current.</li>
+        <li><strong>no readable price</strong> — the page loaded but exposed no monthly price in its
+          HTML (usually JavaScript-rendered), or it blocked the request. No number is published.</li>
+        <li><strong>Intro prices</strong> — where a provider advertises a discounted first term and a
+          higher renewal rate, both appear on the entry. The headline figure is the cheapest price
+          the page actually states.</li>
+      </ul>
+    </div>
+    <p class="sub">
+      Full method, including what this pipeline deliberately refuses to do:
+      <a href="/about.html">read the method page</a>.
+    </p>
+  </section>
+
+</main>
+{% include "partials/footer.html" %}
+</body>
+</html>

@@ -1,0 +1,1256 @@
+{
+  "schema": "vps-deals-promo-radar/offers@1",
+  "generated_at": "2026-09-17T22:37:29Z",
+  "config_path": ".ilang/site.ilang",
+  "config_sha256_16": "4d9e0b6b5b9f1367",
+  "brand": "vps-deals",
+  "niche": "vps 主机",
+  "domain": "vps-deals.pages.dev",
+  "locale": "en-US",
+  "site_currency": "USD",
+  "providers_configured": 15,
+  "providers_with_price": 14,
+  "notes": [
+    "Every price carries price_evidence: the literal page text it was matched from.",
+    "A provider with no price key means no machine-readable monthly price was found; no figure was invented.",
+    "stale=true means a refetch failed and the last verified price is shown with its date."
+  ],
+  "offers": [
+    {
+      "provider": "DigitalOcean",
+      "homepage": "https://www.digitalocean.com/",
+      "offer_url": "https://www.digitalocean.com/pricing/droplets",
+      "affiliate_url": "",
+      "source_url": "https://www.digitalocean.com/pricing/droplets",
+      "fetched_at": "2026-09-17T22:36:47Z",
+      "http_status": 200,
+      "title": "Droplet Pricing | DigitalOcean",
+      "summary": "Helping millions of developers easily build, test, manage, and scale applications of any size - faster than ever before.",
+      "page_chars": 20859,
+      "price_candidates_count": 2,
+      "price_candidates": [
+        {
+          "currency": "USD",
+          "value": 4.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…ty of price points. Bundled Plans start from as low as $ 4 per month , with pricing based on the amount of RAM, CPU, SSD st…"
+        },
+        {
+          "currency": "USD",
+          "value": 5.0,
+          "context": "from",
+          "tier": "weak",
+          "eligible": true,
+          "reason": "no accessory marker, but no server/plan wording nearby",
+          "evidence": "…will be fully utilized, and your card will be charged only $5. Since the credit is valid for 90 days, you won&#x27;t…"
+        }
+      ],
+      "status": "ok",
+      "price": 4.0,
+      "currency": "USD",
+      "price_context": "monthly",
+      "price_tier": "plan",
+      "price_evidence": "…ty of price points. Bundled Plans start from as low as $ 4 per month , with pricing based on the amount of RAM, CPU, SSD st…",
+      "price_reason": "server/plan wording nearby"
+    },
+    {
+      "provider": "Hostinger",
+      "homepage": "https://www.hostinger.com/",
+      "offer_url": "https://www.hostinger.com/vps-hosting",
+      "affiliate_url": "",
+      "source_url": "https://www.hostinger.com/vps-hosting",
+      "fetched_at": "2026-09-17T22:36:51Z",
+      "http_status": 200,
+      "title": "VPS Hosting | Powerful KVM-based Virtual Private Server",
+      "summary": "AI-managed KVM VPS hosting with up to 70% off. Full root access, AMD EPYC processors, NVMe SSD, and free weekly backups. Automate your server with Hostinger Agent AI.",
+      "page_chars": 26233,
+      "price_candidates_count": 8,
+      "price_candidates": [
+        {
+          "currency": "USD",
+          "value": 6.49,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…FAQ Choose your VPS hosting plan 67% off KVM 1 $ 19.49 $ 6.49 /mo Choose plan Renews at $11.99/mo for 2 years. Cancel an…"
+        },
+        {
+          "currency": "USD",
+          "value": 8.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…pace 4 TB bandwidth MOST POPULAR 63% off KVM 2 $ 24.49 $ 8.99 /mo Choose plan Renews at $14.99/mo for 2 years. Cancel an…"
+        },
+        {
+          "currency": "USD",
+          "value": 11.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…67% off KVM 1 $ 19.49 $ 6.49 /mo Choose plan Renews at $11.99/mo for 2 years. Cancel anytime. 1 vCPU core 4 GB RAM 50 G…"
+        },
+        {
+          "currency": "USD",
+          "value": 12.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…B NVMe disk space 8 TB bandwidth 70% off KVM 4 $ 42.99 $ 12.99 /mo Choose plan Renews at $28.99/mo for 2 years. Cancel an…"
+        },
+        {
+          "currency": "USD",
+          "value": 14.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…63% off KVM 2 $ 24.49 $ 8.99 /mo Choose plan Renews at $14.99/mo for 2 years. Cancel anytime. 2 vCPU cores 8 GB RAM 100…"
+        },
+        {
+          "currency": "USD",
+          "value": 25.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…NVMe disk space 16 TB bandwidth 65% off KVM 8 $ 73.99 $ 25.99 /mo Choose plan Renews at $49.99/mo for 2 years. Cancel an…"
+        },
+        {
+          "currency": "USD",
+          "value": 28.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…0% off KVM 4 $ 42.99 $ 12.99 /mo Choose plan Renews at $28.99/mo for 2 years. Cancel anytime. 4 vCPU cores 16 GB RAM 20…"
+        },
+        {
+          "currency": "USD",
+          "value": 49.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…5% off KVM 8 $ 73.99 $ 25.99 /mo Choose plan Renews at $49.99/mo for 2 years. Cancel anytime. 8 vCPU cores 32 GB RAM 40…"
+        }
+      ],
+      "status": "ok",
+      "price": 6.49,
+      "currency": "USD",
+      "price_context": "monthly",
+      "price_tier": "plan",
+      "price_evidence": "…FAQ Choose your VPS hosting plan 67% off KVM 1 $ 19.49 $ 6.49 /mo Choose plan Renews at $11.99/mo for 2 years. Cancel an…",
+      "price_reason": "server/plan wording nearby",
+      "discount": {
+        "kind": "percent",
+        "value": 70,
+        "label": "70% off",
+        "evidence": "…building with confidence. Go to Learning lab EN Up to 70% off VPS hosting Virtual Private Servers for more power and…"
+      }
+    },
+    {
+      "provider": "IONOS",
+      "homepage": "https://www.ionos.com/",
+      "offer_url": "https://www.ionos.com/servers/vps",
+      "affiliate_url": "",
+      "source_url": "https://www.ionos.com/servers/vps",
+      "fetched_at": "2026-09-17T22:36:53Z",
+      "http_status": 200,
+      "title": "VPS Hosting | Virtual Private Servers | Starting at $4/month",
+      "summary": "Fast, reliable, yet low cost VPS hosting » Unlimited traffic up to 1 Gbit/s ✓ Root access ✓ SSD NVMe storage ✓ Money-back-guarantee ✓",
+      "page_chars": 25866,
+      "price_candidates_count": 7,
+      "price_candidates": [
+        {
+          "currency": "USD",
+          "value": 2.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…imited traffic and no setup fees See plans Starting at $ 2 /month VPS hosting VPS hosting at an unbeatable price Placeho…"
+        },
+        {
+          "currency": "USD",
+          "value": 4.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "VPS Hosting | Virtual Private Servers | Starting at $4/month New Momentum AI Domains & SSL Email & Office Websites…"
+        },
+        {
+          "currency": "USD",
+          "value": 5.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…60 GB NVMe Add to cart Placeholder VPS M+ Save 16% $14 $ 5 /month for 3 months with a 1-year term 2 vCores CPU 4 GB RAM…"
+        },
+        {
+          "currency": "USD",
+          "value": 6.0,
+          "context": "monthly",
+          "tier": "no",
+          "eligible": false,
+          "reason": "accessory lead-in 'Plesk'",
+          "evidence": "…el Full root access Administration tool Plesk Obsidian $6/month Control panel Encrypted remote access Email & domains…"
+        },
+        {
+          "currency": "USD",
+          "value": 8.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…120 GB NVMe Add to cart Bestseller VPS L+ Save 17% $25 $ 8 /month for 3 months with a 1-year term 4 vCores CPU 8 GB RAM…"
+        },
+        {
+          "currency": "USD",
+          "value": 14.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…0 GB NVMe Add to cart Placeholder VPS XL+ Save 18% $47 $ 14 /month for 3 months with a 1-year term 8 vCores CPU 16 GB RAM…"
+        },
+        {
+          "currency": "USD",
+          "value": 20.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…0 GB NVMe Add to cart Best value VPS XXL+ Save 18% $68 $ 20 /month for 3 months with a 1-year term 12 vCores CPU 24 GB RA…"
+        }
+      ],
+      "status": "ok",
+      "price": 2.0,
+      "currency": "USD",
+      "price_context": "monthly",
+      "price_tier": "plan",
+      "price_evidence": "…imited traffic and no setup fees See plans Starting at $ 2 /month VPS hosting VPS hosting at an unbeatable price Placeho…",
+      "price_reason": "server/plan wording nearby"
+    },
+    {
+      "provider": "OVHcloud",
+      "homepage": "https://www.ovhcloud.com/",
+      "offer_url": "https://www.ovhcloud.com/en/vps/",
+      "affiliate_url": "",
+      "source_url": "https://www.ovhcloud.com/en/vps/",
+      "fetched_at": "2026-09-17T22:36:57Z",
+      "http_status": 200,
+      "title": "VPS - Your virtual private server in the cloud | OVHcloud Worldwide",
+      "summary": "Migrate to the cloud with our VPS – all the advantages of a dedicated server at a lower price. Up to 8 vCores, 32 GB RAM, 640 GB NVMe, unlimited traffic.",
+      "page_chars": 45967,
+      "price_candidates_count": 5,
+      "price_candidates": [
+        {
+          "currency": "USD",
+          "value": 1.4,
+          "context": "monthly",
+          "tier": "no",
+          "eligible": false,
+          "reason": "accessory lead-in 'backup'",
+          "evidence": "…Your custom backup, with a rolling 7-day restore. From $1.40 /month Control panel Snapshots Easily back up and restore you…"
+        },
+        {
+          "currency": "USD",
+          "value": 4.54,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…ng, gaming, VPN, development and more. 2027 VPS-1 From $4.54 /month Configure 2 vCores 4 GB RAM 40 GB SSD NVMe Daily backu…"
+        },
+        {
+          "currency": "USD",
+          "value": 8.5,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…ited traffic 500 Mbps public bandwidth 2027 VPS-2 From $8.50 /month Configure 4 vCores 8 GB RAM 75 GB SSD NVMe Daily backu…"
+        },
+        {
+          "currency": "USD",
+          "value": 12.32,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…imited traffic 1 Gbps public bandwidth 2027 VPS-3 From $12.32 /month Configure 6 vCores 12 GB RAM 100 GB SSD NVMe Daily bac…"
+        },
+        {
+          "currency": "USD",
+          "value": 23.37,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…imited traffic 2 Gbps public bandwidth 2027 VPS-4 From $23.37 /month Configure 8 vCores 24 GB RAM 200 GB SSD NVMe Daily bac…"
+        }
+      ],
+      "status": "ok",
+      "price": 4.54,
+      "currency": "USD",
+      "price_context": "monthly",
+      "price_tier": "plan",
+      "price_evidence": "…ng, gaming, VPN, development and more. 2027 VPS-1 From $4.54 /month Configure 2 vCores 4 GB RAM 40 GB SSD NVMe Daily backu…",
+      "price_reason": "server/plan wording nearby"
+    },
+    {
+      "provider": "ScalaHosting",
+      "homepage": "https://www.scalahosting.com/",
+      "offer_url": "https://www.scalahosting.com/vps-hosting.html",
+      "affiliate_url": "",
+      "source_url": "https://www.scalahosting.com/vps-hosting.html",
+      "fetched_at": "2026-09-17T22:37:00Z",
+      "http_status": 200,
+      "title": "Managed Cloud Hosting - Rated 5/5 by 2,000+ Users | ScalaHosting",
+      "summary": "Get top-rated managed cloud hosting with ScalaHosting. Boost your site’s speed, security, and scalability with NVMe SSD storage, free SSL, and 24/7 managed support.",
+      "page_chars": 24154,
+      "price_candidates_count": 8,
+      "price_candidates": [
+        {
+          "currency": "USD",
+          "value": 29.95,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…ld your own Build #1 Turbo-fast NVMe SSD 36 M 12 M 1 M $ 29.95 /mo INTRO OFFER - SAVE 45 % Get Started $ 54.95 /mo when y…"
+        },
+        {
+          "currency": "USD",
+          "value": 44.95,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…Get Started Build #2 Turbo-fast NVMe SSD 36 M 12 M 1 M $ 44.95 /mo INTRO OFFER - SAVE 54 % Get Started $ 96.95 /mo when y…"
+        },
+        {
+          "currency": "USD",
+          "value": 54.95,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…M 1 M $ 29.95 /mo INTRO OFFER - SAVE 45 % Get Started $ 54.95 /mo when you renew Core Features 2 CPU Cores 4 GB RAM 50 G…"
+        },
+        {
+          "currency": "USD",
+          "value": 69.95,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…Get Started Build #3 Turbo-fast NVMe SSD 36 M 12 M 1 M $ 69.95 /mo INTRO OFFER - SAVE 59 % Get Started $ 170.95 /mo when…"
+        },
+        {
+          "currency": "USD",
+          "value": 94.95,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…Get Started Build #4 Turbo-fast NVMe SSD 36 M 12 M 1 M $ 94.95 /mo INTRO OFFER - SAVE 61 % Get Started $ 244.95 /mo when…"
+        },
+        {
+          "currency": "USD",
+          "value": 96.95,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…M 1 M $ 44.95 /mo INTRO OFFER - SAVE 54 % Get Started $ 96.95 /mo when you renew Core Features 4 CPU Cores 8 GB RAM 100…"
+        },
+        {
+          "currency": "USD",
+          "value": 170.95,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…M 1 M $ 69.95 /mo INTRO OFFER - SAVE 59 % Get Started $ 170.95 /mo when you renew Core Features 8 CPU Cores 16 GB RAM 150…"
+        },
+        {
+          "currency": "USD",
+          "value": 244.95,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…M 1 M $ 94.95 /mo INTRO OFFER - SAVE 61 % Get Started $ 244.95 /mo when you renew Core Features 12 CPU Cores 24 GB RAM 20…"
+        }
+      ],
+      "status": "ok",
+      "price": 29.95,
+      "currency": "USD",
+      "price_context": "monthly",
+      "price_tier": "plan",
+      "price_evidence": "…ld your own Build #1 Turbo-fast NVMe SSD 36 M 12 M 1 M $ 29.95 /mo INTRO OFFER - SAVE 45 % Get Started $ 54.95 /mo when y…",
+      "price_reason": "server/plan wording nearby"
+    },
+    {
+      "provider": "GreenGeeks",
+      "homepage": "https://www.greengeeks.com/",
+      "offer_url": "https://www.greengeeks.com/vps-hosting/",
+      "affiliate_url": "",
+      "source_url": "https://www.greengeeks.com/vps-hosting/",
+      "fetched_at": "2026-09-17T22:37:03Z",
+      "http_status": 200,
+      "title": "VPS Hosting - Fast Managed VPS Hosting - GreenGeeks",
+      "summary": "GreenGeeks® VPS Hosting on enterprise grade hardware with SSD storage, 24x7x365 support, 99.9% uptime and 30-day money back guarantee.",
+      "page_chars": 13869,
+      "price_candidates_count": 3,
+      "price_candidates": [
+        {
+          "currency": "USD",
+          "value": 69.95,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…oring  300% renewable energy match on every VPS. From $69.95/month View Plans  VPS Hosting Managed VPS hosting built to…"
+        },
+        {
+          "currency": "USD",
+          "value": 129.95,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…e stores, busy apps, and resource-intensive workloads. $129.95 /month Core Features  6 vCPU Cores  8 GB RAM  150 GB SSD S…"
+        },
+        {
+          "currency": "USD",
+          "value": 179.95,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…pplications, large stores, and high-traffic platforms. $179.95 /month Core Features  6 vCPU Cores  16 GB RAM  250 GB SSD…"
+        }
+      ],
+      "status": "ok",
+      "price": 69.95,
+      "currency": "USD",
+      "price_context": "monthly",
+      "price_tier": "plan",
+      "price_evidence": "…oring  300% renewable energy match on every VPS. From $69.95/month View Plans  VPS Hosting Managed VPS hosting built to…",
+      "price_reason": "server/plan wording nearby"
+    },
+    {
+      "provider": "Hostwinds",
+      "homepage": "https://www.hostwinds.com/",
+      "offer_url": "https://www.hostwinds.com/vps/",
+      "affiliate_url": "",
+      "source_url": "https://www.hostwinds.com/vps/",
+      "fetched_at": "2026-09-17T22:37:05Z",
+      "http_status": 200,
+      "title": "Linux VPS Hosting, SSD Virtual Private Servers | Hostwinds",
+      "summary": "Deploy Linux VPS hosting with root access, SSD storage, scalable resources, and multiple Linux operating systems.",
+      "page_chars": 10967,
+      "price_candidates_count": 21,
+      "price_candidates": [
+        {
+          "currency": "USD",
+          "value": 1.0,
+          "context": "monthly",
+          "tier": "no",
+          "eligible": false,
+          "reason": "accessory lead-in 'backup'",
+          "evidence": "…remental backups for your server. The backups are only $1 a month + $0.03 per GB, and we strongly urge you to add this s…"
+        },
+        {
+          "currency": "USD",
+          "value": 7.14,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…RAM 1 GB Storage 30 GB Bandwidth 1 TB Price $ 10.99/mo $ 7.14/mo Order $ 7.14/mo CPU 1 CPU RAM 2 GB Storage 50 GB Bandw…"
+        },
+        {
+          "currency": "USD",
+          "value": 10.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…CPU 1 CPU RAM 1 GB Storage 30 GB Bandwidth 1 TB Price $ 10.99/mo $ 7.14/mo Order $ 7.14/mo CPU 1 CPU RAM 2 GB Storage 5…"
+        },
+        {
+          "currency": "USD",
+          "value": 14.29,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…RAM 2 GB Storage 50 GB Bandwidth 2 TB Price $ 21.99/mo $ 14.29/mo Order $ 14.29/mo CPU 2 CPU RAM 4 GB Storage 75 GB Band…"
+        },
+        {
+          "currency": "USD",
+          "value": 21.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…CPU 1 CPU RAM 2 GB Storage 50 GB Bandwidth 2 TB Price $ 21.99/mo $ 14.29/mo Order $ 14.29/mo CPU 2 CPU RAM 4 GB Storage…"
+        },
+        {
+          "currency": "USD",
+          "value": 25.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…RAM 4 GB Storage 75 GB Bandwidth 2 TB Price $ 39.99/mo $ 25.99/mo Order $ 25.99/mo CPU 2 CPU RAM 6 GB Storage 100 GB Ban…"
+        },
+        {
+          "currency": "USD",
+          "value": 33.14,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…AM 6 GB Storage 100 GB Bandwidth 2 TB Price $ 50.99/mo $ 33.14/mo Order $ 33.14/mo CPU 4 CPU RAM 8 GB Storage 150 GB Ban…"
+        },
+        {
+          "currency": "USD",
+          "value": 39.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…CPU 2 CPU RAM 4 GB Storage 75 GB Bandwidth 2 TB Price $ 39.99/mo $ 25.99/mo Order $ 25.99/mo CPU 2 CPU RAM 6 GB Storage…"
+        },
+        {
+          "currency": "USD",
+          "value": 50.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…CPU 2 CPU RAM 6 GB Storage 100 GB Bandwidth 2 TB Price $ 50.99/mo $ 33.14/mo Order $ 33.14/mo CPU 4 CPU RAM 8 GB Storage…"
+        },
+        {
+          "currency": "USD",
+          "value": 51.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…AM 8 GB Storage 150 GB Bandwidth 3 TB Price $ 79.99/mo $ 51.99/mo Order $ 51.99/mo CPU 4 CPU RAM 12 GB Storage 200 GB Ba…"
+        },
+        {
+          "currency": "USD",
+          "value": 64.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…M 12 GB Storage 200 GB Bandwidth 4 TB Price $ 99.99/mo $ 64.99/mo Order $ 64.99/mo CPU 6 CPU RAM 16 GB Storage 300 GB Ba…"
+        },
+        {
+          "currency": "USD",
+          "value": 79.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…CPU 4 CPU RAM 8 GB Storage 150 GB Bandwidth 3 TB Price $ 79.99/mo $ 51.99/mo Order $ 51.99/mo CPU 4 CPU RAM 12 GB Storag…"
+        }
+      ],
+      "status": "ok",
+      "price": 7.14,
+      "currency": "USD",
+      "price_context": "monthly",
+      "price_tier": "plan",
+      "price_evidence": "…RAM 1 GB Storage 30 GB Bandwidth 1 TB Price $ 10.99/mo $ 7.14/mo Order $ 7.14/mo CPU 1 CPU RAM 2 GB Storage 50 GB Bandw…",
+      "price_reason": "server/plan wording nearby",
+      "discount": {
+        "kind": "percent",
+        "value": 50,
+        "label": "50% off",
+        "evidence": "…ged VPS Hosting. Manage your own server and save up to 50% off the price of your server. Explore Unmanaged Linux Feat…"
+      }
+    },
+    {
+      "provider": "DreamHost",
+      "homepage": "https://www.dreamhost.com/",
+      "offer_url": "https://www.dreamhost.com/hosting/vps/",
+      "affiliate_url": "",
+      "source_url": "https://www.dreamhost.com/hosting/vps/",
+      "fetched_at": "2026-09-17T22:37:07Z",
+      "http_status": 200,
+      "title": "VPS Hosting with Full Root Access | DreamHost",
+      "summary": "VPS hosting with full root access and unmetered bandwidth — no overage bills. Install any OS and run any app on AMD EPYC + NVMe servers you control.",
+      "page_chars": 19093,
+      "price_candidates_count": 8,
+      "price_candidates": [
+        {
+          "currency": "USD",
+          "value": 8.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…eight apps and solo projects On Sale First 3 months at $8.99 /mo SAVE 43% Sign Up Now Auto-renews at $15.99 /mo after 3…"
+        },
+        {
+          "currency": "USD",
+          "value": 13.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…r apps running in production On Sale First 3 months at $13.99 /mo SAVE 36% Sign Up Now Auto-renews at $21.99 /mo after 3…"
+        },
+        {
+          "currency": "USD",
+          "value": 15.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…onths at $8.99 /mo SAVE 43% Sign Up Now Auto-renews at $15.99 /mo after 3 months. 2 vCPU AMD EPYC 4 GB RAM 75 GB NVMe SS…"
+        },
+        {
+          "currency": "USD",
+          "value": 21.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…nths at $13.99 /mo SAVE 36% Sign Up Now Auto-renews at $21.99 /mo after 3 months. 2 vCPU AMD EPYC 8 GB RAM 150 GB NVMe S…"
+        },
+        {
+          "currency": "USD",
+          "value": 22.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…kloads and multiple services On Sale First 3 months at $22.99 /mo SAVE 34% Sign Up Now Auto-renews at $34.99 /mo after 3…"
+        },
+        {
+          "currency": "USD",
+          "value": 34.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…nths at $22.99 /mo SAVE 34% Sign Up Now Auto-renews at $34.99 /mo after 3 months. 4 vCPU AMD EPYC 16 GB RAM 250 GB NVMe…"
+        },
+        {
+          "currency": "USD",
+          "value": 45.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…orms and data-intensive apps On Sale First 3 months at $45.99 /mo SAVE 23% Sign Up Now Auto-renews at $59.99 /mo after 3…"
+        },
+        {
+          "currency": "USD",
+          "value": 59.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…nths at $45.99 /mo SAVE 23% Sign Up Now Auto-renews at $59.99 /mo after 3 months. 8 vCPU AMD EPYC 32 GB RAM 450 GB NVMe…"
+        }
+      ],
+      "status": "ok",
+      "price": 8.99,
+      "currency": "USD",
+      "price_context": "monthly",
+      "price_tier": "plan",
+      "price_evidence": "…eight apps and solo projects On Sale First 3 months at $8.99 /mo SAVE 43% Sign Up Now Auto-renews at $15.99 /mo after 3…",
+      "price_reason": "server/plan wording nearby"
+    },
+    {
+      "provider": "InMotion Hosting",
+      "homepage": "https://www.inmotionhosting.com/",
+      "offer_url": "https://www.inmotionhosting.com/vps-hosting",
+      "affiliate_url": "",
+      "source_url": "https://www.inmotionhosting.com/vps-hosting",
+      "fetched_at": "2026-09-17T22:37:09Z",
+      "http_status": 200,
+      "title": "Best VPS Hosting & Managed VPS Services 2026 | InMotion Hosting",
+      "summary": "VPS hosting is a virtual private server environment with dedicated RAM and CPU resources on a high-availability server with 99.99% uptime.",
+      "page_chars": 23435,
+      "price_candidates_count": 25,
+      "price_candidates": [
+        {
+          "currency": "USD",
+          "value": 9.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…ned with Your Business in Mind VPS 4 vCPU You Save 41% $9.99 /mo For 24 month term Renews at $16.99 /mo Select You Save…"
+        },
+        {
+          "currency": "USD",
+          "value": 13.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…24 month term Renews at $16.99 /mo Select You Save 48% $13.99 /mo For 24 month term Renews at $26.99 /mo Select You Save…"
+        },
+        {
+          "currency": "USD",
+          "value": 14.99,
+          "context": "monthly",
+          "tier": "weak",
+          "eligible": true,
+          "reason": "no accessory marker, but no server/plan wording nearby",
+          "evidence": "…24 month term Renews at $26.99 /mo Select You Save 44% $14.99 /mo For 24 month term Renews at $26.99 /mo Select You Save…"
+        },
+        {
+          "currency": "USD",
+          "value": 16.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…CPU You Save 41% $9.99 /mo For 24 month term Renews at $16.99 /mo Select You Save 48% $13.99 /mo For 24 month term Renew…"
+        },
+        {
+          "currency": "USD",
+          "value": 19.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…9 one-time value) Most Popular VPS 8 vCPU You Save 57% $19.99 /mo For 24 month term Renews at $46.99 /mo Select You Save…"
+        },
+        {
+          "currency": "USD",
+          "value": 21.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…24 month term Renews at $46.99 /mo Select You Save 61% $21.99 /mo For 24 month term Renews at $56.99 /mo Select You Save…"
+        },
+        {
+          "currency": "USD",
+          "value": 22.99,
+          "context": "monthly",
+          "tier": "weak",
+          "eligible": true,
+          "reason": "no accessory marker, but no server/plan wording nearby",
+          "evidence": "…24 month term Renews at $56.99 /mo Select You Save 60% $22.99 /mo For 24 month term Renews at $56.99 /mo Select You Save…"
+        },
+        {
+          "currency": "USD",
+          "value": 26.99,
+          "context": "monthly",
+          "tier": "weak",
+          "eligible": true,
+          "reason": "no accessory marker, but no server/plan wording nearby",
+          "evidence": "…ct You Save 48% $13.99 /mo For 24 month term Renews at $26.99 /mo Select You Save 44% $14.99 /mo For 24 month term Renew…"
+        },
+        {
+          "currency": "USD",
+          "value": 29.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…24 month term Renews at $56.99 /mo Select You Save 55% $29.99 /mo For 24 month term Renews at $66.99 /mo Select 8 vCPU C…"
+        },
+        {
+          "currency": "USD",
+          "value": 31.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…r Setup ($199 one-time value) VPS 12 vCPU You Save 58% $31.99 /mo For 24 month term Renews at $76.99 /mo Select You Save…"
+        },
+        {
+          "currency": "USD",
+          "value": 32.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…24 month term Renews at $76.99 /mo Select You Save 62% $32.99 /mo For 24 month term Renews at $86.99 /mo Select You Save…"
+        },
+        {
+          "currency": "USD",
+          "value": 36.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…ct You Save 54% $16.99 /mo For 24 month term Renews at $36.99 /mo Select 4 vCPU Cores 8GB RAM 160GB NVMe SSD 5TB Bandwid…"
+        }
+      ],
+      "status": "ok",
+      "price": 9.99,
+      "currency": "USD",
+      "price_context": "monthly",
+      "price_tier": "plan",
+      "price_evidence": "…ned with Your Business in Mind VPS 4 vCPU You Save 41% $9.99 /mo For 24 month term Renews at $16.99 /mo Select You Save…",
+      "price_reason": "server/plan wording nearby"
+    },
+    {
+      "provider": "Atlantic.Net",
+      "homepage": "https://www.atlantic.net/",
+      "offer_url": "https://www.atlantic.net/vps-hosting/",
+      "affiliate_url": "",
+      "source_url": "https://www.atlantic.net/vps-hosting/",
+      "fetched_at": "2026-09-17T22:37:12Z",
+      "http_status": 200,
+      "title": "Cloud VPS Hosting | Virtual Private Servers from Atlantic.Net",
+      "summary": "Launch a Cloud VPS in 30 seconds! RAID storage, easy one-click app install, DNS & private networking, all backed by 24/7 support.",
+      "page_chars": 50368,
+      "price_candidates_count": 136,
+      "price_candidates": [
+        {
+          "currency": "USD",
+          "value": 1.0,
+          "context": "monthly",
+          "tier": "no",
+          "eligible": false,
+          "reason": "accessory lead-in 'Minimum'",
+          "evidence": "…ups are available for 20% of the server price. Minimum $1.00/month. *cPanel licensing cost starts at $23 per month Why Ch…"
+        },
+        {
+          "currency": "USD",
+          "value": 3.65,
+          "context": "monthly",
+          "tier": "no",
+          "eligible": false,
+          "reason": "accessory lead-in 'Additional'",
+          "evidence": "…ude one IPv4 Address. Additional IPs are available for $3.65/month ($0.005431/hour) *Unlimited inbound bandwidth. If free…"
+        },
+        {
+          "currency": "USD",
+          "value": 8.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…sfer 3 TB Linux $10.0/mo $0.0149/hr $9.0/mo $0.0134/hr $8.0/mo $0.0119/hr Windows $16.5/mo $0.0246/hr $15.5/mo $0.023…"
+        },
+        {
+          "currency": "USD",
+          "value": 9.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…ral Purpose G3.2GB 2GB 1 50GB 3 TB $10.0/mo $0.0149/hr $9.0/mo $0.0134/hr $8.0/mo $0.0119/hr $16.5/mo $0.0246/hr $15.…"
+        },
+        {
+          "currency": "USD",
+          "value": 10.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…r Linux Windows General Purpose G3.2GB 2GB 1 50GB 3 TB $10.0/mo $0.0149/hr $9.0/mo $0.0134/hr $8.0/mo $0.0119/hr $16.5…"
+        },
+        {
+          "currency": "USD",
+          "value": 15.5,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…0134/hr $8.0/mo $0.0119/hr Windows $16.5/mo $0.0246/hr $15.5/mo $0.0231/hr $15.5/mo $0.0231/hr Sign Up G3.4GB General…"
+        },
+        {
+          "currency": "USD",
+          "value": 16.5,
+          "context": "monthly",
+          "tier": "weak",
+          "eligible": true,
+          "reason": "no accessory marker, but no server/plan wording nearby",
+          "evidence": "….0/mo $0.0149/hr $9.0/mo $0.0134/hr $8.0/mo $0.0119/hr $16.5/mo $0.0246/hr $15.5/mo $0.0231/hr $15.5/mo $0.0231/hr Sig…"
+        },
+        {
+          "currency": "USD",
+          "value": 17.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…fer 5 TB Linux $20.0/mo $0.0298/hr $18.0/mo $0.0268/hr $17.0/mo $0.0253/hr Windows $33.0/mo $0.0491/hr $31.0/mo $0.046…"
+        },
+        {
+          "currency": "USD",
+          "value": 18.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…CPU 2 SSD 80GB Transfer 5 TB Linux $20.0/mo $0.0298/hr $18.0/mo $0.0268/hr $17.0/mo $0.0253/hr Windows $33.0/mo $0.049…"
+        },
+        {
+          "currency": "USD",
+          "value": 20.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…al Purpose RAM 4GB vCPU 2 SSD 80GB Transfer 5 TB Linux $20.0/mo $0.0298/hr $18.0/mo $0.0268/hr $17.0/mo $0.0253/hr Win…"
+        },
+        {
+          "currency": "USD",
+          "value": 23.0,
+          "context": "monthly",
+          "tier": "no",
+          "eligible": false,
+          "reason": "accessory lead-in 'cPanel'",
+          "evidence": "…Minimum $1.00/month. *cPanel licensing cost starts at $23 per month Why Choose Atlantic.Net as Your VPS Hosting Provider?…"
+        },
+        {
+          "currency": "USD",
+          "value": 30.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…253/hr Windows $33.0/mo $0.0491/hr $31.0/mo $0.0461/hr $30.0/mo $0.0446/hr Sign Up G3.8GB General Purpose RAM 8GB vCPU…"
+        }
+      ],
+      "status": "ok",
+      "price": 8.0,
+      "currency": "USD",
+      "price_context": "monthly",
+      "price_tier": "plan",
+      "price_evidence": "…sfer 3 TB Linux $10.0/mo $0.0149/hr $9.0/mo $0.0134/hr $8.0/mo $0.0119/hr Windows $16.5/mo $0.0246/hr $15.5/mo $0.023…",
+      "price_reason": "server/plan wording nearby"
+    },
+    {
+      "provider": "AccuWeb Hosting",
+      "homepage": "https://accuwebhosting.com/",
+      "offer_url": "https://accuwebhosting.com/vps-hosting",
+      "affiliate_url": "",
+      "source_url": "https://accuwebhosting.com/vps-hosting",
+      "fetched_at": "2026-09-17T22:37:14Z",
+      "http_status": 200,
+      "title": "VPS Hosting with SSD | Get Cheap VPS Hosting for $4.99 Only",
+      "summary": "Scalable VPS for developers, businesses, and traders. Deploy with SSD, root access, auto-backups, and low-latency networks - ideal for apps, websites, and Forex platforms.",
+      "page_chars": 24032,
+      "price_candidates_count": 5,
+      "price_candidates": [
+        {
+          "currency": "USD",
+          "value": 6.33,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…to test our network. Windows VPS SSD Plan Starting at $6.33 /mo Self-Managed VPS Pure SSD Storage Windows 2025/2022/20…"
+        },
+        {
+          "currency": "USD",
+          "value": 6.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…$4.99 Only Enterprise WordPress Cloud Now Starting at $6.99/mo Affiliate Program Testimonials Contact +1 (877) 767 46…"
+        },
+        {
+          "currency": "USD",
+          "value": 7.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…More Most Trending Forex Trading VPS Plan Starting at $7.99 /mo Forex Windows VPS on SSD Server Remote Desktop & Full…"
+        },
+        {
+          "currency": "USD",
+          "value": 11.99,
+          "context": "from",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…g-edge technology. OR START SMALLER Resell Web Hosting From $11.99 Sell web hosting under your own brand. Resell Windows…"
+        },
+        {
+          "currency": "USD",
+          "value": 22.49,
+          "context": "from",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…HOSTING VPS RESELLER Higher Earning Resell VPS Hosting From $22.49 Build & Sell Virtual Private Servers. Resell Windows V…"
+        }
+      ],
+      "status": "ok",
+      "price": 6.33,
+      "currency": "USD",
+      "price_context": "monthly",
+      "price_tier": "plan",
+      "price_evidence": "…to test our network. Windows VPS SSD Plan Starting at $6.33 /mo Self-Managed VPS Pure SSD Storage Windows 2025/2022/20…",
+      "price_reason": "server/plan wording nearby"
+    },
+    {
+      "provider": "Hetzner",
+      "homepage": "https://www.hetzner.com/",
+      "offer_url": "https://www.hetzner.com/cloud/",
+      "affiliate_url": "",
+      "source_url": "https://www.hetzner.com/cloud/",
+      "fetched_at": "2026-09-17T22:37:18Z",
+      "http_status": 200,
+      "title": "Cloud-hosting provider for developers & teams",
+      "summary": "Cloud-hosting provider for developers & teams. Scalable cloud hosting services – join 400,000+ customers ✓ GDPR-compliant",
+      "page_chars": 10300,
+      "price_candidates_count": 0,
+      "price_candidates": [],
+      "status": "no_price_in_html",
+      "note": "page returned 200 but exposes no server-rendered monthly price (likely JS-injected); not inventing a figure"
+    },
+    {
+      "provider": "UpCloud",
+      "homepage": "https://upcloud.com/",
+      "offer_url": "https://upcloud.com/pricing/",
+      "affiliate_url": "",
+      "source_url": "https://upcloud.com/pricing/",
+      "fetched_at": "2026-09-17T22:37:22Z",
+      "http_status": 200,
+      "title": "UpCloud Pricing | Fixed Prices And Zero-cost Data Transfer",
+      "summary": "Discover UpCloud’s flexible and transparent pricing for cloud infrastructure. Choose from a range of plans with pay-as-you-go options and no hidden fees.",
+      "page_chars": 43128,
+      "price_candidates_count": 191,
+      "price_candidates": [
+        {
+          "currency": "EUR",
+          "value": 3.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…us-gen AMD CPUs IPv4 included 99.99% SLA Starting from €3/mo Global price Get started See all options Memory CPU co…"
+        },
+        {
+          "currency": "EUR",
+          "value": 3.47,
+          "context": "monthly",
+          "tier": "no",
+          "eligible": false,
+          "reason": "accessory lead-in 'IP address'",
+          "evidence": "…IPv4 addresses. IP addresses Price Floating IP address €3.47/mo Additional public IPv4 address €3.47/mo Networking and…"
+        },
+        {
+          "currency": "EUR",
+          "value": 4.5,
+          "context": "monthly",
+          "tier": "weak",
+          "eligible": true,
+          "reason": "no accessory marker, but no server/plan wording nearby",
+          "evidence": "…10 GB 2 per customer €3/mo 1 GB 1 20 GB 5 per customer €4.5/mo 2 GB 1 30 GB Unlimited €8/mo 4 GB 1 40 GB Unlimited €1…"
+        },
+        {
+          "currency": "EUR",
+          "value": 5.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…orage 1000 Mbps Internet & IPv4 included Starting from €5/mo Global price Get started See all options Memory CPU co…"
+        },
+        {
+          "currency": "EUR",
+          "value": 6.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…GB 1 250 Mbit/s 10 GB €3/mo * 2 GB 1 250 Mbit/s 20 GB €6/mo 2 GB 2 250 Mbit/s 30 GB €8/mo 4 GB 1 250 Mbit/s 30 GB…"
+        },
+        {
+          "currency": "EUR",
+          "value": 7.5,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…orage Global Price Helsinki Price 1 GB 1 25 GB €7.6/mo €7.5/mo 2 GB 1 50 GB €14.2/mo €15/mo 2 GB 2 60 GB €19.5/mo €20…"
+        },
+        {
+          "currency": "EUR",
+          "value": 7.6,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…xIOPS storage Global Price Helsinki Price 1 GB 1 25 GB €7.6/mo €7.5/mo 2 GB 1 50 GB €14.2/mo €15/mo 2 GB 2 60 GB €19.…"
+        },
+        {
+          "currency": "EUR",
+          "value": 8.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…999% Uptime SLA All data lives in memory Starting from €8/mo Global price Get started See all options Memory Cores…"
+        },
+        {
+          "currency": "EUR",
+          "value": 9.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…time SLA Additional storage up to 2.5 TB Starting from €9/mo Global price Get started Memory Cores PITR backup days…"
+        },
+        {
+          "currency": "EUR",
+          "value": 10.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…node Price Essentials 1 1000 €0/mo Development 1 1000 €10/mo Production S 2 50 000 €30/mo Production M 5 50 000 €75…"
+        },
+        {
+          "currency": "EUR",
+          "value": 12.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…PU cores MaxIOPS Price 1 GB 1 25 GB €5/mo 2 GB 1 25 GB €12/mo 2 GB 2 50 GB €16/mo 4 GB 2 50 GB €26/mo 8 GB 2 100 GB…"
+        },
+        {
+          "currency": "EUR",
+          "value": 14.0,
+          "context": "monthly",
+          "tier": "no",
+          "eligible": false,
+          "reason": "accessory lead-in 'backup'",
+          "evidence": "…y Cores PITR backup days Price 1 GB 1 3 €9/mo 2 GB 1 3 €14/mo 4 GB 1 3 €24/mo Point-in-Time Recovery (PITR) allows d…"
+        }
+      ],
+      "status": "ok",
+      "price": 3.0,
+      "currency": "EUR",
+      "price_context": "monthly",
+      "price_tier": "plan",
+      "price_evidence": "…us-gen AMD CPUs IPv4 included 99.99% SLA Starting from €3/mo Global price Get started See all options Memory CPU co…",
+      "price_reason": "server/plan wording nearby"
+    },
+    {
+      "provider": "Scaleway",
+      "homepage": "https://www.scaleway.com/",
+      "offer_url": "https://www.scaleway.com/en/pricing/",
+      "affiliate_url": "",
+      "source_url": "https://www.scaleway.com/en/pricing/",
+      "fetched_at": "2026-09-17T22:37:24Z",
+      "http_status": 200,
+      "title": "Pricing | Scaleway",
+      "summary": "Transparent pricing for cloud services. As your trusted cloud provider, we offer straightforward and easy-to-understand pricing. You'll always know exactly what you'll pay",
+      "page_chars": 14623,
+      "price_candidates_count": 1,
+      "price_candidates": [
+        {
+          "currency": "EUR",
+          "value": 4.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…best price-performance ratio on the market starting at €4.99/month Pro Perfect balance of processing power, memory and st…"
+        }
+      ],
+      "status": "ok",
+      "price": 4.99,
+      "currency": "EUR",
+      "price_context": "monthly",
+      "price_tier": "plan",
+      "price_evidence": "…best price-performance ratio on the market starting at €4.99/month Pro Perfect balance of processing power, memory and st…",
+      "price_reason": "server/plan wording nearby"
+    },
+    {
+      "provider": "netcup",
+      "homepage": "https://www.netcup.com/",
+      "offer_url": "https://www.netcup.com/en/server/vps",
+      "affiliate_url": "",
+      "source_url": "https://www.netcup.com/en/server/vps",
+      "fetched_at": "2026-09-17T22:37:26Z",
+      "http_status": 200,
+      "title": "VPS hosting with top performance & best conditions | netcup",
+      "summary": "vServer (VPS) with lots of compute power at the best price, hourly billing, preconfigured images, DDoS protection & remote console.",
+      "page_chars": 17138,
+      "price_candidates_count": 5,
+      "price_candidates": [
+        {
+          "currency": "EUR",
+          "value": 5.91,
+          "context": "from",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…d much more... Details &gt; €0.010 per hour or monthly starting at €5.91 (incl. 19% VAT) Order now &gt; VPS 1000 G12 4 vCore (x…"
+        },
+        {
+          "currency": "EUR",
+          "value": 10.37,
+          "context": "from",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…d much more... Details &gt; €0.017 per hour or monthly starting at €10.37 (incl. 19% VAT) Order now &gt; VPS 2000 G12 8 vCore (x…"
+        },
+        {
+          "currency": "EUR",
+          "value": 19.25,
+          "context": "from",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…d much more... Details &gt; €0.031 per hour or monthly starting at €19.25 (incl. 19% VAT) Order now &gt; VPS 4000 G12 12 vCore (…"
+        },
+        {
+          "currency": "EUR",
+          "value": 32.41,
+          "context": "from",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…d much more... Details &gt; €0.052 per hour or monthly starting at €32.41 (incl. 19% VAT) Order now &gt; VPS 8000 G12 16 vCore (…"
+        },
+        {
+          "currency": "EUR",
+          "value": 47.95,
+          "context": "from",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…d much more... Details &gt; €0.076 per hour or monthly starting at €47.95 (incl. 19% VAT) Order now &gt; Click here for the vSer…"
+        }
+      ],
+      "status": "ok",
+      "price": 5.91,
+      "currency": "EUR",
+      "price_context": "from",
+      "price_tier": "plan",
+      "price_evidence": "…d much more... Details &gt; €0.010 per hour or monthly starting at €5.91 (incl. 19% VAT) Order now &gt; VPS 1000 G12 4 vCore (x…",
+      "price_reason": "server/plan wording nearby"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">
+      <span class="brand-mark">VPS</span>
+      <span class="brand-text">{{ site.name }}</span>
+    </a>
+    <nav class="site-nav">
+      <a href="/"{% if active == "home" %} class="on"{% endif %}>Providers</a>
+      <a href="/compare.html"{% if active == "compare" %} class="on"{% endif %}>Compare</a>
+      <a href="/about.html"{% if active == "about" %} class="on"{% endif %}>Method</a>
+    </nav>
+  </div>
+</header>

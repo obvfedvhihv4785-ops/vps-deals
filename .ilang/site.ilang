@@ -1,0 +1,74 @@
+ILANG
+TYPE:config PROJECT:vps-deals LANG:zh
+
+# ============================================================================
+# 站点规则的唯一真源。scraper.py 和 build.py 都真的读这个文件。
+# 改这里的任何一行，重跑管线，站上就会变。代码里没有第二份硬编码清单。
+#
+# 想加一家厂商：在 PROVIDERS 里加一行，格式 名称 | 官网 | 抓取入口 | 联盟链接
+# 想删一家：删掉那一行。
+# 想让站换品牌或换细分：改下面 STATE 里的 brand / niche。
+#
+# 抓取入口用该厂商的**公开官方**优惠页 / 定价页 / sitemap / feed。
+# 不绕反爬，不抓登录后内容，遵守 robots.txt。
+# ============================================================================
+
+::STATE{@SITE, brand:vps-deals, niche:vps 主机, domain:vps-deals.pages.dev}
+
+::MODULE{PROVIDERS|title:抓哪几家 这里改了站就变}
+  # 名称 | 官网 | 抓取入口(官方公开页) | 联盟链接(留空则用裸链)
+  # 下面这些入口在 2026-09-18 实测返回 HTTP 200 且价格在服务端 HTML 里可读。
+  DigitalOcean | https://www.digitalocean.com/ | https://www.digitalocean.com/pricing/droplets |
+  Hostinger | https://www.hostinger.com/ | https://www.hostinger.com/vps-hosting |
+  IONOS | https://www.ionos.com/ | https://www.ionos.com/servers/vps |
+  OVHcloud | https://www.ovhcloud.com/ | https://www.ovhcloud.com/en/vps/ |
+  ScalaHosting | https://www.scalahosting.com/ | https://www.scalahosting.com/vps-hosting.html |
+  GreenGeeks | https://www.greengeeks.com/ | https://www.greengeeks.com/vps-hosting/ |
+  Hostwinds | https://www.hostwinds.com/ | https://www.hostwinds.com/vps/ |
+  DreamHost | https://www.dreamhost.com/ | https://www.dreamhost.com/hosting/vps/ |
+  InMotion Hosting | https://www.inmotionhosting.com/ | https://www.inmotionhosting.com/vps-hosting |
+  Atlantic.Net | https://www.atlantic.net/ | https://www.atlantic.net/vps-hosting/ |
+  AccuWeb Hosting | https://accuwebhosting.com/ | https://accuwebhosting.com/vps-hosting |
+  # 下面这些入口实测返回 200 但价格由前端 JS 注入，服务端 HTML 里没有数字。
+  # 保留它们是因为厂商本身有价值，站上会如实标"价格需到官网确认"，不编数字。
+  Hetzner | https://www.hetzner.com/ | https://www.hetzner.com/cloud/ |
+  UpCloud | https://upcloud.com/ | https://upcloud.com/pricing/ |
+  Scaleway | https://www.scaleway.com/ | https://www.scaleway.com/en/pricing/ |
+  netcup | https://www.netcup.com/ | https://www.netcup.com/en/server/vps |
+
+::MODULE{FIELDS|title:每条优惠提取什么}
+  title price currency offer_url valid_until source_url fetched_at
+
+::MODULE{SETTINGS|title:运行参数}
+  locale: en-US
+  currency: USD
+  update_interval_hours: 6
+  request_timeout_seconds: 25
+  request_delay_seconds: 2
+  respect_robots: true
+  user_agent: PromoRadarBot/1.0 (+https://github.com/; contact via repo issues)
+  max_deals_on_index: 24
+  min_plausible_monthly_price: 1.00
+  max_plausible_monthly_price: 2000.00
+  site_name: VPS Deals Radar
+  site_tagline: Machine-verified VPS pricing, refreshed every 6 hours
+
+::MODULE{RENDER|title:页面渲染规则}
+  index: true
+  provider: true
+  deal: true
+  compare: true
+  about: true
+  sitemap: true
+  robots: true
+  jsonld_offer: true
+  jsonld_itemlist: true
+  jsonld_breadcrumb: true
+  hreflang: false
+
+::RULE{抓不到 price⇒这条不写 price 字段 也不写进结构化数据 不许拿估的填}
+::RULE{valid_until 已过⇒标记过期或下架 不许留着冒充有效}
+::RULE{每个数字都要能溯源到 source_url 和 fetched_at 抓不到就不写}
+::RULE{抓取失败就如实记 blocked 或 error 不许把失败包装成没有优惠}
+::BOUNDARY{never:编优惠 编价格 编佣金|scope:permanent}
+::BOUNDARY{never:绕反爬 抓登录后内容 冒充用户|scope:permanent}

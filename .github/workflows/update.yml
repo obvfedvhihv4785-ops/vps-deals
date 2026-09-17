@@ -1,0 +1,92 @@
+name: Update deals
+
+# Re-reads every provider's public pricing page, rebuilds the static site, and
+# commits whatever changed. Public repository, so GitHub-hosted runner minutes
+# are not billed — which is why this can afford to run every 6 hours.
+#
+# The schedule is deliberately off the hour (:17) so it does not queue behind the
+# thousands of jobs that all fire at :00.
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Why are you running this manually?"
+        required: false
+        default: "manual run"
+
+# Needed so the job can push the refreshed data back to the repository.
+permissions:
+  contents: write
+
+# Never let two refreshes overlap; let a running one finish rather than abort it
+# mid-commit.
+concurrency:
+  group: refresh-deals
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # The pipeline is pure standard library on purpose: nothing to install,
+      # nothing to pin, no supply chain to audit, no runtime API key.
+      - name: Show pipeline config
+        run: sed -n '1,24p' .ilang/site.ilang
+
+      - name: Scrape public pricing pages
+        run: python scraper.py
+
+      - name: Build static site
+        run: python build.py
+
+      # Gate. If the generated markup is malformed — unparsable JSON-LD, a
+      # missing canonical, a price that is not a clean decimal, a page left
+      # referencing an undefined value — the job fails here and nothing is
+      # committed. An auto-publishing site needs a check it cannot talk its way
+      # past.
+      - name: Validate generated site
+        run: python verify.py
+
+      - name: Commit refreshed data and site
+        run: |
+          git config user.name "promo-radar-bot"
+          git config user.email "promo-radar-bot@users.noreply.github.com"
+          git add -A data site
+          if git diff --cached --quiet; then
+            echo "Nothing changed this run — no commit made."
+            exit 0
+          fi
+          MSG=$(python -c 'import json;d=json.load(open("data/offers.json",encoding="utf-8"));print("%d/%d providers priced" % (d["providers_with_price"], d["providers_configured"]))')
+          git commit -m "data: refresh ${MSG} at $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push
+          echo "Committed: ${MSG}"
+
+      # Optional. Only runs once CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID
+      # are set as repository secrets. If you instead connected this repository
+      # to Cloudflare Pages through the dashboard ("Connect to Git", build
+      # command `python build.py`, output directory `site`), Cloudflare rebuilds
+      # on the commit above and this step is redundant — it is kept so the site
+      # can also be published without any dashboard wiring.
+      - name: Deploy to Cloudflare Pages
+        if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' && secrets.CLOUDFLARE_ACCOUNT_ID != '' }}
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: >-
+            pages deploy site
+            --project-name=vps-deals-promo-radar
+            --branch=main
