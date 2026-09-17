@@ -11,7 +11,8 @@
 #   PY=... WRANGLER=... ./refresh.sh   override tool paths
 #   SKIP_DEPLOY=1 ./refresh.sh         build and commit only
 #
-# Exit codes: 0 ok, 1 scrape/build failed, 2 verify gate failed (nothing shipped)
+# Exit codes: 0 ok, 1 scrape/build failed, 2 verify gate failed (nothing shipped),
+#             3 source files are dirty (commit or stash them first)
 # ---------------------------------------------------------------------------
 set -uo pipefail
 
@@ -28,6 +29,18 @@ SKIP_DEPLOY="${SKIP_DEPLOY:-}"
 log() { printf '%s  %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$*"; }
 
 log "refresh start (project=$PROJECT)"
+
+# site/ is a build artefact that has to be reproducible from the committed
+# sources — that is what lets anyone clone this repo and rebuild it
+# byte-for-byte. build.py runs from the working copy, so if the sources are
+# dirty this run would commit output built from code the repository does not
+# contain, and the two would silently drift apart. Refuse instead.
+SOURCE_PATHS="build.py scraper.py verify.py ilang.py templates .ilang .github"
+if [ -n "$(git status --porcelain -- $SOURCE_PATHS 2>/dev/null)" ]; then
+  log "FAIL source files are modified; commit or stash them, then re-run:"
+  git status --short -- $SOURCE_PATHS
+  exit 3
+fi
 
 log "-- scrape --"
 if ! "$PY" scraper.py; then

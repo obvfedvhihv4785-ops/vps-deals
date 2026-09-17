@@ -120,7 +120,15 @@ SKIP_DEPLOY=1 bash refresh.sh   # stop before publishing
 `refresh.sh` exists so any scheduler can drive the pipeline without restating the ordering or
 the safety rules. It refuses to commit or deploy when `verify.py` fails, so a malformed page, a
 price that does not match its own quoted evidence, or a crawl that lost most of its providers
-never reaches the live site. Exit codes: `0` ok, `1` scrape/build failed, `2` gate rejected it.
+never reaches the live site. Exit codes: `0` ok, `1` scrape/build failed, `2` gate rejected it,
+`3` source files are dirty.
+
+That last one is worth explaining. `site/` is a build artefact, and the promise this repository
+makes is that you can clone it and rebuild the published output byte-for-byte. `build.py` runs
+from the working copy, so if `build.py`, `templates/` or `.ilang/site.ilang` have uncommitted
+edits, the run would commit output built from code the repository does not contain and the two
+would quietly drift apart. So `refresh.sh` checks the source paths first and exits `3` before
+scraping anything. Commit or stash your edits, then re-run.
 
 Three ways to schedule it, in order of preference:
 
