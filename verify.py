@@ -277,6 +277,47 @@ def check_history() -> None:
                 errors.append(f"history[{name}]: entry with a price but no currency")
 
 
+def check_affiliate_marking() -> None:
+    """Affiliate links must carry rel="sponsored", and only real ones may.
+
+    Google's link-spam policy names rel="sponsored" for affiliate links rather
+    than rel="nofollow". Getting it wrong is invisible until rankings are lost, so
+    it is checked rather than trusted — in both directions, because a page
+    claiming sponsored status it does not have is its own kind of inaccuracy.
+    """
+    path = os.path.join(os.path.dirname(SITE), "data", "offers.json")
+    if not os.path.exists(path):
+        return
+    with open(path, encoding="utf-8") as fh:
+        doc = json.load(fh)
+    affiliate_urls = {o["affiliate_url"] for o in doc.get("offers", []) if o.get("affiliate_url")}
+    sponsored_hrefs: set[str] = set()
+
+    for dirpath, _dirnames, filenames in os.walk(SITE):
+        for fn in sorted(filenames):
+            if not fn.endswith(".html"):
+                continue
+            rel_path = os.path.relpath(os.path.join(dirpath, fn), SITE).replace("\\", "/")
+            with open(os.path.join(dirpath, fn), encoding="utf-8") as fh:
+                page = fh.read()
+            for href, rel in re.findall(r'<a [^>]*href="([^"]+)"[^>]*rel="([^"]*)"', page):
+                sponsored = "sponsored" in rel
+                if href in affiliate_urls and not sponsored:
+                    errors.append(f"{rel_path}: affiliate link to {href} is not rel=sponsored")
+                if sponsored:
+                    sponsored_hrefs.add(href)
+                    if href not in affiliate_urls:
+                        errors.append(f"{rel_path}: rel=sponsored on {href}, which is not a "
+                                      "configured affiliate link")
+
+    # The other direction: a configured affiliate link that no page actually uses
+    # means the template stopped routing through it — monetisation silently broken.
+    for url in sorted(affiliate_urls):
+        if url not in sponsored_hrefs:
+            errors.append(f"configured affiliate link {url} appears on no page with "
+                          "rel=sponsored — is the CTA still routed through affiliate_url?")
+
+
 def main() -> int:
     global BASE
     with open(os.path.join(SITE, "sitemap.xml"), encoding="utf-8") as fh:
@@ -330,6 +371,7 @@ def main() -> int:
 
     check_offers_json()
     check_history()
+    check_affiliate_marking()
 
     if not os.path.exists(os.path.join(SITE, "assets", "style.css")):
         errors.append("assets/style.css missing")

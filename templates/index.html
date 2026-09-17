@@ -61,7 +61,7 @@
 {% endif %}
         <div class="actions">
           <a href="{{ o.url }}">Deal details →</a>
-          <a href="{{ o.cta_url }}" rel="nofollow noopener" target="_blank">Official page ↗</a>
+          <a href="{{ o.cta_url }}" rel="{{ o.cta_rel }}" target="_blank">Official page ↗</a>
         </div>
       </article>
 {% endfor %}

@@ -56,7 +56,7 @@
 {% if o.expired %}<span class="badge stop">expired</span>{% endif %}
             </td>
             <td>{{ o.last_verified_display }}</td>
-            <td><a href="{{ o.cta_url }}" rel="nofollow noopener" target="_blank">Open ↗</a></td>
+            <td><a href="{{ o.cta_url }}" rel="{{ o.cta_rel }}" target="_blank">Open ↗</a></td>
           </tr>
 {% endfor %}
         </tbody>

@@ -331,6 +331,11 @@ def build_view(offer: dict, cfg: ilang.SiteConfig, site: dict, generated_at: str
     show_price = has_price and not expired
 
     cta = offer.get("affiliate_url") or offer.get("offer_url") or offer.get("homepage")
+    # Google's link-spam policy asks for rel="sponsored" on affiliate links, not
+    # rel="nofollow". Getting this wrong is the kind of thing that quietly costs a
+    # site its rankings once monetisation starts, so the value is derived from
+    # where the URL actually came from rather than set by hand in a template.
+    is_affiliate = bool(offer.get("affiliate_url"))
 
     cands = []
     for c in offer.get("price_candidates", [])[:8]:
@@ -348,6 +353,8 @@ def build_view(offer: dict, cfg: ilang.SiteConfig, site: dict, generated_at: str
         "homepage": offer.get("homepage", ""),
         "offer_url": offer.get("offer_url", ""),
         "cta_url": cta,
+        "cta_is_affiliate": is_affiliate,
+        "cta_rel": "sponsored noopener" if is_affiliate else "nofollow noopener",
         "has_price": has_price,
         "show_price": show_price,
         "price_value": offer.get("price") if has_price else None,
@@ -592,6 +599,11 @@ def main() -> int:
     site["url_compare"] = make_url(site["base_url"], "compare.html", site["url_style"])
     site["url_about"] = make_url(site["base_url"], "about.html", site["url_style"])
 
+    # Affiliate status is read from the data, not asserted in prose. A disclosure
+    # that says "may contain affiliate links" when there are none is as inaccurate
+    # as one that stays silent when there are.
+    site["has_affiliate"] = any(o.get("affiliate_url") for o in doc["offers"])
+
     views = [build_view(o, cfg, site, generated_at) for o in doc["offers"]]
 
     # Mask the run stamp and every per-record "verified on" date before hashing.
@@ -805,9 +817,15 @@ def main() -> int:
               "verified price is still shown together with the date it was verified. It is "
               "never presented as current."},
         {"q": "Do you get paid for the links?",
-         "a": "Some outbound links may become affiliate links once a provider's published "
-              "programme accepts this site. That never changes which price is shown, and the "
-              "price always comes from the provider's own page."},
+         "a": ("Some outbound links on this site are affiliate links, marked rel=\"sponsored\" "
+               "and disclosed in the footer. That never changes which price is shown: the price "
+               "comes from the provider's own page and no person chooses it."
+               if site["has_affiliate"] else
+               "Not currently. No outbound link on this site is an affiliate link — every one "
+               "goes straight to the provider's own page. If a provider's published partner "
+               "programme ever accepts this site, those links will be marked rel=\"sponsored\" "
+               "and disclosed in the footer before they go live. It would never change which "
+               "price is shown, because no person chooses the price.")},
     ]
     if on("about"):
         ctx = dict(site=site, stats=stats, faq=faq,

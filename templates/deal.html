@@ -38,7 +38,7 @@
     </div>
 
     <div class="cta-row">
-      <a class="btn" href="{{ o.cta_url }}" rel="nofollow noopener" target="_blank">
+      <a class="btn" href="{{ o.cta_url }}" rel="{{ o.cta_rel }}" target="_blank">
         {% if o.show_price %}Get this plan at {{ o.provider }} ↗{% else %}Check {{ o.provider }} pricing ↗{% endif %}
       </a>
       <a class="btn ghost" href="{{ o.provider_url }}">Full {{ o.provider }} profile</a>
@@ -96,8 +96,14 @@
           Confirm the current price, term, and renewal rate on {{ o.provider }}'s own page.</li>
         <li>The figure above is the lowest one stated on the page — it may be a small plan or a
           promotional first term, not the plan you actually want.</li>
-        <li>{{ site.name }} takes no payment and sells nothing. Some outbound links may be
-          affiliate links, which never changes the price shown.</li>
+{% if site.has_affiliate %}
+        <li>Some outbound links on this page are affiliate links, marked <code>rel="sponsored"</code>.
+          If you buy through one, this site may earn a commission at no extra cost to you. It never
+          changes which price is shown.</li>
+{% else %}
+        <li>No outbound link on this page is currently an affiliate link, and this site sells
+          nothing. Every link goes straight to the provider's own page.</li>
+{% endif %}
       </ul>
     </div>
   </section>

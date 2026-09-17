@@ -8,9 +8,14 @@
     </p>
     <p class="foot-note dim">
       Prices are read automatically and can change at any time — always confirm on the
-      provider's site before buying. Some outbound links may be affiliate links; this never
-      affects which price is shown. No price on this site is estimated, remembered, or typed
-      in by hand.
+      provider's site before buying.{% if site.has_affiliate %}
+      Some outbound links on this site are affiliate links: they are marked
+      <code>rel="sponsored"</code> and disclosed here. Commission never affects which price is
+      shown, because no person chooses the price.{% else %}
+      No outbound link on this site is currently an affiliate link — every link goes straight to
+      the provider's own page. If that ever changes, the links will be marked
+      <code>rel="sponsored"</code> and disclosed here first.{% endif %}
+      No price on this site is estimated, remembered, or typed in by hand.
     </p>
     <p class="foot-note dim">
       <a href="{{ site.url_about }}">Method &amp; data sources</a> ·
