@@ -232,6 +232,51 @@ def check_offers_json() -> None:
                 "re-run, or delete data/offers.json to accept the new baseline")
 
 
+def check_history() -> None:
+    """The price history is append-only and cannot be rebuilt, so guard it.
+
+    A corrupt or rewritten history is unrecoverable, and a silently duplicated or
+    out-of-order entry would make the provider pages claim a price movement that
+    never happened. These checks are cheap and catch exactly that.
+    """
+    path = os.path.join(os.path.dirname(SITE), "data", "history.json")
+    if not os.path.exists(path):
+        warnings.append("data/history.json missing — no price history is being recorded")
+        return
+    try:
+        with open(path, encoding="utf-8") as fh:
+            doc = json.load(fh)
+    except ValueError as exc:
+        errors.append(f"data/history.json is not valid JSON: {exc}")
+        return
+
+    providers = doc.get("providers")
+    if not isinstance(providers, dict) or not providers:
+        errors.append("data/history.json has no providers map")
+        return
+
+    for name, entries in providers.items():
+        if not isinstance(entries, list) or not entries:
+            errors.append(f"history[{name}]: empty or not a list")
+            continue
+        prev_date = ""
+        prev_state = None
+        for e in entries:
+            if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(e.get("date", ""))):
+                errors.append(f"history[{name}]: bad date {e.get('date')!r}")
+            if str(e.get("date", "")) < prev_date:
+                errors.append(f"history[{name}]: dates out of order at {e.get('date')}")
+            prev_date = str(e.get("date", ""))
+            state = (e.get("price"), e.get("currency"), e.get("status"))
+            if state == prev_state:
+                errors.append(
+                    f"history[{name}]: duplicate consecutive entry at {e.get('date')} "
+                    "(entries are only recorded on change)")
+            prev_state = state
+            if isinstance(e.get("price"), (int, float)) and not e.get("currency"):
+                errors.append(f"history[{name}]: entry with a price but no currency")
+
+
 def main() -> int:
     global BASE
     with open(os.path.join(SITE, "sitemap.xml"), encoding="utf-8") as fh:
@@ -284,6 +329,7 @@ def main() -> int:
         errors.append("robots.txt does not reference the sitemap")
 
     check_offers_json()
+    check_history()
 
     if not os.path.exists(os.path.join(SITE, "assets", "style.css")):
         errors.append("assets/style.css missing")

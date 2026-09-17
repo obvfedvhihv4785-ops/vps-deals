@@ -44,6 +44,7 @@ import ilang  # noqa: E402
 HERE = os.path.dirname(os.path.abspath(__file__))
 CONFIG_PATH = os.path.join(HERE, ".ilang", "site.ilang")
 OUT_PATH = os.path.join(HERE, "data", "offers.json")
+HISTORY_PATH = os.path.join(HERE, "data", "history.json")
 
 # ---------------------------------------------------------------------------
 # Extraction patterns
@@ -488,6 +489,48 @@ def carry_forward(prev: dict | None, rec: dict) -> dict:
     return merged
 
 
+def update_history(offers: list[dict], now_iso: str) -> tuple[dict, int]:
+    """Record each provider's price over time. Append-only; never rewrites the past.
+
+    This is the one asset here that cannot be backfilled: a run that does not
+    record a price loses that observation permanently. A record of how a
+    provider's price actually moved across months is something no affiliate page
+    and no competitor has, and it is the part of this dataset that gets more
+    valuable the longer the pipeline runs.
+
+    An entry is appended only when the observable state (price, currency, status)
+    differs from the previous one, so the file stays small and every entry marks
+    a real change. A second change on the same day replaces that day's entry
+    rather than stacking duplicates.
+    """
+    hist: dict = {"schema": "price-history/1", "providers": {}}
+    if os.path.exists(HISTORY_PATH):
+        try:
+            with open(HISTORY_PATH, encoding="utf-8") as fh:
+                loaded = json.load(fh)
+            if isinstance(loaded, dict) and isinstance(loaded.get("providers"), dict):
+                hist["providers"] = loaded["providers"]
+        except (OSError, ValueError):
+            pass  # unreadable history must not stop a refresh; we just start again
+
+    day = now_iso[:10]
+    appended = 0
+    for r in offers:
+        state = {"date": day, "price": r.get("price"), "currency": r.get("currency"),
+                 "status": r.get("status")}
+        entries = hist["providers"].setdefault(r["provider"], [])
+        prev = entries[-1] if entries else None
+        if prev and (prev.get("price"), prev.get("currency"), prev.get("status")) == \
+                    (state["price"], state["currency"], state["status"]):
+            continue                       # nothing observable changed
+        if prev and prev.get("date") == day:
+            entries[-1] = state            # same day, revised: replace
+        else:
+            entries.append(state)
+            appended += 1
+    return hist, appended
+
+
 def main() -> int:
     cfg = ilang.load(CONFIG_PATH)
     settings = cfg.settings()
@@ -560,6 +603,14 @@ def main() -> int:
     with open(OUT_PATH, "w", encoding="utf-8") as fh:
         json.dump(doc, fh, ensure_ascii=False, indent=2)
     print(f"[scraper] wrote {OUT_PATH}")
+
+    hist, appended = update_history(offers, doc["generated_at"])
+    with open(HISTORY_PATH, "w", encoding="utf-8") as fh:
+        json.dump(hist, fh, ensure_ascii=False, indent=2)
+    tracked = sum(len(v) for v in hist["providers"].values())
+    print(f"[scraper] history: {tracked} observation(s) across "
+          f"{len(hist['providers'])} provider(s); +{appended} new this run")
+
     print(f"[scraper] with price: {doc['providers_with_price']}/{len(providers)}")
     return 0
 

@@ -102,9 +102,61 @@
     </div>
   </section>
 
+{% if o.history_count %}
+  <section>
+    <h2>What this price has done since we started recording</h2>
+    <p class="sub">
+      This pipeline has been recording {{ o.provider }}'s price since {{ o.first_seen }}.{% if o.history_multi %}
+      Across that period the lowest was {{ o.lowest_seen }} and the highest {{ o.highest_seen }}.{% endif %}
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Date</th><th>Price</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+{% for e in o.history %}
+          <tr><td>{{ e.date }}</td><td class="num">{{ e.display }}</td><td>{{ e.status }}</td></tr>
+{% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+{% endif %}
+
+{% if o.has_price %}
+  <section>
+    <h2>How this price compares</h2>
+    <p class="sub">
+      {{ o.provider }} is ranked {{ o.rank_in_currency }} of {{ o.group_size }}
+      {{ o.currency_group }}-priced providers. Currencies are not converted, so these neighbours
+      are all in {{ o.currency_group }}.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th></th><th>Provider</th><th>From</th></tr>
+        </thead>
+        <tbody>
+{% if o.cheaper_name %}
+          <tr><td>Next cheaper</td><td><a href="{{ o.cheaper_url }}">{{ o.cheaper_name }}</a></td><td class="num">{{ o.cheaper_price }}</td></tr>
+{% endif %}
+          <tr><td>This deal</td><td><b>{{ o.provider }}</b></td><td class="num">{{ o.price_display }}</td></tr>
+{% if o.pricier_name %}
+          <tr><td>Next pricier</td><td><a href="{{ o.pricier_url }}">{{ o.pricier_name }}</a></td><td class="num">{{ o.pricier_price }}</td></tr>
+{% endif %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+{% endif %}
+
   <section>
     <h2>Other providers</h2>
-    <p class="sub"><a href="{{ site.url_compare }}">Compare every tracked provider →</a></p>
+    <p class="sub">
+      <a href="{{ o.provider_url }}">Full {{ o.provider }} profile, including the figures we rejected →</a>
+      · <a href="{{ site.url_compare }}">Compare every tracked provider →</a>
+    </p>
   </section>
 
 </main>

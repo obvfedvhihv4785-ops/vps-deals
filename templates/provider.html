@@ -100,11 +100,56 @@
   </section>
 {% endif %}
 
+{% if o.history_count %}
   <section>
-    <h2>Compare with other providers</h2>
+    <h2>Price history</h2>
     <p class="sub">
-      <a href="{{ site.url_compare }}">See all tracked providers side by side →</a>
+      Recorded by this pipeline on every run, starting {{ o.first_seen }}. History cannot be
+      reconstructed after the fact, so it only grows from here.{% if o.history_multi %}
+      Over the period recorded so far the lowest figure seen was {{ o.lowest_seen }} and the
+      highest was {{ o.highest_seen }}.{% endif %}
     </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Date</th><th>Price</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+{% for e in o.history %}
+          <tr><td>{{ e.date }}</td><td class="num">{{ e.display }}</td><td>{{ e.status }}</td></tr>
+{% endfor %}
+        </tbody>
+      </table>
+    </div>
+{% if not o.history_multi %}
+    <p class="sub">One observation so far. This table fills in as the pipeline keeps running.</p>
+{% endif %}
+  </section>
+{% endif %}
+
+  <section>
+    <h2>Nearest prices in the same currency</h2>
+    <p class="sub">
+      Ranked {{ o.rank_in_currency }} of {{ o.group_size }} {{ o.currency_group }} entries. These are
+      its immediate neighbours, so the ranking can be walked in order rather than taken on trust.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th></th><th>Provider</th><th>From</th></tr>
+        </thead>
+        <tbody>
+{% if o.cheaper_name %}
+          <tr><td>Next cheaper</td><td><a href="{{ o.cheaper_url }}">{{ o.cheaper_name }}</a></td><td class="num">{{ o.cheaper_price }}</td></tr>
+{% endif %}
+          <tr><td>This provider</td><td><b>{{ o.provider }}</b></td><td class="num">{% if o.show_price %}{{ o.price_display }}{% else %}—{% endif %}</td></tr>
+{% if o.pricier_name %}
+          <tr><td>Next pricier</td><td><a href="{{ o.pricier_url }}">{{ o.pricier_name }}</a></td><td class="num">{{ o.pricier_price }}</td></tr>
+{% endif %}
+        </tbody>
+      </table>
+    </div>
+    <p class="sub"><a href="{{ site.url_compare }}">See all {{ stats.tracked }} tracked providers side by side →</a></p>
   </section>
 
 </main>

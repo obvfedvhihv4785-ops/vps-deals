@@ -619,6 +619,65 @@ def main() -> int:
         _seen_cur[cur] = _seen_cur.get(cur, 0) + 1
         v["rank_in_currency"] = _seen_cur[cur]
 
+    # ---- price history -----------------------------------------------------
+    # Recorded by scraper.py on every run. It is the only part of this dataset
+    # that grows more valuable with time and cannot be reconstructed later.
+    hist: dict = {}
+    hist_path = os.path.join(HERE, "data", "history.json")
+    if os.path.exists(hist_path):
+        try:
+            with open(hist_path, encoding="utf-8") as fh:
+                hist = (json.load(fh) or {}).get("providers", {}) or {}
+        except (OSError, ValueError):
+            hist = {}
+
+    # ---- same-currency neighbours -----------------------------------------
+    # Precomputed as flat strings: the template engine does not walk nested
+    # objects, and a "next cheapest" link is a real internal link between pages.
+    _by_cur: dict[str, list[dict]] = {}
+    for v in priced_sorted:
+        _by_cur.setdefault(v["price_currency"], []).append(v)
+
+    for v in views:
+        v["currency_group"] = ""
+        v["group_size"] = ""
+        v["cheaper_name"] = ""
+        v["cheaper_url"] = ""
+        v["cheaper_price"] = ""
+        v["pricier_name"] = ""
+        v["pricier_url"] = ""
+        v["pricier_price"] = ""
+        entries = hist.get(v["provider"], [])
+        v["history"] = [
+            {"date": e.get("date", ""),
+             "display": money(e["price"], e.get("currency", v["price_currency"]))
+                        if isinstance(e.get("price"), (int, float)) else "no readable price",
+             "status": e.get("status", "")}
+            for e in entries
+        ]
+        v["history_count"] = len(entries)
+        v["history_multi"] = len(entries) >= 2
+        v["first_seen"] = entries[0].get("date", "") if entries else ""
+        v["last_change"] = entries[-1].get("date", "") if entries else ""
+        v["changed_since_first"] = (
+            len(entries) > 1 and entries[0].get("price") != entries[-1].get("price"))
+        _prices = [e["price"] for e in entries if isinstance(e.get("price"), (int, float))]
+        v["lowest_seen"] = money(min(_prices), v["price_currency"]) if _prices else ""
+        v["highest_seen"] = money(max(_prices), v["price_currency"]) if _prices else ""
+
+    for cur, group in _by_cur.items():
+        for i, v in enumerate(group):
+            v["currency_group"] = cur
+            v["group_size"] = len(group)
+            if i > 0:
+                p = group[i - 1]
+                v["cheaper_name"], v["cheaper_url"] = p["provider"], p["url"]
+                v["cheaper_price"] = p["price_display"]
+            if i + 1 < len(group):
+                n = group[i + 1]
+                v["pricier_name"], v["pricier_url"] = n["provider"], n["url"]
+                v["pricier_price"] = n["price_display"]
+
     # RENDER flags from site.ilang genuinely control what gets emitted. Turning a
     # page type off here removes it from the build and from the sitemap.
     def on(key: str, default: str = "true") -> bool:

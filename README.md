@@ -65,8 +65,20 @@ date.
 | `build.py` | Renders `templates/` into `site/`. Generates JSON-LD, `sitemap.xml`, `robots.txt`. |
 | `templates/` | Presentation only. Contains no pricing logic. |
 | `data/offers.json` | Dataset, overwritten on every run. Do not hand-edit. |
+| `data/history.json` | Append-only price history. One entry per provider per observable change. See below. |
 | `data/page_state.json` | Per-page content hash and the date that content last changed. This is what makes `sitemap.xml` `lastmod` mean something — see below. |
 | `site/` | Build output, regenerated each run. Do not hand-edit. |
+
+### Why the price history matters more than it looks
+
+`data/history.json` records a provider's price only when the observable state (price, currency,
+status) changes, so it stays small and every entry marks something real. It is the one asset here
+that **cannot be backfilled**: a run that does not record a price loses that observation forever,
+which is why it started on the first run rather than once the site "needed" it. A record of how
+twenty-odd providers actually moved their pricing over months is something no affiliate page and
+no competitor has, and it is the part of this dataset that gets more valuable the longer the
+pipeline runs. `verify.py` treats it as append-only: duplicated consecutive entries and
+out-of-order dates fail the build, because a rewritten history is unrecoverable.
 
 ### Why `lastmod` is tracked separately
 
