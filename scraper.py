@@ -502,11 +502,16 @@ def main() -> int:
     print(f"[scraper] providers from config: {len(providers)}")
 
     prev_by_name: dict[str, dict] = {}
+    prev_priced = None
     if os.path.exists(OUT_PATH):
         try:
             with open(OUT_PATH, encoding="utf-8") as fh:
-                for r in json.load(fh).get("offers", []):
-                    prev_by_name[r.get("provider", "")] = r
+                prev_doc = json.load(fh)
+            for r in prev_doc.get("offers", []):
+                prev_by_name[r.get("provider", "")] = r
+            # Kept so verify.py can tell a normal refresh from a run where the
+            # whole crawl fell over, and refuse to publish the latter.
+            prev_priced = prev_doc.get("providers_with_price")
         except (OSError, ValueError):
             pass
 
@@ -541,6 +546,7 @@ def main() -> int:
         "site_currency": settings.get("currency", "USD"),
         "providers_configured": len(providers),
         "providers_with_price": sum(1 for r in offers if r.get("status") == "ok"),
+        "previous_providers_with_price": prev_priced,
         "notes": [
             "Every price carries price_evidence: the literal page text it was matched from.",
             "A provider with no price key means no machine-readable monthly price was found; "

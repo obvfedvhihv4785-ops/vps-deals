@@ -76,6 +76,16 @@ to ignore the field. `build.py` instead hashes each page with the run stamp and 
 "verified on" dates masked out, and only advances `lastmod` when that hash actually moves.
 A refresh that changes nothing changes no dates, and makes no commit.
 
+### The CI gate refuses to publish a bad crawl
+
+`verify.py` runs before the commit step and fails the job on malformed markup — unparsable
+JSON-LD, a missing canonical, a price that is not a clean decimal, a price that does not appear
+in its own quoted evidence. It also acts as a circuit breaker: if the number of providers with a
+readable price collapses by more than 40% in one run, the job fails and the previous good commit
+stays live, because a blocked or rate-limited crawl is far likelier than a dozen providers
+changing their pages simultaneously. Re-run it, or delete `data/offers.json` to accept the new
+baseline.
+
 ### Run it locally
 
 ```bash

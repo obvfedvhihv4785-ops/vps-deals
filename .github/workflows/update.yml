@@ -57,6 +57,12 @@ jobs:
       # referencing an undefined value — the job fails here and nothing is
       # committed. An auto-publishing site needs a check it cannot talk its way
       # past.
+      #
+      # It also acts as a circuit breaker: if the priced-provider count collapses
+      # by more than 40% in a single run, that is far more likely to be a blocked
+      # or rate-limited crawl than a dozen companies changing their pages at once.
+      # The job fails, the previous good commit stays live, and no degraded site
+      # is published unattended.
       - name: Validate generated site
         run: python verify.py
 

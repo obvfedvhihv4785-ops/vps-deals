@@ -217,6 +217,20 @@ def check_offers_json() -> None:
                 and status == "ok":
             warnings.append(f"{name}: valid_until has passed but status is still ok")
 
+    # Circuit breaker. An unattended job that publishes whatever it manages to
+    # fetch will happily publish a gutted site if the runner gets rate-limited or
+    # blocked across the board. Losing most of the priced providers in one hop is
+    # far more likely to be a bad crawl than 15 companies changing their pages at
+    # once, so refuse to publish it and leave the previous good commit live.
+    now_priced = doc.get("providers_with_price")
+    was_priced = doc.get("previous_providers_with_price")
+    if isinstance(now_priced, int) and isinstance(was_priced, int) and was_priced >= 10:
+        if now_priced < was_priced * 0.6:
+            errors.append(
+                f"priced providers fell from {was_priced} to {now_priced} in one run "
+                f"(>40% drop) — refusing to publish a likely-bad crawl; "
+                "re-run, or delete data/offers.json to accept the new baseline")
+
 
 def main() -> int:
     global BASE
