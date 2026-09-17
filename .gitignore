@@ -17,3 +17,4 @@ _cache_*.txt
 .DS_Store
 Thumbs.db
 desktop.ini
+_live/
