@@ -25,25 +25,28 @@
     <p class="sub">
       "From" is the cheapest monthly figure stated on the provider's page. Currencies are not
       converted — no exchange rate is applied, because that would make the numbers less true, not
-      more.
+      more. Rows are grouped by currency and sorted by price <em>within</em> each group, so the
+      <strong>#</strong> column is a rank inside that currency only: a EUR row is never ranked
+      against a USD row, and no claim is made about which currency is worth more.
     </p>
     <div class="table-wrap">
       <table>
         <thead>
           <tr>
-            <th>#</th><th>Provider</th><th>From</th><th>Advertised discount</th>
+            <th>#</th><th>Provider</th><th>From</th><th>Cur.</th><th>Advertised discount</th>
             <th>Status</th><th>Last verified</th><th></th>
           </tr>
         </thead>
         <tbody>
 {% for o in offers %}
           <tr>
-            <td>{{ loop.index }}</td>
+            <td>{% if o.rank_in_currency %}{{ o.rank_in_currency }}{% else %}—{% endif %}</td>
             <td>
               <a href="{{ o.provider_url }}">{{ o.provider }}</a>
               <p class="sub">{{ o.status_label }}</p>
             </td>
             <td class="num">{% if o.show_price %}{{ o.price_display }}<span class="sub">/mo</span>{% else %}—{% endif %}</td>
+            <td>{% if o.show_price %}{{ o.price_currency }}{% else %}—{% endif %}</td>
             <td>{% if o.discount_label %}{{ o.discount_label }}{% else %}—{% endif %}</td>
             <td>
 {% if o.show_price %}<span class="badge ok">verified</span>

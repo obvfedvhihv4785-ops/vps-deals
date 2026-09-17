@@ -29,6 +29,9 @@ page it came from.
 - It never carries a number forward silently — a failed refresh is labelled `stale` and dated.
 - It never publishes `Offer` structured data for a price it cannot quote.
 - It never bypasses anti-bot protection, and it honours `robots.txt`.
+- It never converts between currencies. EUR and USD entries are shown as published and ranked
+  **within** their own currency, so nothing implies a cross-currency ordering that no exchange
+  rate was applied to justify.
 
 Providers whose pricing is JavaScript-only, or who refuse automated requests, are listed with
 **no price at all**. A blank is more useful than a guess.

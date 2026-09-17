@@ -607,6 +607,18 @@ def main() -> int:
     priced_sorted = sorted(priced, key=lambda v: (v["price_currency"], v["price_value"]))
     index_order = priced_sorted + unpriced
 
+    # Rank within each currency group, never across them. A single running number
+    # over a mixed-currency list would place EUR 5.91 above USD 2 and read as
+    # "cheaper", which is false. No exchange rate is applied anywhere in this
+    # project, so no cross-currency ordering is claimed either.
+    for v in views:
+        v["rank_in_currency"] = ""
+    _seen_cur: dict[str, int] = {}
+    for v in priced_sorted:
+        cur = v["price_currency"]
+        _seen_cur[cur] = _seen_cur.get(cur, 0) + 1
+        v["rank_in_currency"] = _seen_cur[cur]
+
     # RENDER flags from site.ilang genuinely control what gets emitted. Turning a
     # page type off here removes it from the build and from the sitemap.
     def on(key: str, default: str = "true") -> bool:

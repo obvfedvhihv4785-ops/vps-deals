@@ -222,13 +222,15 @@
     <p class="sub">
       "From" is the cheapest monthly figure stated on the provider's page. Currencies are not
       converted — no exchange rate is applied, because that would make the numbers less true, not
-      more.
+      more. Rows are grouped by currency and sorted by price <em>within</em> each group, so the
+      <strong>#</strong> column is a rank inside that currency only: a EUR row is never ranked
+      against a USD row, and no claim is made about which currency is worth more.
     </p>
     <div class="table-wrap">
       <table>
         <thead>
           <tr>
-            <th>#</th><th>Provider</th><th>From</th><th>Advertised discount</th>
+            <th>#</th><th>Provider</th><th>From</th><th>Cur.</th><th>Advertised discount</th>
             <th>Status</th><th>Last verified</th><th></th>
           </tr>
         </thead>
@@ -241,6 +243,7 @@
               <p class="sub">verified</p>
             </td>
             <td class="num">€2.15<span class="sub">/mo</span></td>
+            <td>EUR</td>
             <td>—</td>
             <td>
 <span class="badge ok">verified</span>
@@ -259,6 +262,7 @@
               <p class="sub">verified</p>
             </td>
             <td class="num">€3<span class="sub">/mo</span></td>
+            <td>EUR</td>
             <td>—</td>
             <td>
 <span class="badge ok">verified</span>
@@ -277,6 +281,7 @@
               <p class="sub">verified</p>
             </td>
             <td class="num">€5.91<span class="sub">/mo</span></td>
+            <td>EUR</td>
             <td>—</td>
             <td>
 <span class="badge ok">verified</span>
@@ -289,12 +294,13 @@
           </tr>
 
           <tr>
-            <td>4</td>
+            <td>1</td>
             <td>
               <a href="https://vps-deals-radar.pages.dev/provider/ionos">IONOS</a>
               <p class="sub">verified</p>
             </td>
             <td class="num">$2<span class="sub">/mo</span></td>
+            <td>USD</td>
             <td>—</td>
             <td>
 <span class="badge ok">verified</span>
@@ -307,12 +313,13 @@
           </tr>
 
           <tr>
-            <td>5</td>
+            <td>2</td>
             <td>
               <a href="https://vps-deals-radar.pages.dev/provider/hostgator">HostGator</a>
               <p class="sub">verified</p>
             </td>
             <td class="num">$2.09<span class="sub">/mo</span></td>
+            <td>USD</td>
             <td>—</td>
             <td>
 <span class="badge ok">verified</span>
@@ -325,12 +332,13 @@
           </tr>
 
           <tr>
-            <td>6</td>
+            <td>3</td>
             <td>
               <a href="https://vps-deals-radar.pages.dev/provider/cloudzy">Cloudzy</a>
               <p class="sub">verified</p>
             </td>
             <td class="num">$2.48<span class="sub">/mo</span></td>
+            <td>USD</td>
             <td>50% off</td>
             <td>
 <span class="badge ok">verified</span>
@@ -343,12 +351,13 @@
           </tr>
 
           <tr>
-            <td>7</td>
+            <td>4</td>
             <td>
               <a href="https://vps-deals-radar.pages.dev/provider/vultr">Vultr</a>
               <p class="sub">verified</p>
             </td>
             <td class="num">$2.50<span class="sub">/mo</span></td>
+            <td>USD</td>
             <td>—</td>
             <td>
 <span class="badge ok">verified</span>
@@ -361,12 +370,13 @@
           </tr>
 
           <tr>
-            <td>8</td>
+            <td>5</td>
             <td>
               <a href="https://vps-deals-radar.pages.dev/provider/digitalocean">DigitalOcean</a>
               <p class="sub">verified</p>
             </td>
             <td class="num">$4<span class="sub">/mo</span></td>
+            <td>USD</td>
             <td>—</td>
             <td>
 <span class="badge ok">verified</span>
@@ -379,12 +389,13 @@
           </tr>
 
           <tr>
-            <td>9</td>
+            <td>6</td>
             <td>
               <a href="https://vps-deals-radar.pages.dev/provider/ovhcloud">OVHcloud</a>
               <p class="sub">verified</p>
             </td>
             <td class="num">$4.54<span class="sub">/mo</span></td>
+            <td>USD</td>
             <td>—</td>
             <td>
 <span class="badge ok">verified</span>
@@ -397,12 +408,13 @@
           </tr>
 
           <tr>
-            <td>10</td>
+            <td>7</td>
             <td>
               <a href="https://vps-deals-radar.pages.dev/provider/bluehost">Bluehost</a>
               <p class="sub">verified</p>
             </td>
             <td class="num">$4.69<span class="sub">/mo</span></td>
+            <td>USD</td>
             <td>70% off</td>
             <td>
 <span class="badge ok">verified</span>
@@ -415,12 +427,13 @@
           </tr>
 
           <tr>
-            <td>11</td>
+            <td>8</td>
             <td>
               <a href="https://vps-deals-radar.pages.dev/provider/civo">Civo</a>
               <p class="sub">verified</p>
             </td>
             <td class="num">$5.43<span class="sub">/mo</span></td>
+            <td>USD</td>
             <td>—</td>
             <td>
 <span class="badge ok">verified</span>
@@ -433,12 +446,13 @@
           </tr>
 
           <tr>
-            <td>12</td>
+            <td>9</td>
             <td>
               <a href="https://vps-deals-radar.pages.dev/provider/monovm">MonoVM</a>
               <p class="sub">verified</p>
             </td>
             <td class="num">$6<span class="sub">/mo</span></td>
+            <td>USD</td>
             <td>—</td>
             <td>
 <span class="badge ok">verified</span>
@@ -451,12 +465,13 @@
           </tr>
 
           <tr>
-            <td>13</td>
+            <td>10</td>
             <td>
               <a href="https://vps-deals-radar.pages.dev/provider/accuweb-hosting">AccuWeb Hosting</a>
               <p class="sub">verified</p>
             </td>
             <td class="num">$6.33<span class="sub">/mo</span></td>
+            <td>USD</td>
             <td>—</td>
             <td>
 <span class="badge ok">verified</span>
@@ -469,12 +484,13 @@
           </tr>
 
           <tr>
-            <td>14</td>
+            <td>11</td>
             <td>
               <a href="https://vps-deals-radar.pages.dev/provider/hostinger">Hostinger</a>
               <p class="sub">verified</p>
             </td>
             <td class="num">$6.49<span class="sub">/mo</span></td>
+            <td>USD</td>
             <td>70% off</td>
             <td>
 <span class="badge ok">verified</span>
@@ -487,12 +503,13 @@
           </tr>
 
           <tr>
-            <td>15</td>
+            <td>12</td>
             <td>
               <a href="https://vps-deals-radar.pages.dev/provider/hostwinds">Hostwinds</a>
               <p class="sub">verified</p>
             </td>
             <td class="num">$7.14<span class="sub">/mo</span></td>
+            <td>USD</td>
             <td>50% off</td>
             <td>
 <span class="badge ok">verified</span>
@@ -505,12 +522,13 @@
           </tr>
 
           <tr>
-            <td>16</td>
+            <td>13</td>
             <td>
               <a href="https://vps-deals-radar.pages.dev/provider/atlantic-net">Atlantic.Net</a>
               <p class="sub">verified</p>
             </td>
             <td class="num">$8<span class="sub">/mo</span></td>
+            <td>USD</td>
             <td>—</td>
             <td>
 <span class="badge ok">verified</span>
@@ -523,12 +541,13 @@
           </tr>
 
           <tr>
-            <td>17</td>
+            <td>14</td>
             <td>
               <a href="https://vps-deals-radar.pages.dev/provider/dreamhost">DreamHost</a>
               <p class="sub">verified</p>
             </td>
             <td class="num">$8.99<span class="sub">/mo</span></td>
+            <td>USD</td>
             <td>—</td>
             <td>
 <span class="badge ok">verified</span>
@@ -541,12 +560,13 @@
           </tr>
 
           <tr>
-            <td>18</td>
+            <td>15</td>
             <td>
               <a href="https://vps-deals-radar.pages.dev/provider/inmotion-hosting">InMotion Hosting</a>
               <p class="sub">verified</p>
             </td>
             <td class="num">$9.99<span class="sub">/mo</span></td>
+            <td>USD</td>
             <td>—</td>
             <td>
 <span class="badge ok">verified</span>
@@ -559,12 +579,13 @@
           </tr>
 
           <tr>
-            <td>19</td>
+            <td>16</td>
             <td>
               <a href="https://vps-deals-radar.pages.dev/provider/verpex">Verpex</a>
               <p class="sub">verified</p>
             </td>
             <td class="num">$10<span class="sub">/mo</span></td>
+            <td>USD</td>
             <td>—</td>
             <td>
 <span class="badge ok">verified</span>
@@ -577,12 +598,13 @@
           </tr>
 
           <tr>
-            <td>20</td>
+            <td>17</td>
             <td>
               <a href="https://vps-deals-radar.pages.dev/provider/scalahosting">ScalaHosting</a>
               <p class="sub">verified</p>
             </td>
             <td class="num">$29.95<span class="sub">/mo</span></td>
+            <td>USD</td>
             <td>—</td>
             <td>
 <span class="badge ok">verified</span>
@@ -595,12 +617,13 @@
           </tr>
 
           <tr>
-            <td>21</td>
+            <td>18</td>
             <td>
               <a href="https://vps-deals-radar.pages.dev/provider/greengeeks">GreenGeeks</a>
               <p class="sub">verified</p>
             </td>
             <td class="num">$69.95<span class="sub">/mo</span></td>
+            <td>USD</td>
             <td>—</td>
             <td>
 <span class="badge ok">verified</span>
@@ -613,12 +636,13 @@
           </tr>
 
           <tr>
-            <td>22</td>
+            <td>19</td>
             <td>
               <a href="https://vps-deals-radar.pages.dev/provider/milesweb">MilesWeb</a>
               <p class="sub">verified</p>
             </td>
             <td class="num">$69.99<span class="sub">/mo</span></td>
+            <td>USD</td>
             <td>77% off</td>
             <td>
 <span class="badge ok">verified</span>
@@ -631,12 +655,13 @@
           </tr>
 
           <tr>
-            <td>23</td>
+            <td>—</td>
             <td>
               <a href="https://vps-deals-radar.pages.dev/provider/hetzner">Hetzner</a>
               <p class="sub">price not machine-readable</p>
             </td>
             <td class="num">—</td>
+            <td>—</td>
             <td>—</td>
             <td>
 <span class="badge warn">no price</span>
