@@ -65,7 +65,8 @@ TYPE:agents PROJECT:vps-deals-promo-radar LANG:zh
   build.py       | 渲染和生成 不发起网络请求
   templates/     | 只做展示 不许自己算价格
   data/offers.json | 由 workflow 每次覆盖 不要手工编辑
-  site/          | 构建产物 由 build.py 每次清空重建 不要手工编辑
+  data/page_state.json | 每页内容哈希 + 该内容最后变化的日期 用来算真实的 sitemap lastmod 不要手工编辑
+  site/          | 构建产物 由 build.py 覆盖生成 本轮没写到的孤儿文件会被清掉 不要手工编辑
 
 ::MODULE{CONTACT|title:有疑问时}
   ::ASK{拿不准某个价格该不该收录 就不要收录 宁缺勿造}

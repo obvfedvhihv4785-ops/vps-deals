@@ -29,11 +29,11 @@ no number is rendered.
 
 from __future__ import annotations
 
+import hashlib
 import html
 import json
 import os
 import re
-import shutil
 import sys
 from datetime import date, datetime, timezone
 
@@ -45,6 +45,26 @@ CONFIG_PATH = os.path.join(HERE, ".ilang", "site.ilang")
 DATA_PATH = os.path.join(HERE, "data", "offers.json")
 TPL_DIR = os.path.join(HERE, "templates")
 OUT_DIR = os.path.join(HERE, "site")
+
+# Remembers, per output page, the hash of its last substantive content and the
+# date that content last changed. Committed by the workflow, so lastmod survives
+# across runs.
+STATE_PATH = os.path.join(HERE, "data", "page_state.json")
+
+# Every path written this run. The build does NOT wipe site/ up front: it writes
+# the pages it produces and then prunes only what it did not produce. That keeps
+# the run idempotent without mass-deleting a directory, and it means a provider
+# removed from site.ilang leaves exactly one orphan behind to clean up.
+WRITTEN: set[str] = set()
+
+# Strings that change on every run but say nothing about the page's content
+# (the build timestamp appears in the footer and in JSON-LD). They are masked
+# out before hashing, otherwise every page would look modified every 6 hours and
+# the lastmod field would be worthless to a crawler.
+_VOLATILE: list[str] = []
+_prev_state: dict[str, dict] = {}
+_new_state: dict[str, dict] = {}
+_NOW_ISO: str = ""
 
 CURRENCY_SYMBOL = {"USD": "$", "EUR": "€", "GBP": "£"}
 
@@ -469,14 +489,69 @@ def faq_jsonld(faq: list[dict]) -> str:
 # Page writers
 # ---------------------------------------------------------------------------
 
-def write(path: str, content: str) -> None:
+def _stable_hash(content: str) -> str:
+    """Hash a page with run-volatile strings masked out."""
+    stable = content
+    for token in _VOLATILE:
+        if token:
+            stable = stable.replace(token, "\x00")
+    return hashlib.sha256(stable.encode("utf-8")).hexdigest()[:16]
+
+
+def write(path: str, content: str) -> str:
+    """Write one output file; return the lastmod to publish for it.
+
+    lastmod means "when this page's content last changed", not "when we last
+    ran". A full refresh rewrites every page every run, so using the run
+    timestamp would make all URLs look modified on every refresh — which teaches
+    crawlers to ignore the field. The masked content hash decides instead.
+    """
     full = os.path.join(OUT_DIR, path)
     os.makedirs(os.path.dirname(full), exist_ok=True)
     with open(full, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(content)
+    key = path.replace(os.sep, "/")
+    WRITTEN.add(os.path.normcase(os.path.abspath(full)))
+
+    digest = _stable_hash(content)
+    prev = _prev_state.get(key) or {}
+    if prev.get("sha256_16") == digest and prev.get("lastmod"):
+        lastmod = prev["lastmod"]          # unchanged content keeps its old date
+    else:
+        lastmod = _NOW_ISO
+    _new_state[key] = {"sha256_16": digest, "lastmod": lastmod}
+    return lastmod
+
+
+def prune_orphans() -> list[str]:
+    """Delete files under site/ that this run did not write.
+
+    This is the only deletion the build performs. It is intentionally narrow:
+    a file survives if and only if it was produced above. Returns the relative
+    paths removed, so the caller can report them.
+    """
+    removed: list[str] = []
+    if not os.path.isdir(OUT_DIR):
+        return removed
+    for root, _dirs, files in os.walk(OUT_DIR):
+        for name in files:
+            full = os.path.abspath(os.path.join(root, name))
+            if os.path.normcase(full) in WRITTEN:
+                continue
+            os.remove(full)
+            removed.append(os.path.relpath(full, OUT_DIR).replace(os.sep, "/"))
+    # Drop directories left empty by the prune, deepest first.
+    for root, dirs, files in os.walk(OUT_DIR, topdown=False):
+        if os.path.abspath(root) == os.path.abspath(OUT_DIR):
+            continue
+        if not os.listdir(root):
+            os.rmdir(root)
+    return removed
 
 
 def main() -> int:
+    global _NOW_ISO, _VOLATILE, _prev_state
+
     cfg = ilang.load(CONFIG_PATH)
     settings = cfg.settings()
     render_cfg = cfg.render()
@@ -485,6 +560,14 @@ def main() -> int:
         doc = json.load(fh)
 
     generated_at = doc["generated_at"]
+    _NOW_ISO = generated_at
+
+    if os.path.exists(STATE_PATH):
+        try:
+            with open(STATE_PATH, encoding="utf-8") as fh:
+                _prev_state = (json.load(fh) or {}).get("pages", {}) or {}
+        except (ValueError, OSError):
+            _prev_state = {}   # unreadable state is not fatal; everything looks new
     site = {
         "brand": cfg.brand,
         "niche": cfg.niche,
@@ -510,6 +593,15 @@ def main() -> int:
     site["url_about"] = make_url(site["base_url"], "about.html", site["url_style"])
 
     views = [build_view(o, cfg, site, generated_at) for o in doc["offers"]]
+
+    # Mask the run stamp and every per-record "verified on" date before hashing.
+    # Those advance on each refresh without the page's substance changing, so
+    # they must not count as a modification.
+    _VOLATILE = [generated_at, site["generated_display"]]
+    for v in views:
+        _VOLATILE += [v.get("last_verified_display", ""), v.get("fetched_display", "")]
+    _VOLATILE = [t for t in dict.fromkeys(_VOLATILE) if t]
+
     priced = [v for v in views if v["show_price"]]
     unpriced = [v for v in views if not v["show_price"]]
     priced_sorted = sorted(priced, key=lambda v: (v["price_currency"], v["price_value"]))
@@ -529,8 +621,8 @@ def main() -> int:
         "sources": len({v["offer_url"] for v in views}),
     }
 
-    if os.path.isdir(OUT_DIR):
-        shutil.rmtree(OUT_DIR)
+    # No bulk wipe: pages are overwritten in place, then anything not written
+    # this run is pruned at the end. See prune_orphans().
     os.makedirs(OUT_DIR, exist_ok=True)
 
     # ---- stylesheet --------------------------------------------------------
@@ -557,8 +649,8 @@ def main() -> int:
                        f"Refreshed every {site['update_interval_hours']} hours."),
                    canonical=site["url_home"],
                    active="home")
-        write("index.html", render_file("index.html", ctx))
-        emitted.append((site["url_home"], generated_at, "1.0", "hourly"))
+        lm = write("index.html", render_file("index.html", ctx))
+        emitted.append((site["url_home"], lm, "1.0", "hourly"))
 
     # ---- compare -----------------------------------------------------------
     if on("compare"):
@@ -575,8 +667,8 @@ def main() -> int:
                                      "price was taken from."),
                    canonical=site["url_compare"],
                    active="compare")
-        write("compare.html", render_file("compare.html", ctx))
-        emitted.append((site["url_compare"], generated_at, "0.9", "hourly"))
+        lm = write("compare.html", render_file("compare.html", ctx))
+        emitted.append((site["url_compare"], lm, "0.9", "hourly"))
 
     # ---- provider + deal pages --------------------------------------------
     for v in views:
@@ -584,7 +676,6 @@ def main() -> int:
                  ("Providers", site["url_home"] + "#providers"),
                  (v["provider"], v["provider_url"])]
         deal_trail = trail + [("Deal", v["url"])]
-        lastmod = v["last_verified_at"] or generated_at
 
         if on("provider"):
             ctx = dict(site=site, stats=stats, o=v,
@@ -600,8 +691,8 @@ def main() -> int:
                            + f"Last verified {v['last_verified_display']}."),
                        canonical=v["provider_url"],
                        active="")
-            write(f"provider/{v['slug']}.html", render_file("provider.html", ctx))
-            emitted.append((v["provider_url"], lastmod, "0.8", "daily"))
+            lm = write(f"provider/{v['slug']}.html", render_file("provider.html", ctx))
+            emitted.append((v["provider_url"], lm, "0.8", "daily"))
 
         if on("deal"):
             ctx = dict(site=site, stats=stats, o=v,
@@ -621,9 +712,9 @@ def main() -> int:
                            + f"Verified against the provider's own page on {v['last_verified_display']}."),
                        canonical=v["url"],
                        active="")
-            write(f"deal/{v['slug']}.html", render_file("deal.html", ctx))
+            lm = write(f"deal/{v['slug']}.html", render_file("deal.html", ctx))
             if v["show_price"]:
-                emitted.append((v["url"], lastmod, "0.7", "daily"))
+                emitted.append((v["url"], lm, "0.7", "daily"))
 
     # ---- about -------------------------------------------------------------
     faq = [
@@ -658,8 +749,17 @@ def main() -> int:
                                      "source cannot be read, and what is deliberately never done."),
                    canonical=site["url_about"],
                    active="about")
-        write("about.html", render_file("about.html", ctx))
-        emitted.append((site["url_about"], generated_at, "0.4", "monthly"))
+        lm = write("about.html", render_file("about.html", ctx))
+        emitted.append((site["url_about"], lm, "0.4", "monthly"))
+
+    # ---- 404 ---------------------------------------------------------------
+    # Without this file the host answers every unknown path with the homepage and
+    # a 200, which is a soft 404: unlimited duplicate URLs, all looking like the
+    # index. Publishing a real 404.html makes the host return an actual 404.
+    # It is intentionally absent from the sitemap and carries no canonical.
+    if on("notfound"):
+        ctx = dict(site=site, stats=stats, active="")
+        write("404.html", render_file("404.html", ctx))
 
     # ---- sitemap + robots --------------------------------------------------
     # The sitemap is derived from what was actually written, so a page type
@@ -681,6 +781,25 @@ def main() -> int:
               "Allow: /\n"
               f"Sitemap: {site['base_url']}/sitemap.xml\n")
 
+    # ---- prune -------------------------------------------------------------
+    # Anything left in site/ that this run did not write is a page for a provider
+    # or feature that no longer exists (e.g. a provider removed from site.ilang).
+    removed = prune_orphans()
+
+    # Persist content hashes + change dates so the next run can tell "unchanged"
+    # from "changed" instead of stamping every URL with the run time. Skipped
+    # when nothing moved, so an uneventful refresh does not churn the file (and
+    # therefore does not churn the workflow's commit).
+    if _new_state != _prev_state:
+        try:
+            os.makedirs(os.path.dirname(STATE_PATH), exist_ok=True)
+            with open(STATE_PATH, "w", encoding="utf-8", newline="\n") as fh:
+                json.dump({"schema": "page-state/1", "updated_at": generated_at,
+                           "pages": _new_state}, fh, indent=1, sort_keys=True)
+                fh.write("\n")
+        except OSError as exc:
+            print(f"[build] WARN could not write {STATE_PATH}: {exc}", file=sys.stderr)
+
     # ---- report ------------------------------------------------------------
     print(f"[build] brand={site['brand']!r} domain={site['domain']!r}")
     print(f"[build] pages: index={on('index')} compare={on('compare')} about={on('about')} "
@@ -691,6 +810,12 @@ def main() -> int:
         flag = v["price_display"] if v["show_price"] else "—"
         print(f"[build]   {v['provider']:<20} {flag:<9} {v['status_label']}")
     print(f"[build] wrote {OUT_DIR}")
+    changed = sum(1 for k, s in _new_state.items()
+                  if (_prev_state.get(k) or {}).get("sha256_16") != s["sha256_16"])
+    print(f"[build] content changed on {changed}/{len(_new_state)} page(s) this run")
+    if removed:
+        print(f"[build] pruned {len(removed)} orphaned file(s): {', '.join(sorted(removed)[:8])}"
+              + (" …" if len(removed) > 8 else ""))
     return 0
 
 

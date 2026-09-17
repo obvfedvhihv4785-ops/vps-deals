@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="{{ site.locale }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page not found — {{ site.name }}</title>
+<meta name="description" content="That page does not exist on {{ site.name }}.">
+<!-- Deliberately no canonical and no Open Graph: this page must never be
+     indexed and must never be treated as a duplicate of the homepage. -->
+<meta name="robots" content="noindex, follow">
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+{% include "partials/header.html" %}
+<main class="wrap">
+
+  <div class="hero">
+    <h1>That page does not exist</h1>
+    <p class="lede">
+      The address you followed is not one of the {{ stats.tracked }} provider pages or
+      {{ stats.priced }} deal pages this site publishes. It may have been a provider that was
+      removed because its price could not be read reliably.
+    </p>
+  </div>
+
+  <div class="prose">
+    <h2>Where to go instead</h2>
+    <ul>
+      <li><a href="/">All tracked providers and their lowest verified price</a></li>
+      <li><a href="{{ site.url_compare }}">Side-by-side comparison</a></li>
+      <li><a href="{{ site.url_about }}">How every price is collected</a></li>
+      <li><a href="/sitemap.xml">Full list of pages</a></li>
+    </ul>
+    <p class="sub">Last pipeline run: {{ site.generated_display }}.</p>
+  </div>
+
+</main>
+{% include "partials/footer.html" %}
+</body>
+</html>

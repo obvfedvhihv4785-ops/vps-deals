@@ -87,8 +87,29 @@ PLAN_CONTEXT_RE = re.compile(
     r"|server|plan|hosting",
     re.I,
 )
+# The same idea applied AFTER the price. Some pages put the unit on the right:
+# "Price: $1.00 /month Storage: 10 GB" is an object-storage rate, not a VPS plan,
+# and the lead-in gives no hint at all.
+ACCESSORY_AFTER_RE = re.compile(
+    r"storage|backup|snapshot|per\s+gb|/\s?gb\b|egress",
+    re.I,
+)
+# Marketing prose about the market rather than a price this provider charges:
+# "VPS hosting costs vary widely, starting from around $4/month".
+MARKET_PROSE_RE = re.compile(
+    r"varies|costs\s+vary|price\s+varies|starting\s+from\s+around|on\s+average"
+    r"|typically|generally\s+(?:cost|start)",
+    re.I,
+)
+# A title matching this means the page is a third-party ranking, so every price
+# on it belongs to some other company and must not be attributed to this one.
+THIRD_PARTY_TITLE_RE = re.compile(
+    r"rankings?\b|top\s+\d+\s|best\s+[\w\s]{0,20}\bproviders\b", re.I
+)
 ACCESSORY_WINDOW = 45
+ACCESSORY_AFTER_WINDOW = 50
 PLAN_WINDOW = 90
+MARKET_WINDOW = 120
 DISCOUNT_RE = re.compile(
     r"(?P<pct>\d{1,3})\s?%\s?(?:off|discount|savings|cheaper)", re.I)
 SAVE_RE = re.compile(r"save\s+(?P<sym>US\$|\$|€)\s?(?P<amt>\d{1,4}(?:\.\d{1,2})?)", re.I)
@@ -242,7 +263,14 @@ def classify_candidate(text: str, start: int) -> tuple[str, str]:
     m = ACCESSORY_LEAD_RE.search(lead)
     if m:
         return "no", f"accessory lead-in {m.group(0)!r}"
-    around = text[max(0, start - PLAN_WINDOW):start + PLAN_WINDOW]
+    after = text[start:start + ACCESSORY_AFTER_WINDOW]
+    m = ACCESSORY_AFTER_RE.search(after)
+    if m:
+        return "no", f"accessory unit after the price ({m.group(0)!r})"
+    around = text[max(0, start - MARKET_WINDOW):start + MARKET_WINDOW]
+    m = MARKET_PROSE_RE.search(around)
+    if m:
+        return "no", f"market commentary, not a price they charge ({m.group(0)!r})"
     if PLAN_CONTEXT_RE.search(around):
         return "plan", "server/plan wording nearby"
     return "weak", "no accessory marker, but no server/plan wording nearby"
@@ -387,6 +415,15 @@ def scrape_provider(prov: dict, cfg: ilang.SiteConfig, settings: dict,
         return rec
 
     title, desc = extract_page_meta(html)
+
+    # A ranking/list page about the market prices other companies, so any number
+    # on it would be attributed to the wrong provider. Refuse the whole page.
+    if title and THIRD_PARTY_TITLE_RE.search(title):
+        rec.update(status="third_party_page", http_status=status, title=title, summary=desc,
+                   note=("page title indicates a third-party ranking/list, so its prices "
+                         "belong to other companies; nothing extracted"))
+        return rec
+
     text = strip_to_visible_text(html)
     prices = extract_prices(text, float(settings["min_plausible_monthly_price"]),
                             float(settings["max_plausible_monthly_price"]))

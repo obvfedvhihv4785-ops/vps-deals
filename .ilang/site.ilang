@@ -29,11 +29,32 @@ TYPE:config PROJECT:vps-deals LANG:zh
   InMotion Hosting | https://www.inmotionhosting.com/ | https://www.inmotionhosting.com/vps-hosting |
   Atlantic.Net | https://www.atlantic.net/ | https://www.atlantic.net/vps-hosting/ |
   AccuWeb Hosting | https://accuwebhosting.com/ | https://accuwebhosting.com/vps-hosting |
+  # 第二轮扩充：2026-09-18 又实测了 40 家，下面 9 家能读到真实套餐价，逐条看过原文证据。
+  Vultr | https://www.vultr.com/ | https://www.vultr.com/pricing/ |
+  Bluehost | https://www.bluehost.com/ | https://www.bluehost.com/hosting/vps |
+  HostGator | https://www.hostgator.com/ | https://www.hostgator.com/vps-hosting |
+  MilesWeb | https://www.milesweb.com/ | https://www.milesweb.com/vps-hosting.php |
+  Verpex | https://verpex.com/ | https://verpex.com/vps-hosting |
+  Cloudzy | https://cloudzy.com/ | https://cloudzy.com/vps-hosting/ |
+  MonoVM | https://monovm.com/ | https://monovm.com/vps/ |
+  Webdock | https://webdock.io/ | https://webdock.io/en/pricing |
+  Civo | https://www.civo.com/ | https://www.civo.com/pricing |
+  # 实测过但**故意不收录**的，原因是抽出来的最低价不是它的 VPS 套餐价：
+  #   ChemiCloud  $1.00 是 WordPress 促销价，页面标题写的是 VPS 从 $32.95 起
+  #   Namecheap   $2.88 是 cPanel 授权费，不是套餐价（另一处 $3.00 是备份存储）
+  #   Ultahost    $5.00 出现在第三人称营销文案里，挂不到具体套餐
+  #   PQ Hosting  $1.71 出自它自家的"TOP 20 排行榜"，那是别家公司的价格
+  #   A2 Hosting  VPS 页 302 到 hosting.com，价格其实是共享主机
+  #   Scaleway    €4.99 在 /pricing/ 总览页上挂在 "Bare Metal / Dedibox 独立服务器 → Start"
+  #               名下，是**独立物理服务器**不是 VPS；另找的三个 VPS/实例定价页全 404。
+  #               品类都不对，删掉，宁可不收录。
+  #   Linode/Vultr(旧)/Contabo/InterServer/RackNerd/Liquid Web/HostPapa/Time4VPS/
+  #   RamNode/ChicagoVPS/HostUS 等 返回 403 或连接失败
+  # 宁缺勿造：抽不准就不收录，而不是调正则调到出现一个看着合理的数字。
   # 下面这些入口实测返回 200 但价格由前端 JS 注入，服务端 HTML 里没有数字。
   # 保留它们是因为厂商本身有价值，站上会如实标"价格需到官网确认"，不编数字。
   Hetzner | https://www.hetzner.com/ | https://www.hetzner.com/cloud/ |
   UpCloud | https://upcloud.com/ | https://upcloud.com/pricing/ |
-  Scaleway | https://www.scaleway.com/ | https://www.scaleway.com/en/pricing/ |
   netcup | https://www.netcup.com/ | https://www.netcup.com/en/server/vps |
 
 ::MODULE{FIELDS|title:每条优惠提取什么}
@@ -63,6 +84,7 @@ TYPE:config PROJECT:vps-deals LANG:zh
   deal: true
   compare: true
   about: true
+  notfound: true
   sitemap: true
   robots: true
   jsonld_offer: true

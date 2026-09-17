@@ -64,6 +64,9 @@ jobs:
         run: |
           git config user.name "promo-radar-bot"
           git config user.email "promo-radar-bot@users.noreply.github.com"
+          # data/page_state.json is committed on purpose: it is what lets the
+          # next run distinguish "page changed" from "page merely re-fetched",
+          # which is what makes sitemap lastmod meaningful.
           git add -A data site
           if git diff --cached --quiet; then
             echo "Nothing changed this run — no commit made."

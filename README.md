@@ -16,8 +16,8 @@ page it came from.
 
 | | |
 |---|---|
-| Providers tracked | 15 (list lives in `.ilang/site.ilang`) |
-| With a machine-readable price | 14 at the time of writing |
+| Providers tracked | 23 (list lives in `.ilang/site.ilang`) |
+| With a machine-readable price | 22 at the time of writing |
 | Refresh cycle | every 6 hours, via GitHub Actions |
 | Running cost | zero — no server, no database, no API keys, no LLM calls at runtime |
 | Dependencies | none beyond the Python standard library |
@@ -62,7 +62,16 @@ date.
 | `build.py` | Renders `templates/` into `site/`. Generates JSON-LD, `sitemap.xml`, `robots.txt`. |
 | `templates/` | Presentation only. Contains no pricing logic. |
 | `data/offers.json` | Dataset, overwritten on every run. Do not hand-edit. |
-| `site/` | Build output, wiped and regenerated each run. Do not hand-edit. |
+| `data/page_state.json` | Per-page content hash and the date that content last changed. This is what makes `sitemap.xml` `lastmod` mean something — see below. |
+| `site/` | Build output, regenerated each run. Do not hand-edit. |
+
+### Why `lastmod` is tracked separately
+
+A full refresh rewrites every page every six hours, so using the run timestamp as `lastmod`
+would tell a crawler that all 48 URLs changed four times a day — which is how you teach Google
+to ignore the field. `build.py` instead hashes each page with the run stamp and the per-record
+"verified on" dates masked out, and only advances `lastmod` when that hash actually moves.
+A refresh that changes nothing changes no dates, and makes no commit.
 
 ### Run it locally
 

@@ -6,6 +6,9 @@ venv/
 
 # Local scratch / one-off probes — not part of the pipeline
 *.local
+_probe*.py
+_candidates.json
+_cache_*.txt
 
 # OS noise
 .DS_Store

@@ -13,11 +13,13 @@ This is a structural check, not Google's Rich Results Test — it cannot guarant
 that Google will show rich results, only that the markup is well-formed and
 internally consistent.
 """
+import datetime
 import json
 import os
 import re
 import sys
 import xml.etree.ElementTree as ET
+from datetime import datetime, timezone
 
 SITE = "site"
 BASE = None
@@ -58,6 +60,25 @@ def check_page(path: str) -> None:
         html = fh.read()
     stats["pages"] += 1
     rel = os.path.relpath(path, SITE).replace("\\", "/")
+
+    if rel == "404.html":
+        # The 404 page is deliberately outside the normal page contract: no
+        # canonical (it must not compete with the homepage), no Open Graph and no
+        # structured data. What it must carry is a noindex directive — otherwise
+        # it becomes another indexable page. Its existence is what makes the host
+        # return a real 404 instead of serving the homepage with a 200.
+        if "noindex" not in html:
+            errors.append("404.html: missing noindex directive")
+        if re.search(r'<link rel="canonical"', html):
+            errors.append("404.html: must not declare a canonical")
+        if LD_RE.search(html):
+            errors.append("404.html: must not carry structured data")
+        t = re.search(r"<title>(.*?)</title>", html, re.S)
+        if not t or not t.group(1).strip():
+            errors.append("404.html: empty <title>")
+        if "{{" in html or "{%" in html:
+            errors.append("404.html: unrendered template tag left in output")
+        return
 
     # canonical
     cans = re.findall(r'<link rel="canonical" href="([^"]+)"', html)
@@ -147,6 +168,56 @@ def check_page(path: str) -> None:
                           "no-price statement")
 
 
+def check_offers_json() -> None:
+    """Integrity checks on the dataset itself, not the rendered HTML.
+
+    The strongest guarantee this project makes is that a published number is
+    literally present in the quoted source text. That is checkable, so check it:
+    a headline price whose digits do not appear in its own evidence string means
+    the number and the quote have drifted apart, and the page would be showing
+    proof for something it does not say.
+    """
+    path = os.path.join(os.path.dirname(SITE), "data", "offers.json")
+    if not os.path.exists(path):
+        errors.append("data/offers.json missing")
+        return
+    with open(path, encoding="utf-8") as fh:
+        doc = json.load(fh)
+
+    for o in doc.get("offers", []):
+        name = o.get("provider", "?")
+        has_price = isinstance(o.get("price"), (int, float))
+        status = o.get("status")
+
+        if has_price:
+            if status not in ("ok", "stale"):
+                errors.append(f"{name}: has a price but status={status}")
+            ev = o.get("price_evidence") or ""
+            if not ev:
+                errors.append(f"{name}: price with no price_evidence")
+            else:
+                # Accept 4, 4.0, 4.00, 2.5, 2.50 for a value of 4 / 4.0 / 2.5.
+                v = float(o["price"])
+                variants = {f"{v:g}", f"{v:.1f}", f"{v:.2f}", str(int(v)) if v == int(v) else ""}
+                if not any(x and x in ev for x in variants):
+                    errors.append(
+                        f"{name}: headline {v:g} does not appear in its own quoted evidence")
+            for field in ("source_url", "fetched_at"):
+                if not o.get(field):
+                    errors.append(f"{name}: priced record missing {field}")
+        else:
+            if status == "ok":
+                errors.append(f"{name}: status=ok but no price")
+            if o.get("price_evidence"):
+                warnings.append(f"{name}: has evidence but no price")
+
+        if o.get("status") == "stale" and not o.get("last_verified_at"):
+            errors.append(f"{name}: stale without last_verified_at")
+        if o.get("valid_until") and o["valid_until"] < datetime.date.today().isoformat() \
+                and status == "ok":
+            warnings.append(f"{name}: valid_until has passed but status is still ok")
+
+
 def main() -> int:
     global BASE
     with open(os.path.join(SITE, "sitemap.xml"), encoding="utf-8") as fh:
@@ -168,15 +239,37 @@ def main() -> int:
     for loc in locs:
         if resolve_loc(loc) is None:
             errors.append(f"sitemap lists {loc} but no generated file serves it")
+    # The 404 page must exist (it is what stops the host serving the homepage
+    # for unknown paths) and must stay out of the sitemap.
+    if not os.path.exists(os.path.join(SITE, "404.html")):
+        errors.append("404.html missing — host will answer unknown paths with a 200 homepage")
+    if any(l.rstrip("/").endswith("/404") or l.rstrip("/").endswith("404.html") for l in locs):
+        errors.append("sitemap must not list the 404 page")
     lastmods = [e.text for e in root.findall(".//s:lastmod", ns)]
     if not all(re.fullmatch(r"\d{4}-\d{2}-\d{2}", m or "") for m in lastmods):
         errors.append("sitemap has malformed lastmod values")
-    if len(set(lastmods)) < 2:
-        warnings.append("all sitemap lastmod values identical — check per-page dates")
+    # lastmod must be a date that has actually happened. A future date is either
+    # a clock bug or a fabricated freshness claim, and Google discards it.
+    today = datetime.now(timezone.utc).date()
+    for m in lastmods:
+        try:
+            if m and datetime.strptime(m, "%Y-%m-%d").date() > today:
+                errors.append(f"sitemap lastmod {m} is in the future")
+                break
+        except ValueError:
+            pass
+    # Identical dates are legitimate on a cold build (every page really is new)
+    # or when nothing changed. What matters is that dates come from per-page
+    # change tracking; without the state file they are just the run timestamp.
+    if len(set(lastmods)) < 2 and not os.path.exists(os.path.join("data", "page_state.json")):
+        warnings.append("all sitemap lastmod values identical and no page_state.json — "
+                        "dates are the run timestamp, not per-page change dates")
 
     robots = open(os.path.join(SITE, "robots.txt"), encoding="utf-8").read()
     if "Sitemap:" not in robots:
         errors.append("robots.txt does not reference the sitemap")
+
+    check_offers_json()
 
     if not os.path.exists(os.path.join(SITE, "assets", "style.css")):
         errors.append("assets/style.css missing")
