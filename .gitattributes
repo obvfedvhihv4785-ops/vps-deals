@@ -1,0 +1,8 @@
+# Normalise to LF in the repository. The pipeline runs on Linux runners, and
+# mixed line endings in shell/YAML/Python are a needless source of surprises.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.ico binary
+*.woff2 binary
