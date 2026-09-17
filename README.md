@@ -103,11 +103,33 @@ baseline.
 ```bash
 python scraper.py     # ~1 minute; fetches every provider page
 python build.py       # writes site/
+python verify.py      # the gate — must pass before anything ships
 python -m http.server -d site 8000
 ```
 
 Both scripts read their configuration from `.ilang/site.ilang` at run time. Nothing is
 hard-coded — changing a provider there and re-running changes the site.
+
+### Or run the whole thing in one command
+
+```bash
+bash refresh.sh                 # scrape -> build -> verify -> commit -> publish
+SKIP_DEPLOY=1 bash refresh.sh   # stop before publishing
+```
+
+`refresh.sh` exists so any scheduler can drive the pipeline without restating the ordering or
+the safety rules. It refuses to commit or deploy when `verify.py` fails, so a malformed page, a
+price that does not match its own quoted evidence, or a crawl that lost most of its providers
+never reaches the live site. Exit codes: `0` ok, `1` scrape/build failed, `2` gate rejected it.
+
+Three ways to schedule it, in order of preference:
+
+1. **GitHub Actions** — `.github/workflows/update.yml`, runs every 6 hours, free on a public
+   repository. This is the intended production setup.
+2. **Any cron/Task Scheduler** on a machine that is on — just call `refresh.sh`.
+3. **WorkBuddy automation** — a recurring task pointed at `refresh.sh`. Needs no third-party
+   credentials at all, so it works before any repository exists. Remove it once option 1 is live,
+   otherwise the pipeline runs twice.
 
 ### Adding or removing a provider
 
