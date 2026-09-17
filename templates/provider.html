@@ -28,7 +28,7 @@
     </div>
     <div class="cta-row">
       <a class="btn" href="{{ o.cta_url }}" rel="nofollow noopener" target="_blank">{{ o.provider }} official pricing ↗</a>
-      <a class="btn ghost" href="/deal/{{ o.slug }}.html">Deal details</a>
+      <a class="btn ghost" href="{{ o.url }}">Deal details</a>
     </div>
   </div>
 
@@ -103,7 +103,7 @@
   <section>
     <h2>Compare with other providers</h2>
     <p class="sub">
-      <a href="/compare.html">See all tracked providers side by side →</a>
+      <a href="{{ site.url_compare }}">See all tracked providers side by side →</a>
     </p>
   </section>
 

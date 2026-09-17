@@ -29,6 +29,30 @@ stats = {"pages": 0, "jsonld": 0, "offer": 0, "product": 0, "itemlist": 0,
 LD_RE = re.compile(r'<script type="application/ld\+json">\s*([\s\S]*?)\s*</script>')
 
 
+def clean_url(base: str, rel: str) -> str:
+    """Public URL for a generated file path, matching build.py's url_style=clean."""
+    if rel == "index.html":
+        return f"{base}/"
+    return f"{base}/{rel[:-5]}" if rel.endswith(".html") else f"{base}/{rel}"
+
+
+def resolve_loc(loc: str) -> str | None:
+    """Map a sitemap URL back to the file that should serve it.
+
+    Clean URLs have no extension, so `/compare` is served by `compare.html` and
+    `/` by `index.html`. Both forms are tried before declaring a dead link.
+    """
+    rel = loc[len(BASE):].lstrip("/")
+    candidates = [rel, rel + ".html", (rel + "/index.html") if rel else "index.html"]
+    if not rel:
+        candidates = ["index.html"]
+    for c in candidates:
+        p = os.path.join(SITE, c.replace("/", os.sep))
+        if os.path.exists(p):
+            return p
+    return None
+
+
 def check_page(path: str) -> None:
     with open(path, encoding="utf-8") as fh:
         html = fh.read()
@@ -40,7 +64,7 @@ def check_page(path: str) -> None:
     if len(cans) != 1:
         errors.append(f"{rel}: expected 1 canonical, found {len(cans)}")
     else:
-        expected = f"{BASE}/{rel}" if rel != "index.html" else f"{BASE}/"
+        expected = clean_url(BASE, rel)
         if cans[0] != expected:
             errors.append(f"{rel}: canonical {cans[0]} != {expected}")
 
@@ -142,12 +166,8 @@ def main() -> int:
 
     # sitemap -> file existence
     for loc in locs:
-        rel = loc[len(BASE):].lstrip("/") or "index.html"
-        if rel.endswith("/"):
-            rel += "index.html"
-        target = os.path.join(SITE, rel.replace("/", os.sep))
-        if not os.path.exists(target):
-            errors.append(f"sitemap lists {loc} but {target} does not exist")
+        if resolve_loc(loc) is None:
+            errors.append(f"sitemap lists {loc} but no generated file serves it")
     lastmods = [e.text for e in root.findall(".//s:lastmod", ns)]
     if not all(re.fullmatch(r"\d{4}-\d{2}-\d{2}", m or "") for m in lastmods):
         errors.append("sitemap has malformed lastmod values")

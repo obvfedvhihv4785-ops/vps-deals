@@ -13,7 +13,7 @@ TYPE:config PROJECT:vps-deals LANG:zh
 # 不绕反爬，不抓登录后内容，遵守 robots.txt。
 # ============================================================================
 
-::STATE{@SITE, brand:vps-deals, niche:vps 主机, domain:vps-deals.pages.dev}
+::STATE{@SITE, brand:vps-deals, niche:vps 主机, domain:vps-deals-radar.pages.dev}
 
 ::MODULE{PROVIDERS|title:抓哪几家 这里改了站就变}
   # 名称 | 官网 | 抓取入口(官方公开页) | 联盟链接(留空则用裸链)
@@ -52,6 +52,10 @@ TYPE:config PROJECT:vps-deals LANG:zh
   max_plausible_monthly_price: 2000.00
   site_name: VPS Deals Radar
   site_tagline: Machine-verified VPS pricing, refreshed every 6 hours
+  # clean = canonical 和 sitemap 用无扩展名 URL（/compare 而不是 /compare.html）
+  # Cloudflare Pages 会把 .html 308 跳到无扩展名版本，canonical 指向跳转地址会浪费信号。
+  # 换到不做这个跳转的主机时，改成 html。
+  url_style: clean
 
 ::MODULE{RENDER|title:页面渲染规则}
   index: true

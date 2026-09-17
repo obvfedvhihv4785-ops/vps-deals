@@ -242,6 +242,21 @@ def slugify(name: str) -> str:
     return re.sub(r"-{2,}", "-", s).strip("-")
 
 
+def make_url(base: str, rel: str, style: str) -> str:
+    """Public URL for a generated file.
+
+    Cloudflare Pages serves `compare.html` at `/compare` and 308-redirects the
+    `.html` form. A canonical pointing at a redirect is a wasted signal, so the
+    default is the extensionless URL. Set `url_style: html` in site.ilang for a
+    host that does not do this.
+    """
+    rel = rel.lstrip("/")
+    if style == "html" or not rel.endswith(".html"):
+        return f"{base}/{rel}"
+    clean = rel[:-5]
+    return f"{base}/" if clean == "index" else f"{base}/{clean}"
+
+
 def money(value: float, currency: str) -> str:
     sym = CURRENCY_SYMBOL.get(currency, currency + " ")
     if abs(value - round(value)) < 0.005:
@@ -336,8 +351,8 @@ def build_view(offer: dict, cfg: ilang.SiteConfig, site: dict, generated_at: str
         "last_verified_display": fmt_date(offer.get("last_verified_at") or offer.get("fetched_at")),
         "fetched_display": fmt_date(offer.get("fetched_at")),
         "candidates": cands,
-        "url": f"{site['base_url']}/deal/{slug}.html",
-        "provider_url": f"{site['base_url']}/provider/{slug}.html",
+        "url": make_url(site["base_url"], f"deal/{slug}.html", site["url_style"]),
+        "provider_url": make_url(site["base_url"], f"provider/{slug}.html", site["url_style"]),
         "in_stock": show_price,
     }
 
@@ -487,7 +502,12 @@ def main() -> int:
         # Single-locale for v1, so hreflang is off. Flip it in site.ilang when a
         # second language directory is added, otherwise Google sees duplicates.
         "hreflang_enabled": render_cfg.get("hreflang", "false") == "true",
+        # "clean" strips .html so canonicals match what the host actually serves.
+        "url_style": settings.get("url_style", "clean"),
     }
+    site["url_home"] = make_url(site["base_url"], "index.html", site["url_style"])
+    site["url_compare"] = make_url(site["base_url"], "compare.html", site["url_style"])
+    site["url_about"] = make_url(site["base_url"], "about.html", site["url_style"])
 
     views = [build_view(o, cfg, site, generated_at) for o in doc["offers"]]
     priced = [v for v in views if v["show_price"]]
@@ -527,7 +547,7 @@ def main() -> int:
         ctx = dict(site=site, stats=stats, offers=index_shown, priced=priced_sorted,
                    jsonld_itemlist=(itemlist_jsonld(index_shown, f"{site['name']} — tracked VPS providers")
                                     if on("jsonld_itemlist") else ""),
-                   jsonld_breadcrumb=(breadcrumb_jsonld([("Home", site["base_url"] + "/")])
+                   jsonld_breadcrumb=(breadcrumb_jsonld([("Home", site["url_home"])])
                                       if on("jsonld_breadcrumb") else ""),
                    page_title=f"{site['name']} — verified VPS prices, updated every "
                               f"{site['update_interval_hours']}h ({site['month']})",
@@ -535,10 +555,10 @@ def main() -> int:
                        f"{stats['priced']} VPS providers with machine-verified monthly prices, "
                        f"each traced to the provider's own public pricing page. "
                        f"Refreshed every {site['update_interval_hours']} hours."),
-                   canonical=f"{site['base_url']}/",
+                   canonical=site["url_home"],
                    active="home")
         write("index.html", render_file("index.html", ctx))
-        emitted.append((f"{site['base_url']}/", generated_at, "1.0", "hourly"))
+        emitted.append((site["url_home"], generated_at, "1.0", "hourly"))
 
     # ---- compare -----------------------------------------------------------
     if on("compare"):
@@ -546,22 +566,22 @@ def main() -> int:
                    jsonld_itemlist=(itemlist_jsonld(index_order, f"VPS price comparison — {site['name']}")
                                     if on("jsonld_itemlist") else ""),
                    jsonld_breadcrumb=(breadcrumb_jsonld(
-                       [("Home", site["base_url"] + "/"), ("Compare", site["base_url"] + "/compare.html")])
+                       [("Home", site["url_home"]), ("Compare", site["url_compare"])])
                        if on("jsonld_breadcrumb") else ""),
                    page_title=f"VPS price comparison — {stats['priced']} providers side by side "
                               f"({site['month']})",
                    page_description=("Side-by-side comparison of the lowest machine-readable VPS "
                                      "price at each tracked provider, with the exact page text each "
                                      "price was taken from."),
-                   canonical=f"{site['base_url']}/compare.html",
+                   canonical=site["url_compare"],
                    active="compare")
         write("compare.html", render_file("compare.html", ctx))
-        emitted.append((f"{site['base_url']}/compare.html", generated_at, "0.9", "hourly"))
+        emitted.append((site["url_compare"], generated_at, "0.9", "hourly"))
 
     # ---- provider + deal pages --------------------------------------------
     for v in views:
-        trail = [("Home", site["base_url"] + "/"),
-                 ("Providers", site["base_url"] + "/#providers"),
+        trail = [("Home", site["url_home"]),
+                 ("Providers", site["url_home"] + "#providers"),
                  (v["provider"], v["provider_url"])]
         deal_trail = trail + [("Deal", v["url"])]
         lastmod = v["last_verified_at"] or generated_at
@@ -631,15 +651,15 @@ def main() -> int:
         ctx = dict(site=site, stats=stats, faq=faq,
                    jsonld_faq=faq_jsonld(faq),
                    jsonld_breadcrumb=(breadcrumb_jsonld(
-                       [("Home", site["base_url"] + "/"), ("About", site["base_url"] + "/about.html")])
+                       [("Home", site["url_home"]), ("About", site["url_about"])])
                        if on("jsonld_breadcrumb") else ""),
                    page_title=f"Method & data sources — {site['name']}",
                    page_description=("How every price on this site is collected, what happens when a "
                                      "source cannot be read, and what is deliberately never done."),
-                   canonical=f"{site['base_url']}/about.html",
+                   canonical=site["url_about"],
                    active="about")
         write("about.html", render_file("about.html", ctx))
-        emitted.append((f"{site['base_url']}/about.html", generated_at, "0.4", "monthly"))
+        emitted.append((site["url_about"], generated_at, "0.4", "monthly"))
 
     # ---- sitemap + robots --------------------------------------------------
     # The sitemap is derived from what was actually written, so a page type

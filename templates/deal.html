@@ -7,7 +7,7 @@
 <main class="wrap">
 
   <nav class="crumbs">
-    <a href="/">Home</a> › <a href="/provider/{{ o.slug }}.html">{{ o.provider }}</a> › Deal
+    <a href="/">Home</a> › <a href="{{ o.provider_url }}">{{ o.provider }}</a> › Deal
   </nav>
 
   <div class="hero">
@@ -41,7 +41,7 @@
       <a class="btn" href="{{ o.cta_url }}" rel="nofollow noopener" target="_blank">
         {% if o.show_price %}Get this plan at {{ o.provider }} ↗{% else %}Check {{ o.provider }} pricing ↗{% endif %}
       </a>
-      <a class="btn ghost" href="/provider/{{ o.slug }}.html">Full {{ o.provider }} profile</a>
+      <a class="btn ghost" href="{{ o.provider_url }}">Full {{ o.provider }} profile</a>
     </div>
   </div>
 
@@ -104,7 +104,7 @@
 
   <section>
     <h2>Other providers</h2>
-    <p class="sub"><a href="/compare.html">Compare every tracked provider →</a></p>
+    <p class="sub"><a href="{{ site.url_compare }}">Compare every tracked provider →</a></p>
   </section>
 
 </main>

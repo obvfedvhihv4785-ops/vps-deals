@@ -40,7 +40,7 @@
           <tr>
             <td>{{ loop.index }}</td>
             <td>
-              <a href="/provider/{{ o.slug }}.html">{{ o.provider }}</a>
+              <a href="{{ o.provider_url }}">{{ o.provider }}</a>
               <p class="sub">{{ o.status_label }}</p>
             </td>
             <td class="num">{% if o.show_price %}{{ o.price_display }}<span class="sub">/mo</span>{% else %}—{% endif %}</td>
@@ -73,7 +73,7 @@
           estimate.</li>
       </ul>
     </div>
-    <p class="sub"><a href="/about.html">Read the full method →</a></p>
+    <p class="sub"><a href="{{ site.url_about }}">Read the full method →</a></p>
   </section>
 
 </main>

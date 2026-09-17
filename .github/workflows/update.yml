@@ -88,5 +88,5 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: >-
             pages deploy site
-            --project-name=vps-deals-promo-radar
+            --project-name=vps-deals-radar
             --branch=main

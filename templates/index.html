@@ -33,7 +33,7 @@
 {% for o in offers %}
       <article class="card">
         <div class="card-head">
-          <h3><a href="/provider/{{ o.slug }}.html">{{ o.provider }}</a></h3>
+          <h3><a href="{{ o.provider_url }}">{{ o.provider }}</a></h3>
 {% if o.show_price %}
           <div class="price">{{ o.price_display }}<small>/mo</small></div>
 {% else %}
@@ -60,7 +60,7 @@
         <p class="sum">{{ o.summary }}</p>
 {% endif %}
         <div class="actions">
-          <a href="/deal/{{ o.slug }}.html">Deal details →</a>
+          <a href="{{ o.url }}">Deal details →</a>
           <a href="{{ o.cta_url }}" rel="nofollow noopener" target="_blank">Official page ↗</a>
         </div>
       </article>
@@ -86,7 +86,7 @@
     </div>
     <p class="sub">
       Full method, including what this pipeline deliberately refuses to do:
-      <a href="/about.html">read the method page</a>.
+      <a href="{{ site.url_about }}">read the method page</a>.
     </p>
   </section>
 

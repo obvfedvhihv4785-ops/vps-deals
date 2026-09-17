@@ -6,8 +6,8 @@
     </a>
     <nav class="site-nav">
       <a href="/"{% if active == "home" %} class="on"{% endif %}>Providers</a>
-      <a href="/compare.html"{% if active == "compare" %} class="on"{% endif %}>Compare</a>
-      <a href="/about.html"{% if active == "about" %} class="on"{% endif %}>Method</a>
+      <a href="{{ site.url_compare }}"{% if active == "compare" %} class="on"{% endif %}>Compare</a>
+      <a href="{{ site.url_about }}"{% if active == "about" %} class="on"{% endif %}>Method</a>
     </nav>
   </div>
 </header>

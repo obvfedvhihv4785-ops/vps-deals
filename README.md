@@ -1,6 +1,6 @@
 # vps-deals-promo-radar
 
-**Live site:** https://vps-deals.pages.dev *(update this line once the domain is registered)*
+**Live site:** https://vps-deals-radar.pages.dev *(update this line once the domain is registered)*
 
 A self-updating VPS pricing index. Every six hours it re-reads the public pricing pages of
 the providers listed in [`.ilang/site.ilang`](.ilang/site.ilang), extracts the lowest monthly
@@ -44,7 +44,7 @@ Providers whose pricing is JavaScript-only, or who refuse automated requests, ar
         │
         └─► build.py   ──► site/                render templates, JSON-LD, sitemap, robots.txt
                                   │
-                                  └─► Cloudflare Pages ──► https://vps-deals.pages.dev
+                                  └─► Cloudflare Pages ──► https://vps-deals-radar.pages.dev
 ```
 
 `.github/workflows/update.yml` runs the whole chain every six hours and commits whatever
