@@ -189,6 +189,11 @@
           the page states it and it is higher than the advertised rate.</li>
         <li>It never estimates a missing figure from a similar provider.</li>
         <li>It never carries a number forward without marking it stale and dating it.</li>
+        <li>It never dates a carried-forward number to the refresh that failed. The date shown is
+          the last successful read, and it does not move forward while the refreshes keep failing.</li>
+        <li>It never lets a page, a badge, or its structured data call a figure current when the
+          refresh failed. An <em>InStock</em> claim carries its qualifier inside the same block,
+          because a search engine reads that block without the prose around it.</li>
         <li>It never buys traffic, follows, or engagement.</li>
         <li>It never publishes structured data for a price it cannot quote.</li>
       </ul>
@@ -204,6 +209,12 @@
       page, rebuilds the site, and commits whatever changed. The date shown on each entry is the
       date that specific provider's page was last read — not the date of the most recent run in
       general.
+    </p>
+    <p>
+      The price-history table on each entry is a change log, not a run log. A row is added only
+      when the price or the status actually moves, and a later change on the same day replaces
+      that day's row, so a date shows the last state recorded that day. A table with two rows
+      therefore means the price moved twice — not that the pipeline ran twice.
     </p>
 
     <h2>Money</h2>

@@ -202,6 +202,16 @@ expect_caught_in_html(
         "The most recent refresh of that page failed, so this is the last "
         "verified figure rather than a current reading.", ""))
 
+# A claim the data cannot support is the failure this whole gate exists to
+# catch, and copy is a claim. The history file records a row only when the price
+# or status changes, so a provider read twelve times with a stable price has one
+# row — "on every run" describes a table this pipeline does not produce.
+expect_caught_in_html(
+    "history copy claiming a row per run when rows are recorded on change",
+    "provider/vultr.html",
+    lambda h: h.replace("whenever a provider's price or status changes",
+                        "on every run", 1))
+
 print()
 print("-" * 72)
 restored = run_verify()

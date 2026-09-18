@@ -209,8 +209,10 @@
   <section>
     <h2>Price history</h2>
     <p class="sub">
-      Recorded by this pipeline on every run, starting 2026-09-17. History cannot be
-      reconstructed after the fact, so it only grows from here.
+      Recorded by this pipeline whenever a provider's price or status changes, starting
+      2026-09-17. A run that finds no change adds no row, so a gap is a run where nothing
+      moved rather than a run that did not happen. Each date shows the last state recorded that
+      day. History cannot be reconstructed after the fact, so it only grows from here.
     </p>
     <div class="table-wrap">
       <table>
@@ -225,7 +227,8 @@
       </table>
     </div>
 
-    <p class="sub">One observation so far. This table fills in as the pipeline keeps running.</p>
+    <p class="sub">No change has been recorded since the first reading, so this holds a single
+      row. The table grows only when the price or status moves.</p>
 
   </section>
 

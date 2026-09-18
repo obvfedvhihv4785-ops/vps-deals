@@ -16,11 +16,18 @@ page it came from.
 
 | | |
 |---|---|
-| Providers tracked | 23 (list lives in `.ilang/site.ilang`) |
-| With a machine-readable price | 22 at the time of writing |
+| Providers tracked | 26 (list lives in `.ilang/site.ilang`) |
+| With a machine-readable price | 25 published, 23 read fresh in the latest run (18 Sep 2026) |
 | Refresh cycle | every 6 hours, via GitHub Actions |
 | Running cost | zero — no server, no database, no API keys, no LLM calls at runtime |
 | Dependencies | none beyond the Python standard library |
+
+Two counts appear above because they answer different questions. **Published** counts the records
+that carry a number, including a price carried forward from an earlier run and labelled `stale`.
+**Read fresh** counts the pages that yielded a price in the most recent run. Conflating the two is
+how a summary ends up disagreeing with the site it describes, so both are recomputed from the
+records on every run and printed in the commit message. The live site's footer always carries the
+current numbers.
 
 ## What it deliberately does not do
 
@@ -174,7 +181,7 @@ evidence, both fail the build.
 ### Why `lastmod` is tracked separately
 
 A full refresh rewrites every page every six hours, so using the run timestamp as `lastmod`
-would tell a crawler that all 48 URLs changed four times a day — which is how you teach Google
+would tell a crawler that every URL changed four times a day — which is how you teach Google
 to ignore the field. `build.py` instead hashes each page with the run stamp and the per-record
 "verified on" dates masked out, and only advances `lastmod` when that hash actually moves.
 A refresh that changes nothing changes no dates, and makes no commit.
@@ -274,8 +281,9 @@ rather than after the content is good.
 
 Availability and price below were read from Cloudflare Registrar's live registry check
 (`POST /accounts/{account_id}/registrar/domain-check`), which is authoritative and at-cost — the
-registrar charges the registry fee with no markup. Prices are USD per year and were current when
-recorded:
+registrar charges the registry fee with no markup. Prices are USD per year, read on
+**2026-09-18 at 11:53 UTC**, and registrar pricing does move — re-run the check before buying
+rather than trusting this table.
 
 | Domain | Register | Renew | Notes |
 | --- | --- | --- | --- |

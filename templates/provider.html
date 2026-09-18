@@ -114,8 +114,10 @@
   <section>
     <h2>Price history</h2>
     <p class="sub">
-      Recorded by this pipeline on every run, starting {{ o.first_seen }}. History cannot be
-      reconstructed after the fact, so it only grows from here.{% if o.history_multi %}
+      Recorded by this pipeline whenever a provider's price or status changes, starting
+      {{ o.first_seen }}. A run that finds no change adds no row, so a gap is a run where nothing
+      moved rather than a run that did not happen. Each date shows the last state recorded that
+      day. History cannot be reconstructed after the fact, so it only grows from here.{% if o.history_multi %}
       Over the period recorded so far the lowest figure seen was {{ o.lowest_seen }} and the
       highest was {{ o.highest_seen }}.{% endif %}
     </p>
@@ -132,7 +134,8 @@
       </table>
     </div>
 {% if not o.history_multi %}
-    <p class="sub">One observation so far. This table fills in as the pipeline keeps running.</p>
+    <p class="sub">No change has been recorded since the first reading, so this holds a single
+      row. The table grows only when the price or status moves.</p>
 {% endif %}
   </section>
 {% endif %}

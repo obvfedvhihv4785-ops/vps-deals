@@ -274,6 +274,16 @@ def check_stale_disclosure(doc: dict) -> None:
                     errors.append(
                         f"{rel}: rejected-figures table is empty under its own promise")
 
+            # update_history() appends a row only when the price or status
+            # changes, so copy promising a row per run describes a table this
+            # pipeline does not produce. The wording is part of the claim, and a
+            # claim the data cannot support is the failure this whole file exists
+            # to catch — so the phrase is checked rather than trusted.
+            if "on every run" in html:
+                errors.append(
+                    f"{rel}: history copy claims a row per run, but entries are only "
+                    f"recorded when the price or status changes")
+
     # The comparison table prints its own status badge, and it is the page a
     # buyer scans prices on. A bare "verified" there is the same contradiction
     # as the long form on a card, so it is checked against the status too.
