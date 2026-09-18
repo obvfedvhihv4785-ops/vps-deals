@@ -118,7 +118,7 @@
       Each provider's <em>own</em> public pricing or VPS page is fetched over plain HTTP on a
       schedule. Only publicly reachable pages are read: nothing behind a login, nothing requiring
       a bypass of anti-bot protection, and <code>robots.txt</code> is honoured. The pipeline reads
-      23 source pages per run and tracks 23 providers.
+      26 source pages per run and tracks 26 providers.
     </p>
     <p>
       This site is not a scraper of other comparison sites. There is no second-hand data. If a
@@ -135,6 +135,34 @@
     <p>
       The discarded figures are not thrown away. They are listed on each provider page with the
       reason they were rejected, so the filtering can be audited rather than believed.
+    </p>
+
+    <h2>What is published next to a price</h2>
+    <p>
+      A price on its own can be true and still mislead. Two figures sitting beside it decide what
+      it actually means, and most price tables drop both.
+    </p>
+    <p>
+      <strong>The commitment.</strong> Not every figure written "/mo" is a month-to-month price.
+      10 of the 25 priced providers here are quoting a
+      rate that depends on something — prepaying two years, a first-three-months promotion, or a
+      page that shows several terms beside one price without saying which one it belongs to. The
+      <em>Term</em> column says which, and says <em>not stated</em> where the page is silent.
+      Silence is not evidence of a monthly price, so it is not reported as one.
+    </p>
+    <p>
+      <strong>The renewal.</strong> 8 of the 25 providers
+      state what the advertised rate becomes later, usually within a few words of the headline —
+      and the jump is often large. Both figures are published, each quoted from the provider's own
+      page, because a deals page showing only the introductory number is showing half the offer.
+    </p>
+    <p>
+      Both are read from prose, so both are written to stay quiet when the page is ambiguous. The
+      commitment is only accepted when it sits immediately beside the figure. A duration attached
+      to something else in the sentence — "free SSL for the first 12 months" — is not read as a
+      price condition. A renewal is only accepted when it is <em>higher</em> than the advertised
+      figure and no other price sits between the two, because in a plan table the nearest following
+      sentence often belongs to the next plan down.
     </p>
 
     <h2>What happens when something fails</h2>
@@ -155,6 +183,10 @@
     <div class="rulebox">
       <ul>
         <li>It never invents a price, a discount, a rating, or a review count.</li>
+        <li>It never asserts a commitment the page does not state. Where the page is silent, the
+          column says so rather than assuming the friendliest reading.</li>
+        <li>It never warns about a renewal that is not there. A later figure is only published when
+          the page states it and it is higher than the advertised rate.</li>
         <li>It never estimates a missing figure from a similar provider.</li>
         <li>It never carries a number forward without marking it stale and dating it.</li>
         <li>It never buys traffic, follows, or engagement.</li>
@@ -207,17 +239,17 @@
       the page for the quoted text, and see whether the figure is there. If it is not, the entry is
       wrong and should be reported.
     </p>
-    <p class="sub">Last pipeline run: 18 Sep 2026, 07:57 UTC.</p>
+    <p class="sub">Last pipeline run: 18 Sep 2026, 08:28 UTC.</p>
   </div>
 
 </main>
 <footer class="site-footer">
   <div class="wrap">
     <p class="foot-note">
-      <strong>VPS Deals Radar</strong> tracks 23 VPS providers.
-      22 have a machine-readable monthly price. Every price is quoted from the
+      <strong>VPS Deals Radar</strong> tracks 26 VPS providers.
+      25 have a machine-readable monthly price. Every price is quoted from the
       provider's own public page and shown with the exact text it came from.
-      Last pipeline run 18 Sep 2026, 07:57 UTC.
+      Last pipeline run 18 Sep 2026, 08:28 UTC.
     </p>
     <p class="foot-note dim">
       Prices are read automatically and can change at any time — always confirm on the

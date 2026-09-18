@@ -184,6 +184,30 @@
         "currency": "EUR",
         "status": "ok"
       }
+    ],
+    "Kamatera": [
+      {
+        "date": "2026-09-18",
+        "price": 4.0,
+        "currency": "USD",
+        "status": "ok"
+      }
+    ],
+    "CloudCone": [
+      {
+        "date": "2026-09-18",
+        "price": 2.33,
+        "currency": "USD",
+        "status": "ok"
+      }
+    ],
+    "Hostodo": [
+      {
+        "date": "2026-09-18",
+        "price": 2.99,
+        "currency": "USD",
+        "status": "ok"
+      }
     ]
   }
 }
