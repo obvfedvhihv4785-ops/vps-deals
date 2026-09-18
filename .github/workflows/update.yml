@@ -48,7 +48,11 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          # Pinned to the version this pipeline is actually developed and tested
+          # against. Do not lower this to match some idea of "conservative" —
+          # every extraction test and every gate run so far happened on 3.13, so
+          # a 3.12 runner would be an untested environment on first contact.
+          python-version: "3.13"
 
       # The pipeline is pure standard library on purpose: nothing to install,
       # nothing to pin, no supply chain to audit, no runtime API key.
