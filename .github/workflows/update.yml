@@ -32,6 +32,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
+    # The Cloudflare credentials are lifted into job-level env on purpose. The
+    # `secrets` context is NOT available inside a step-level `if:`, so writing
+    # `if: ${{ secrets.X != '' }}` evaluates the secret as empty and the deploy
+    # step is skipped forever, with a green build and no error to explain it.
+    # The `env` context *is* available in `if:`, so route through it.
+    env:
+      CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -78,7 +87,13 @@ jobs:
             echo "Nothing changed this run — no commit made."
             exit 0
           fi
-          MSG=$(python -c 'import json;d=json.load(open("data/offers.json",encoding="utf-8"));print("%d/%d providers priced" % (d["providers_with_price"], d["providers_configured"]))')
+          # Two different counts, and the message must not conflate them:
+          #   providers_with_price_shown — records that carry a number, i.e.
+          #     what the site actually publishes (includes a price carried
+          #     forward from an earlier run and labelled stale);
+          #   providers_with_price — pages that yielded a price *this* run,
+          #     which is what the circuit breaker above is calibrated on.
+          MSG=$(python -c 'import json;d=json.load(open("data/offers.json",encoding="utf-8"));print("%d/%d providers priced (%d read fresh this run)" % (d["providers_with_price_shown"], d["providers_configured"], d["providers_with_price"]))')
           git commit -m "data: refresh ${MSG} at $(date -u +%Y-%m-%dT%H:%MZ)"
           git push
           echo "Committed: ${MSG}"
@@ -90,11 +105,11 @@ jobs:
       # on the commit above and this step is redundant — it is kept so the site
       # can also be published without any dashboard wiring.
       - name: Deploy to Cloudflare Pages
-        if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' && secrets.CLOUDFLARE_ACCOUNT_ID != '' }}
+        if: ${{ env.CF_API_TOKEN != '' && env.CF_ACCOUNT_ID != '' }}
         uses: cloudflare/wrangler-action@v3
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          apiToken: ${{ env.CF_API_TOKEN }}
+          accountId: ${{ env.CF_ACCOUNT_ID }}
           command: >-
             pages deploy site
             --project-name=vps-deals-radar
