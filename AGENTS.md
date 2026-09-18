@@ -59,13 +59,21 @@ TYPE:agents PROJECT:vps-deals-promo-radar LANG:zh
   ::RULE{每个价格必须带 price_evidence 原文和 source_url 和 fetched_at 缺一不可}
   ::RULE{价格附带承诺期或首期促销时 必须把条件一起显示 只写 /mo 不写条件是误导}
   ::RULE{承诺期只能从紧邻价格的原文里读 读不到或页面给了多个档就写"未注明" 不许猜}
+  ::RULE{页面说"所有方案都需预付 月费是总价除以月数"时 全页每个 /mo 都是预付摊销 不是月付 必须按预付标注}
+  ::RULE{厂商写了续费价时 必须和首期价一起显示 只登首期价等于只登了半张报价单}
+  ::RULE{续费价必须高于首期价 低于或等于就不算提示 不许为了警示而登}
+  ::RULE{续费那句话和价格之间若还夹着别的价格 那句话多半属于下一档方案 不许拿来配这个价}
+  ::RULE{续费价与首期价币种不同时 一个都不许登 连"仅供参考"都不许}
+  ::RULE{厂商没写承诺期时 写"未注明" 不许写"按月付费" 页面沉默不等于月付}
   ::RULE{改完必须本地跑通 scraper.py 和 build.py 再提交}
+  ::RULE{改完抽取规则必须跑 tests/test_extraction.py 三个陷阱用例一个都不许红}
 
 ::MODULE{FILES|title:每个文件的职责边界}
   ilang.py       | I-Lang 配置解析器 只读配置 不抓不渲染
   scraper.py     | 抓取和抽取 不碰 HTML 模板
   build.py       | 渲染和生成 不发起网络请求
   templates/     | 只做展示 不许自己算价格
+  tests/test_extraction.py | 抽取规则的回归测试 用的是各家页面原文 改规则必须让它全绿
   data/offers.json | 由 workflow 每次覆盖 不要手工编辑
   data/page_state.json | 每页内容哈希 + 该内容最后变化的日期 用来算真实的 sitemap lastmod 不要手工编辑
   site/          | 构建产物 由 build.py 覆盖生成 本轮没写到的孤儿文件会被清掉 不要手工编辑

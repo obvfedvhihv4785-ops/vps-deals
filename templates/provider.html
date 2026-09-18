@@ -18,6 +18,10 @@
 {% if o.has_term_caveat %}
       That figure is not a month-to-month price: {{ o.billing_term_note }}.
 {% endif %}
+{% if o.has_renewal %}
+      {{ o.provider }} also states that it {{ o.renewal_phrase }}, so the advertised figure is a
+      first-term rate rather than the ongoing one.
+{% endif %}
 {% else %}
       {{ o.provider }}'s page could not be read as a number on the last run. Rather than publish a
       guess, this entry carries no price. The provider's own page is linked below.
@@ -25,7 +29,8 @@
     </p>
     <div class="facts">
       <div class="fact"><span>Lowest readable price</span><b>{% if o.show_price %}{{ o.price_display }}/mo{% else %}not available{% endif %}</b></div>
-      <div class="fact"><span>Term</span><b>{% if o.show_price %}{% if o.term_short %}{{ o.term_short }}{% else %}month to month{% endif %}{% else %}—{% endif %}</b></div>
+      <div class="fact"><span>Term</span><b>{% if o.show_price %}{% if o.term_short %}{{ o.term_short }}{% else %}not stated{% endif %}{% else %}—{% endif %}</b></div>
+      <div class="fact"><span>Renews at</span><b>{% if o.has_renewal %}{{ o.renewal_display }}/mo{% if o.renewal_months %} · {{ o.renewal_months }} mo{% endif %}{% else %}not stated{% endif %}</b></div>
       <div class="fact"><span>Status</span><b>{{ o.status_label }}</b></div>
       <div class="fact"><span>Last verified</span><b>{{ o.last_verified_display }}</b></div>
       <div class="fact"><span>Source page</span><b><a href="{{ o.offer_url }}" rel="nofollow noopener" target="_blank">open ↗</a></b></div>

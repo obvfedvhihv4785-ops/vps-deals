@@ -9,6 +9,10 @@ venv/
 _probe*.py
 _candidates.json
 _cache_*.txt
+_tamper.py
+
+# Local agent tooling state. Never part of the published site or the dataset.
+.workbuddy-ai/
 
 # Wrangler's local deploy cache — machine state, never part of the site
 .wrangler/

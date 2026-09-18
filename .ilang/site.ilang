@@ -103,5 +103,8 @@ TYPE:config PROJECT:vps-deals LANG:zh
 ::RULE{每个数字都要能溯源到 source_url 和 fetched_at 抓不到就不写}
 ::RULE{抓取失败就如实记 blocked 或 error 不许把失败包装成没有优惠}
 ::RULE{价格带附加条件⇒必须一起显示条件 只写 /mo 而不写要承诺 24 个月 等于误导}
+::RULE{厂商写了续费价⇒必须和首期价一起显示 只登首期价等于只登了半张报价单}
+::RULE{续费价必须高于首期价 且与价格之间不许夹着别的价格 否则多半是下一档方案的续费价}
+::RULE{页面沉默⇒写"未注明" 不许写"按月付费" 沉默不等于月付}
 ::BOUNDARY{never:编优惠 编价格 编佣金|scope:permanent}
 ::BOUNDARY{never:绕反爬 抓登录后内容 冒充用户|scope:permanent}

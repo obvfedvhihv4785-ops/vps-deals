@@ -35,14 +35,24 @@
       and one is a rate that only holds for the first three months. {{ stats.with_term_caveat }} of
       the {{ stats.priced }} priced providers below are not quoting a plain monthly price. Two
       numbers in this column are only comparable when their terms match, so read the Term column
-      before reading the price.
+      before reading the price. Where a provider states no term at all, this column says
+      <em>not stated</em> — it does not assume the friendliest answer.
     </p>
+{% if stats.with_renewal %}
+    <p class="sub">
+      <strong>Renews at</strong> is the figure the advertised rate becomes later.
+      {{ stats.with_renewal }} of the {{ stats.priced }} priced providers state one next to their
+      headline, and it is often a large jump — {{ stats.biggest_renewal_jump }} is the largest
+      here. A deals page that shows only the introductory number is showing half the offer, so
+      both figures are published side by side and each is quoted from the provider's own page.
+    </p>
+{% endif %}
     <div class="table-wrap">
       <table>
         <thead>
           <tr>
             <th>#</th><th>Provider</th><th>From</th><th>Cur.</th><th>Term</th>
-            <th>Advertised discount</th><th>Status</th><th>Last verified</th><th></th>
+            <th>Renews at</th><th>Advertised discount</th><th>Status</th><th>Last verified</th><th></th>
           </tr>
         </thead>
         <tbody>
@@ -55,7 +65,8 @@
             </td>
             <td class="num">{% if o.show_price %}{{ o.price_display }}<span class="sub">/mo</span>{% else %}—{% endif %}</td>
             <td>{% if o.show_price %}{{ o.price_currency }}{% else %}—{% endif %}</td>
-            <td>{% if o.show_price %}{% if o.term_short %}<span class="badge warn">{{ o.term_short }}</span>{% else %}<span class="sub">month to month</span>{% endif %}{% else %}—{% endif %}</td>
+            <td>{% if o.show_price %}{% if o.term_short %}<span class="badge warn">{{ o.term_short }}</span>{% else %}<span class="sub">not stated</span>{% endif %}{% else %}—{% endif %}</td>
+            <td class="num">{% if o.has_renewal %}{{ o.renewal_display }}<span class="sub">/mo{% if o.renewal_months %} · {{ o.renewal_months }} mo{% endif %}</span>{% else %}<span class="sub">—</span>{% endif %}</td>
             <td>{% if o.discount_label %}{{ o.discount_label }}{% else %}—{% endif %}</td>
             <td>
 {% if o.show_price %}<span class="badge ok">verified</span>
@@ -85,6 +96,9 @@
           provider's rate depends on a commitment — a 24-month prepay, a first-three-months
           promotion, or a page that offers several terms without saying which one the price
           belongs to — the Term column says so, and says nothing when the page says nothing.</li>
+        <li>It does not treat the advertised rate as the price you will pay. Where the provider
+          states a renewal figure, that figure is published beside it in the Renews at column,
+          taken from the same sentence on the same page.</li>
         <li>It does not fill gaps. A provider with no readable price shows a dash, never an
           estimate.</li>
       </ul>

@@ -52,6 +52,9 @@
 {% if o.term_short %}
           <span class="badge warn">{{ o.term_short }}</span>
 {% endif %}
+{% if o.has_renewal %}
+          <span class="badge warn">renews at {{ o.renewal_display }}</span>
+{% endif %}
 {% if o.stale %}
           <span class="badge warn">stale</span>
 {% endif %}

@@ -319,16 +319,50 @@ def check_affiliate_marking() -> None:
 
 
 TERM_KINDS = {"term", "intro", "annual", "ambiguous_terms", "ambiguous_toggle",
-              "intro_word", "none", ""}
+              "intro_word", "prepay", "none", ""}
 
 # How each kind of claim has to be traceable back to the quoted page text. The
 # notes for the ambiguous kinds are paraphrase, so there is nothing to match
 # them against — but the ones that assert a specific commitment must be checkable,
 # because an invented term is a false statement about money.
-TERM_TRACE = {
-    "term": lambda months, ev: str(months) in ev,
-    "annual": lambda months, ev: bool(re.search(r"per\s+year|annually|/\s*yr", ev, re.I)),
-    "intro": lambda months, ev: bool(re.search(r"first\s+\d{1,2}\s*months?", ev, re.I)),
+#
+# A commitment may be written in months or in years ("for 24 month term" vs
+# "with a 1-year term"), and the same page can phrase the promotional period
+# either before the figure ("First 3 months at $8.99") or after it ("$2 /month
+# for 3 months"). Both spellings are the page saying the same thing, so both
+# count as traceable; the check is that the page said it, not how.
+TERM_YEAR_RE = re.compile(r"\b(?P<n>\d{1,2})\s*[-\s]?\s*years?\b", re.I)
+TERM_PROMO_MARK_RE = re.compile(
+    r"\b(?:first|initial|introductory|intro)\s+\d{1,2}\s*[-\s]?\s*months?\b"
+    r"|/\s*mo(?:nth)?\s*for\s+\d{1,2}\s*[-\s]?\s*months?\b",
+    re.I,
+)
+
+
+def _commitment_in_evidence(months: int, ev: str) -> bool:
+    """True when the quoted text states this many months of commitment."""
+    if str(months) in ev:
+        return True
+    if months % 12 == 0:
+        for m in TERM_YEAR_RE.finditer(ev):
+            if int(m.group("n")) * 12 == months:
+                return True
+    return False
+
+
+# Kinds whose claim rests on page-level wording rather than the price snippet,
+# so they carry their own quoted evidence and are checked against it instead.
+TERM_PAGE_EVIDENCE = {"prepay": r"paid\s+upfront"}
+
+RENEWAL_KINDS = {"renews_at", "renewal_price", "regular_price"}
+
+# Each kind names the wording that makes it a renewal claim rather than a
+# sentence that merely contains the same number.
+RENEWAL_TRACE = {
+    "renews_at": lambda ev: bool(re.search(r"renews?\s+at", ev, re.I)),
+    "renewal_price": lambda ev: bool(re.search(
+        r"when you renew|at renewal|on renewal|upon renewal", ev, re.I)),
+    "regular_price": lambda ev: bool(re.search(r"(regular|list|standard)\s+price", ev, re.I)),
 }
 
 
@@ -366,16 +400,136 @@ def check_billing_terms() -> None:
         elif months or note:
             errors.append(f"{who}: term data present ({months!r}/{note!r}) but kind is empty")
 
+        ev = o.get("price_evidence") or ""
+
         if months is not None:
             if not isinstance(months, int) or not 1 <= months <= 60:
                 errors.append(f"{who}: implausible billing_term_months {months!r}")
                 continue
-            ev = o.get("price_evidence") or ""
-            probe = TERM_TRACE.get(kind)
-            if probe and not probe(months, ev):
+            # A commitment stated as "billed annually" has no number in the text
+            # to match, so it is traced by its own wording instead.
+            if kind == "annual":
+                ok = bool(re.search(r"per\s+year|annually|/\s*yr", ev, re.I))
+            else:
+                ok = _commitment_in_evidence(months, ev)
+            if not ok:
                 errors.append(
                     f"{who}: claims a {months}-month term, but that is not supported by its own "
                     f"price_evidence ({ev[:70]!r}) — the claim is not traceable to the page")
+
+        # An introductory rate is a claim about a promotional period, which the
+        # page states in its own words. The note paraphrases it, so the wording
+        # has to be found in the quoted text.
+        if kind in ("intro", "intro_word") and not TERM_PROMO_MARK_RE.search(ev):
+            errors.append(
+                f"{who}: claims an introductory rate, but no promotional period is stated in "
+                f"its own price_evidence ({ev[:70]!r})")
+
+        # A page-level claim (currently only "paid upfront") applies to every
+        # price on the page, so it cannot be checked against one figure's
+        # snippet. It carries its own quoted sentence, and that sentence has to
+        # contain the wording the claim rests on.
+        pattern = TERM_PAGE_EVIDENCE.get(kind)
+        if pattern:
+            ev = o.get("billing_term_evidence") or ""
+            if not ev:
+                errors.append(f"{who}: billing_term_kind={kind!r} publishes no quoted evidence")
+            elif not re.search(pattern, ev, re.I):
+                errors.append(
+                    f"{who}: billing_term_kind={kind!r} is not supported by its own "
+                    f"billing_term_evidence ({ev[:70]!r})")
+
+
+def check_renewal_claims() -> None:
+    """A published renewal figure must be real, higher, and quoted from the page.
+
+    The renewal is the most consequential number on a deal page after the
+    headline: it is the difference between "this costs $2.09/mo" and "this costs
+    $2.09/mo for now". Getting it wrong in either direction is a false statement
+    about money — inventing a rise that is not there, or dropping one that is.
+
+    So a renewal may only appear when all of the following hold, and the checks
+    are deliberately symmetrical: data without a figure and a figure without
+    traceable evidence both fail.
+    """
+    path = os.path.join(os.path.dirname(SITE), "data", "offers.json")
+    if not os.path.exists(path):
+        return
+    with open(path, encoding="utf-8") as fh:
+        doc = json.load(fh)
+
+    for o in doc.get("offers", []):
+        who = o.get("provider", "?")
+        value = o.get("renewal_price")
+        kind = o.get("renewal_kind", "")
+        evidence = o.get("renewal_evidence") or ""
+        months = o.get("renewal_months")
+        has_figure = isinstance(value, (int, float))
+
+        if not has_figure:
+            # A kind, an evidence string or a period with no figure is drift.
+            if kind or evidence or months:
+                errors.append(
+                    f"{who}: renewal metadata present (kind={kind!r}, months={months!r}) "
+                    f"but no renewal_price")
+            continue
+
+        if value <= 0:
+            errors.append(f"{who}: renewal_price {value!r} is not a positive number")
+            continue
+
+        if kind not in RENEWAL_KINDS:
+            errors.append(f"{who}: unknown renewal_kind {kind!r}")
+            continue
+
+        price = o.get("price")
+        if not isinstance(price, (int, float)):
+            errors.append(f"{who}: has a renewal_price but no advertised price to compare it to")
+        elif value <= price:
+            # The scraper only records a rise. A renewal at or below the
+            # headline is not a caveat, and publishing it as one would be a
+            # fabricated warning.
+            errors.append(
+                f"{who}: renewal_price {value} is not above the advertised price {price}")
+
+        # Currency must match the headline; the site never compares across
+        # currencies, and a mismatched pair would mean the two numbers cannot be
+        # read together at all.
+        cur = o.get("renewal_currency") or ""
+        if cur and cur != o.get("currency"):
+            errors.append(
+                f"{who}: renewal_currency {cur!r} differs from offer currency "
+                f"{o.get('currency')!r}")
+
+        if not evidence:
+            errors.append(f"{who}: publishes a renewal figure with no quoted evidence")
+            continue
+
+        # The figure itself must appear in the quoted text. Both spellings are
+        # accepted because pages write "$4.68" and "4.68" interchangeably.
+        if not _figure_in_text(value, evidence):
+            errors.append(
+                f"{who}: renewal figure {value} does not appear in its own evidence "
+                f"({evidence[:70]!r}) — the claim is not traceable to the page")
+
+        # And the evidence must actually be a renewal claim, not some other
+        # sentence that happens to contain the number.
+        probe = RENEWAL_TRACE.get(kind)
+        if probe and not probe(evidence):
+            errors.append(
+                f"{who}: renewal_kind={kind!r} is not supported by its own evidence "
+                f"({evidence[:70]!r})")
+
+        if months is not None:
+            if not isinstance(months, int) or not 1 <= months <= 60:
+                errors.append(f"{who}: implausible renewal_months {months!r}")
+
+
+def _figure_in_text(value: float, text: str) -> bool:
+    """True when a money figure appears in a quoted snippet, in either spelling."""
+    plain = f"{value:g}"
+    two_dp = f"{value:.2f}"
+    return plain in text or two_dp in text
 
 
 def main() -> int:
@@ -433,6 +587,7 @@ def main() -> int:
     check_history()
     check_affiliate_marking()
     check_billing_terms()
+    check_renewal_claims()
 
     if not os.path.exists(os.path.join(SITE, "assets", "style.css")):
         errors.append("assets/style.css missing")

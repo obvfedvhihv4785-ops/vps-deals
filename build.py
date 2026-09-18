@@ -320,16 +320,78 @@ TERM_SHORT_LABEL = {
     "annual": "annual billing",
     "ambiguous_terms": "term unclear",
     "ambiguous_toggle": "term unclear",
+    "prepay": "paid upfront",
 }
 
 
 def term_short(offer: dict) -> str:
-    """One or two words describing the commitment, or "" when there is none."""
+    """One or two words describing the commitment, or "" when there is none.
+
+    A commitment and a promotional period can both apply to the same figure, so
+    both are named when both are known.
+    """
     kind = offer.get("billing_term_kind", "")
-    if kind == "term":
-        months = offer.get("billing_term_months")
-        return f"{months}-month term" if months else "term not stated"
-    return TERM_SHORT_LABEL.get(kind, "")
+    months = offer.get("billing_term_months") or 0
+    parts = []
+    if months:
+        parts.append(f"{months}-month term")
+    label = TERM_SHORT_LABEL.get(kind)
+    if label and not months:
+        parts.append(label)
+    elif label and months and kind in ("intro", "intro_word"):
+        parts.append(label)
+    return ", ".join(parts)
+
+
+def renewal_display(offer: dict) -> str:
+    """The later price, formatted, or "" when the page states none."""
+    value = offer.get("renewal_price")
+    if not isinstance(value, (int, float)):
+        return ""
+    return money(value, offer.get("renewal_currency") or offer.get("currency") or "USD")
+
+
+def renewal_phrase(offer: dict) -> str:
+    """The renewal as one readable sentence fragment, e.g. "renews at $11.99/mo
+    for 2 years".
+
+    The period matters as much as the figure: "renews at $11.99/mo" reads like a
+    rate that then holds indefinitely, while the page actually says it holds for
+    two years. Only the period the page states is appended — never an assumed one.
+    """
+    shown = renewal_display(offer)
+    if not shown:
+        return ""
+    months = offer.get("renewal_months")
+    if isinstance(months, int) and months and months % 12 == 0:
+        return f"renews at {shown}/mo for {months // 12} years"
+    if isinstance(months, int) and months:
+        return f"renews at {shown}/mo for {months} months"
+    return f"renews at {shown}/mo"
+
+
+def _biggest_renewal_jump(priced: list[dict]) -> str:
+    """Name the steepest renewal on the site, for the comparison page lede.
+
+    Ratio rather than absolute difference, because the point being made is "the
+    headline is not the price" and a $2 → $5 jump makes that point better than a
+    $70 → $90 one. Returns "" when no provider states a renewal, so the sentence
+    can be omitted rather than printed with a hole in it.
+    """
+    best, best_ratio = None, 0.0
+    for v in priced:
+        if not v["has_renewal"]:
+            continue
+        price = v["price_value"]
+        if not isinstance(price, (int, float)) or price <= 0:
+            continue
+        ratio = v["renewal_value"] / price
+        if ratio > best_ratio:
+            best, best_ratio = v, ratio
+    if not best:
+        return ""
+    return (f"{best['provider']} (from {best['price_display']} to "
+            f"{best['renewal_display']}/mo)")
 
 
 # ---------------------------------------------------------------------------
@@ -386,9 +448,32 @@ def build_view(offer: dict, cfg: ilang.SiteConfig, site: dict, generated_at: str
         "discount_evidence": (offer.get("discount") or {}).get("evidence", ""),
         "billing_term_kind": offer.get("billing_term_kind", ""),
         "billing_term_months": offer.get("billing_term_months") or 0,
-        "billing_term_note": offer.get("billing_term_note", ""),
+        # A plain commitment carries its fact in the months, not in a note, so
+        # the sentence is composed here. Leaving it empty would print
+        # "Read the term before the price. — so this is not a month-to-month
+        # figure", which reads as a mistake and undermines the claim.
+        "billing_term_note": (
+            offer.get("billing_term_note")
+            or (f"this rate requires a {offer['billing_term_months']}-month commitment"
+                if offer.get("billing_term_months") else "")
+        ),
+        "billing_term_evidence": offer.get("billing_term_evidence", ""),
         "term_short": term_short(offer),
         "has_term_caveat": bool(offer.get("billing_term_kind")),
+        "renewal_value": offer.get("renewal_price") if isinstance(
+            offer.get("renewal_price"), (int, float)) else None,
+        "renewal_display": renewal_display(offer),
+        "renewal_phrase": renewal_phrase(offer),
+        "renewal_months": offer.get("renewal_months") or 0,
+        "renewal_kind": offer.get("renewal_kind", ""),
+        "renewal_evidence": offer.get("renewal_evidence", ""),
+        "has_renewal": isinstance(offer.get("renewal_price"), (int, float)),
+        "renewal_multiple": (
+            round(offer["renewal_price"] / offer["price"], 1)
+            if isinstance(offer.get("renewal_price"), (int, float))
+            and isinstance(offer.get("price"), (int, float)) and offer["price"] > 0
+            else ""
+        ),
         "valid_until": valid_until or "",
         "expired": expired,
         "status": status,
@@ -440,6 +525,12 @@ def offer_jsonld(v: dict, site: dict) -> str:
             # that only holds for 24 months should not read as a monthly rate.
             + (f" This rate applies to a {v['term_short']}."
                if v["term_short"] else "")
+            # Same reasoning for the renewal: schema.org cannot express "the
+            # price rises later", so the sentence carries it. A structured-data
+            # block that quotes the headline and omits the renewal is telling
+            # search engines half the offer.
+            + (f" The provider states it {v['renewal_phrase']}."
+               if v["has_renewal"] else "")
         ),
     }
     # priceValidUntil is only emitted when the page actually stated a date.
@@ -737,6 +828,10 @@ def main() -> int:
         # figures are all alike.
         "with_term_caveat": sum(1 for v in priced if v["has_term_caveat"]),
         "plain_monthly": sum(1 for v in priced if not v["has_term_caveat"]),
+        # How many advertised prices are promotional and rise later. This is the
+        # number that decides whether the headline is the price at all.
+        "with_renewal": sum(1 for v in priced if v["has_renewal"]),
+        "biggest_renewal_jump": _biggest_renewal_jump(priced),
     }
 
     # No bulk wipe: pages are overwritten in place, then anything not written
@@ -808,6 +903,8 @@ def main() -> int:
                            + (f"Lowest monthly price found: {v['price_display']}. "
                               if v["show_price"] else "No machine-readable monthly price found. ")
                            + (f"That rate applies to a {v['term_short']}. " if v["term_short"] else "")
+                           + (f"The provider states it {v['renewal_phrase']}. "
+                              if v["has_renewal"] else "")
                            + f"Last verified {v['last_verified_display']}."),
                        canonical=v["provider_url"],
                        active="")
@@ -832,6 +929,8 @@ def main() -> int:
                                if v["term_short"] else ". ")
                            if v["show_price"]
                            else f"{v['provider']} VPS pricing could not be read as a number. ")
+                           + (f"The provider states it {v['renewal_phrase']}. "
+                              if v["has_renewal"] else "")
                            + f"Verified against the provider's own page on {v['last_verified_display']}."),
                        canonical=v["url"],
                        active="")

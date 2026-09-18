@@ -64,6 +64,7 @@ date.
 | `scraper.py` | Fetches pages, extracts prices with their evidence text. Never invents a value. |
 | `build.py` | Renders `templates/` into `site/`. Generates JSON-LD, `sitemap.xml`, `robots.txt`. |
 | `templates/` | Presentation only. Contains no pricing logic. |
+| `tests/test_extraction.py` | The term and renewal extractions, tested against verbatim excerpts from the live pages. Run it with `python tests/test_extraction.py`. |
 | `data/offers.json` | Dataset, overwritten on every run. Do not hand-edit. |
 | `data/history.json` | Append-only price history. One entry per provider per observable change. See below. |
 | `data/page_state.json` | Per-page content hash and the date that content last changed. This is what makes `sitemap.xml` `lastmod` mean something — see below. |
@@ -101,6 +102,63 @@ beside one price, the result is "term not stated" rather than a guess at one of 
 from the wrong sentence would be a false statement about money, which is worse than the silence it
 replaced — and `verify.py` now checks that any claimed term is actually supported by the text the
 scraper quoted.
+
+One further case came out of this. Hostinger does not put the term beside the price at all; it
+states a rule once for the whole page:
+
+> All plans are paid upfront. The monthly rate reflects the total plan price divided by the number
+> of months in your plan.
+
+That single sentence means every `/mo` figure on that page is an amortised prepay. Reading it as
+"month to month" — which is what a Term column that defaults to the friendliest answer would do —
+would have been wrong about all of them at once. So the page-level rule is detected too, and
+because it applies to every price rather than one, it carries its own quoted sentence in
+`billing_term_evidence` rather than reusing one figure's snippet. Both halves of the rule must be
+present: "paid upfront" alone can describe a setup fee, so a page saying only that is left alone,
+and so is a page with the amortisation sentence but no upfront statement.
+
+Where a provider states **no** term, the column says *not stated*. It does not say "month to
+month". Those are different claims, and only one of them is supported by a page that is silent.
+
+### The renewal price is published too
+
+The headline figure on a hosting page is usually a first-term price, and the provider almost
+always says so within a few words of it. Nine of the twenty-two priced providers state a renewal
+price beside the advertised one, and the gap is not small:
+
+| Provider | Advertised | Renews at |
+| --- | --- | --- |
+| HostGator | $2.09 | **$4.68** |
+| DreamHost | $8.99 (first 3 months) | **$15.99** |
+| Hostinger | $6.49 | **$11.99** for 2 years |
+| Verpex | $10 | **$19.99** |
+| InMotion Hosting | $9.99 | **$16.99** |
+| ScalaHosting | $29.95 | **$54.95** |
+| MilesWeb | $69.99 | **$89.99** |
+| Bluehost | $4.69 | **$5.69** |
+
+A deals page that publishes only the left column is showing half the offer, so both are shown —
+in the **Renews at** column on the comparison table, as a callout and a fact on the deal page, in
+the page description and in the `Offer` JSON-LD. Each figure is quoted from the provider's own
+page in a "What it renews at" section, so it can be checked rather than trusted.
+
+Three guards keep this honest, and all three exist because of a specific failure seen in testing:
+
+- **It must be a rise.** A renewal at or below the headline is not a caveat, and publishing it as
+  one would be an invented warning.
+- **No other price may sit between the figure and the sentence.** In a plan table the nearest
+  following sentence often belongs to the *next* plan down; without this guard HostGator's
+  `$2.09` was being paired with the `$9.35` renewal of a larger plan.
+- **Currencies never mix.** A `$10` headline is not compared with a `€12.99` renewal, not even to
+  warn.
+
+The renewal *period* is read too, so the site says "renews at $11.99/mo **for 2 years**" rather
+than a bare figure that reads like a rate held indefinitely.
+
+`verify.py` gates all of it: a published renewal must be a positive number, above the advertised
+price, in the same currency, traceable to its own quoted evidence, and that evidence must contain
+the wording that makes it a renewal claim. Metadata without a figure, and a figure without
+evidence, both fail the build.
 
 ### Why `lastmod` is tracked separately
 

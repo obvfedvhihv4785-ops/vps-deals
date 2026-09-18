@@ -26,6 +26,13 @@
       quoting a plain monthly rate.
     </p>
 {% endif %}
+{% if o.has_renewal %}
+    <p class="note">
+      <strong>This is not the price you keep paying.</strong> The same page states the rate
+      {{ o.renewal_phrase }} — about {{ o.renewal_multiple }}× the advertised figure. The
+      advertised number is what you pay first; the renewal is what it becomes.
+    </p>
+{% endif %}
 {% else %}
     <h1>{{ o.provider }} VPS</h1>
     <p class="lede">
@@ -37,7 +44,8 @@
 
     <div class="facts">
       <div class="fact"><span>Price</span><b>{% if o.show_price %}{{ o.price_display }}/mo {{ o.price_currency }}{% else %}not published{% endif %}</b></div>
-      <div class="fact"><span>Term</span><b>{% if o.show_price %}{% if o.term_short %}{{ o.term_short }}{% else %}month to month{% endif %}{% else %}—{% endif %}</b></div>
+      <div class="fact"><span>Term</span><b>{% if o.show_price %}{% if o.term_short %}{{ o.term_short }}{% else %}not stated{% endif %}{% else %}—{% endif %}</b></div>
+      <div class="fact"><span>Renews at</span><b>{% if o.has_renewal %}{{ o.renewal_display }}/mo{% if o.renewal_months %} · {{ o.renewal_months }} mo{% endif %}{% else %}not stated{% endif %}</b></div>
       <div class="fact"><span>Provider</span><b>{{ o.provider }}</b></div>
       <div class="fact"><span>Verified</span><b>{{ o.last_verified_display }}</b></div>
 {% if o.valid_until %}
@@ -87,12 +95,36 @@
   </section>
 {% endif %}
 
+{% if o.billing_term_evidence %}
+  <section>
+    <h2>Where the term comes from</h2>
+    <p class="sub">
+      This provider states the billing rule once for the whole page rather than beside each price,
+      so the claim above rests on this sentence. Quoted verbatim.
+    </p>
+    <p class="evidence-label">Quoted page text</p>
+    <p class="evidence">{{ o.billing_term_evidence }}</p>
+  </section>
+{% endif %}
+
 {% if o.discount_label %}
   <section>
     <h2>Advertised discount</h2>
     <p class="sub">Quoted from the same page.</p>
     <p class="evidence-label">Quoted page text</p>
     <p class="evidence">{{ o.discount_evidence }}</p>
+  </section>
+{% endif %}
+
+{% if o.has_renewal %}
+  <section>
+    <h2>What it renews at</h2>
+    <p class="sub">
+      {{ o.provider }} states this itself, on the same page as the advertised price. Quoted
+      verbatim, so the figure can be checked against the source rather than taken on trust.
+    </p>
+    <p class="evidence-label">Quoted page text</p>
+    <p class="evidence">{{ o.renewal_evidence }}</p>
   </section>
 {% endif %}
 
@@ -106,6 +138,11 @@
         <li>This particular figure is <strong>not a month-to-month price</strong>.
           {{ o.billing_term_note }}. What you actually pay per month, and how much you pay up
           front, both depend on the term you choose.</li>
+{% endif %}
+{% if o.has_renewal %}
+        <li>Budget for the renewal, not the headline. {{ o.provider }} states it
+          {{ o.renewal_phrase }}, so the first-term price is a discount against a higher ongoing
+          rate — the two together are the real cost.</li>
 {% endif %}
         <li>The figure above is the lowest one stated on the page — it may be a small plan or a
           promotional first term, not the plan you actually want.</li>

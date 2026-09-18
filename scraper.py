@@ -155,11 +155,93 @@ INTRO_NEAR_RE = re.compile(
     re.I,
 )
 INTRO_WORD_NEAR_RE = re.compile(r"\bintro(?:ductory)?\s+(?:offer|price|rate|pricing)\b.{0,25}$", re.I)
+# "Snapshots retained for the first 6 months" is a duration attached to a
+# feature, not to the price that happens to follow it. When one of these verbs
+# governs the clause, the "first N months" belongs to whatever that verb is
+# about, so the price is left alone. Without this guard the phrase immediately
+# before a figure is indistinguishable from a real introductory rate, and
+# labelling a plain price "introductory" is a fabricated claim about money.
+INTRO_FEATURE_VERB_RE = re.compile(
+    r"\b(?:retain(?:ed)?|kept|stored|included|includes|available|valid|free|provided|"
+    r"accessible|supported|protected|backed\s+up|deleted|expires?|renew(?:ed)?|"
+    r"released|issued|granted)\b",
+    re.I,
+)
+# "…/month for 3 months with a 1-year term" — IONOS states the promotional
+# period directly after the figure rather than as "first N months" before it.
+# Anchored to the start of the after-window so it can only match text that
+# begins right at the price.
+#
+# The trailing lookahead matters: "For 24 month term" also starts with "for N
+# months" but is a commitment, not a promotional period, and reading it as one
+# would label a two-year contract an introductory rate.
+INTRO_AFTER_RE = re.compile(
+    r"^\s*(?:/\s*mo(?:nth)?)?\s*for\s+(?P<n>\d{1,2})\s*[-\s]?\s*months?\b"
+    r"(?!\s*(?:term|commitment|contract|billing|plan|period))",
+    re.I,
+)
+# A commitment can be stated in years ("a 1-year term"), which is the same fact
+# as 12 months and belongs in the same field.
+YEAR_TERM_RE = re.compile(
+    r"(?P<n>\d{1,2})\s*[-\s]?\s*years?\s*(?:term|commitment|contract|billing|plan|period)",
+    re.I,
+)
 ANNUAL_RE = re.compile(r"billed\s+(?:annually|yearly|per\s+year)|\bper\s+year\b|/\s*yr\b", re.I)
 # ScalaHosting renders term toggles as "36 M 12 M 1 M" with one price beside
 # them. Which toggle the price belongs to is not in the static HTML, so the
 # honest result is "term not stated", not a guess at one of the three.
 TERM_TOGGLE_RE = re.compile(r"\b\d{1,2}\s*M\b(?=\s+\d{1,2}\s*M\b)", re.I)
+# Some providers state the billing rule once for the whole page instead of beside
+# each price. Hostinger says: "All plans are paid upfront. The monthly rate
+# reflects the total plan price divided by the number of months in your plan."
+# That single sentence means every "/mo" figure on the page is an amortised
+# prepay, not a monthly charge — so a term column reading "month to month"
+# there would be flatly wrong.
+#
+# Both halves are required. "Paid upfront" alone can describe a setup fee, and
+# the amortisation sentence alone can describe one plan rather than the page.
+UPFRONT_PAID_RE = re.compile(r"\bpaid\s+upfront\b", re.I)
+UPFRONT_AMORTISE_RE = re.compile(
+    r"monthly\s+rate\s+reflects\s+the\s+total\s+plan\s+price\s+divided\s+by", re.I)
+
+# What the figure becomes after the promotional period.
+#
+# This is arguably the most important number after the advertised one. HostGator
+# advertises "$2.09 /mo" and states two words later that it "Renews at $4.68
+# /mo" — more than double. Verpex goes from $10 to $19.99. Nine of the
+# twenty-two tracked providers state a renewal price next to the headline, and a
+# deals page that shows only the introductory figure is showing half the offer.
+RENEWAL_AFTER_RE = re.compile(
+    r"(?:auto[-\s]?)?renews?\s+at\s+(?P<sym>US\$|\$|€)\s?(?P<amt>\d{1,4}(?:,\d{3})*(?:[.,]\d{1,2})?)",
+    re.I,
+)
+RENEWAL_BEFORE_RE = re.compile(
+    r"(?P<sym>US\$|\$|€)\s?(?P<amt>\d{1,4}(?:,\d{3})*(?:[.,]\d{1,2})?)"
+    r"\s*(?:/\s*mo(?:nth)?)?\s*(?:when you renew|at renewal|on renewal|upon renewal)",
+    re.I,
+)
+REGULAR_PRICE_RE = re.compile(
+    r"(?:regular|list|standard)\s+price\s*(?::|of|is)?\s*"
+    r"(?P<sym>US\$|\$|€)\s?(?P<amt>\d{1,4}(?:,\d{3})*(?:[.,]\d{1,2})?)",
+    re.I,
+)
+# Wide enough to reach the renewal sentence in every case observed ("Renews at"
+# lands 20-60 characters after the figure), but bounded, and guarded below
+# against reaching past another plan's price.
+RENEWAL_AFTER_WINDOW = 90
+RENEWAL_BEFORE_WINDOW = 70
+ANY_MONEY_RE = re.compile(r"(?:US\$|\$|€)\s?\d", re.I)
+# Hostinger states the renewal *period* as well as the figure: "Renews at
+# $11.99/mo for 2 years." That "for 2 years" is part of the same sentence and
+# belongs in the same disclosure — dropping it would make the renewal look like
+# a rate that holds indefinitely. Anchored immediately after the figure so it
+# cannot pick up a duration from elsewhere in the sentence.
+RENEWAL_TERM_RE = re.compile(
+    r"^\s*(?:/\s*mo(?:nth)?)?\s*(?:for|over)\s+(?P<n>\d{1,2})\s*[-\s]?\s*"
+    r"(?P<unit>months?|mos?|years?|yrs?)",
+    re.I,
+)
+
 # The term sits immediately beside the figure in every case observed ("$2.09
 # /mo For 24 month", "on the 12-month", "Billed $28 per year"), so the search is
 # tight. A wide window would start attributing a term mentioned elsewhere on the
@@ -395,11 +477,16 @@ def extract_discount(text: str) -> dict | None:
 def extract_billing_term(text: str, start: int, end: int) -> dict:
     """Read how long a buyer must commit for the quoted rate to apply.
 
-    Returns {"months": int | None, "note": str}. `months` is only set when the
-    page names exactly one term, because a page showing several terms beside a
-    single price does not say which of them that price belongs to — guessing one
-    would be inventing a fact. `note` carries what can honestly be said instead:
-    an introductory rate, an ambiguous term list, or annual billing.
+    Returns {"kind": str, "months": int | None, "note": str}. `months` is only
+    set when the page names exactly one term, because a page showing several
+    terms beside a single price does not say which of them that price belongs to
+    — guessing one would be inventing a fact. `note` carries what can honestly
+    be said instead: an introductory rate, an ambiguous term list, annual
+    billing, or a page-wide upfront-prepay rule.
+
+    A commitment and a promotional period can both be true at once — IONOS sells
+    "$2 /month for 3 months with a 1-year term" — so months and note are
+    independent rather than alternatives.
 
     Both windows are deliberately short. A term read from far away on the page
     might describe a different plan, and a wrong term is a fabricated claim
@@ -408,28 +495,46 @@ def extract_billing_term(text: str, start: int, end: int) -> dict:
     before = text[max(0, start - BEFORE_WINDOW):start]
     after = text[end:end + AFTER_WINDOW]
 
-    # A temporary rate is not a price, and must never be shown as one silently.
+    # Work out the promotional period first, then mask it out of the text the
+    # term patterns see. "for 3 months" is a duration, not a commitment, and
+    # reading it as one would contradict the "1-year term" in the same sentence.
+    intro_n = None
+    after_for_terms = after
     intro = INTRO_NEAR_RE.search(before)
-    if intro:
-        n = int(intro.group("n"))
-        return {"kind": "intro", "months": None,
-                "note": f"introductory rate for the first {n} months only"}
+    if intro and not INTRO_FEATURE_VERB_RE.search(before[:intro.start()]):
+        intro_n = int(intro.group("n"))
+    else:
+        intro = INTRO_AFTER_RE.search(after)
+        if intro:
+            intro_n = int(intro.group("n"))
+            after_for_terms = after[:intro.start()] + " " + after[intro.end():]
 
     terms: set[int] = set()
-    for chunk in (after, before):
-        for rx in (TERM_EXPLICIT_RE, TERM_AFTER_RE):
+    for chunk in (after_for_terms, before):
+        for rx in (TERM_EXPLICIT_RE, TERM_AFTER_RE, YEAR_TERM_RE):
             for m in rx.finditer(chunk):
                 n = int(m.group("n"))
+                if rx is YEAR_TERM_RE:
+                    n *= 12
                 if 1 <= n <= 60:
                     terms.add(n)
 
+    months = None
+    ambiguous = None
     if len(terms) > 1:
         listed = ", ".join(f"{n}-month" for n in sorted(terms))
-        return {"kind": "ambiguous_terms", "months": None,
-                "note": f"the page lists several terms ({listed}) without saying "
-                        "which one the advertised rate applies to"}
-    if len(terms) == 1:
-        return {"kind": "term", "months": terms.pop(), "note": ""}
+        ambiguous = (f"the page lists several terms ({listed}) without saying which one "
+                     "the advertised rate applies to")
+    elif len(terms) == 1:
+        months = terms.pop()
+
+    if intro_n:
+        return {"kind": "intro", "months": months,
+                "note": f"introductory rate for the first {intro_n} months only"}
+    if ambiguous:
+        return {"kind": "ambiguous_terms", "months": None, "note": ambiguous}
+    if months:
+        return {"kind": "term", "months": months, "note": ""}
     if ANNUAL_RE.search(after) or ANNUAL_RE.search(before):
         return {"kind": "annual", "months": 12, "note": "billed annually"}
     if TERM_TOGGLE_RE.search(before):
@@ -439,7 +544,128 @@ def extract_billing_term(text: str, start: int, end: int) -> dict:
     if INTRO_WORD_NEAR_RE.search(before):
         return {"kind": "intro_word", "months": None,
                 "note": "advertised as an introductory offer; the ongoing rate is higher"}
+    # A page-wide billing rule. This is read from the whole page rather than the
+    # price window because that is where the provider chose to say it, and it is
+    # the difference between "month to month" and "a prepay divided by its
+    # length" — the exact distinction this column exists to make.
+    if UPFRONT_PAID_RE.search(text) and UPFRONT_AMORTISE_RE.search(text):
+        # The sentence is captured rather than paraphrased, because this claim
+        # applies to every price on the page and a reader is entitled to see the
+        # words it rests on. It is page-level, so it cannot live in
+        # price_evidence, which belongs to one figure.
+        m = UPFRONT_PAID_RE.search(text)
+        return {"kind": "prepay", "months": None,
+                "note": "the provider states all plans are paid upfront and the monthly "
+                        "rate is the total plan price divided by the number of months",
+                "evidence": _snippet(text, m.start(), m.end())}
     return {"kind": "none", "months": None, "note": ""}
+
+
+def extract_renewal(text: str, start: int, end: int, price: float, currency: str) -> dict:
+    """Find the price this figure becomes later, when the page states one.
+
+    Returns {} or {"price", "currency", "kind", "evidence"}.
+
+    Only a renewal *above* the advertised figure is recorded — that is the fact a
+    reader needs and would otherwise miss, and a lower later price is not a
+    caveat. Two guards keep it honest: the sentence has to sit near the figure,
+    and no other price may fall between the two, because in a plan table the
+    nearest following sentence often belongs to the next plan down.
+    """
+    after_off = end
+    before_off = max(0, start - RENEWAL_BEFORE_WINDOW)
+    after = text[after_off:after_off + RENEWAL_AFTER_WINDOW]
+    before = text[before_off:start]
+
+    probes = (
+        # "…$2.09 /mo For 24 month term Renews at $4.68 /mo" — the claim follows.
+        ("renews_at", RENEWAL_AFTER_RE, after, after_off, True),
+        # "…$29.95 /mo INTRO OFFER … $54.95 /mo when you renew" — the renewal
+        # price itself follows the headline, phrased backwards.
+        ("renewal_price", RENEWAL_BEFORE_RE, after, after_off, True),
+        ("regular_price", REGULAR_PRICE_RE, after, after_off, True),
+        # The same two forms stated before the figure, for completeness.
+        ("renewal_price", RENEWAL_BEFORE_RE, before, before_off, False),
+        ("regular_price", REGULAR_PRICE_RE, before, before_off, False),
+    )
+    for kind, rx, chunk, off, claim_follows in probes:
+        m = rx.search(chunk)
+        if not m:
+            continue
+        # If another price sits between this figure and the sentence, the
+        # sentence probably describes that other plan, not this one. When the
+        # claim follows the figure the gap is the text before it; when the claim
+        # carries its own price and precedes the figure, the gap is after it.
+        between = chunk[:m.start()] if claim_follows else chunk[m.end():]
+        if ANY_MONEY_RE.search(between):
+            continue
+        cur = SYM_TO_CURRENCY.get(m.group("sym"), "USD")
+        if cur != currency:
+            continue  # never compare across currencies, not even to warn
+        val = _to_float(m.group("amt"))
+        if val is None or val <= price:
+            continue
+        # "…Renews at $11.99/mo for 2 years." — the period the renewed rate
+        # holds for is part of the same sentence, so it is read from directly
+        # after the figure and nowhere else.
+        rmonths = None
+        tail = text[off + m.end():off + m.end() + 40]
+        tm = RENEWAL_TERM_RE.match(tail)
+        if tm:
+            n = int(tm.group("n"))
+            if tm.group("unit").lower().startswith(("year", "yr")):
+                n *= 12
+            if 1 <= n <= 60:
+                rmonths = n
+        return {"price": val, "currency": cur, "kind": kind, "months": rmonths,
+                "evidence": _snippet(text, off + m.start(), off + m.end())}
+    return {}
+
+
+def _occurrences(text: str, value: float, currency: str) -> list[tuple[int, int]]:
+    """Every place this exact figure appears, as (start, end) offsets."""
+    out = set()
+    for rx in (PRICE_MONTHLY_RE, PRICE_FROM_RE):
+        for m in rx.finditer(text):
+            sym = m.group("sym")
+            cur = SYM_TO_CURRENCY.get(sym if sym in SYM_TO_CURRENCY else sym.upper(), "USD")
+            if cur != currency:
+                continue
+            v = _to_float(m.group("amt"))
+            if v is not None and abs(v - value) < 1e-9:
+                out.add((m.start(), m.end()))
+    return sorted(out)
+
+
+def _signal_score(text: str, start: int, end: int, price: float, currency: str) -> int:
+    """How much a single mention of a figure tells us about the offer."""
+    score = 0
+    term = extract_billing_term(text, start, end)
+    if term["months"]:
+        score += 2
+    if term["note"]:
+        score += 1
+    if extract_renewal(text, start, end, price, currency):
+        score += 3
+    return score
+
+
+def best_occurrence(text: str, price: float, currency: str) -> tuple[int, int] | None:
+    """Pick the most informative mention of a figure the page repeats.
+
+    A page often states the same price twice: once in a hero line and again in
+    the plan table, which is where the commitment and the renewal price live.
+    The hero mention comes first, so taking it blindly throws the caveats away —
+    IONOS's "$ 2 /month" is the hero, while "$ 2 /month for 3 months with a
+    1-year term" is the actual offer. Choosing the mention with the most
+    surrounding signal keeps the stored evidence and the published caveat
+    describing the same sentence.
+    """
+    occ = _occurrences(text, price, currency)
+    if not occ:
+        return None
+    return max(occ, key=lambda se: (_signal_score(text, se[0], se[1], price, currency),
+                                    -se[0]))
 
 
 def extract_valid_until(text: str) -> str | None:
@@ -545,6 +771,15 @@ def scrape_provider(prov: dict, cfg: ilang.SiteConfig, settings: dict,
 
     headline = pick_headline(prices, settings.get("currency", "USD"))
     if headline:
+        # A page may state the same figure more than once. The first mention is
+        # usually a hero line; the plan table repeats it with the commitment and
+        # the renewal price attached. Re-point at the most informative mention so
+        # the stored evidence and the published caveats describe one sentence.
+        better = best_occurrence(text, headline["value"], headline["currency"])
+        if better:
+            headline["start"], headline["end"] = better
+            headline["evidence"] = _snippet(text, better[0], better[1])
+
         rec["status"] = "ok"
         rec["price"] = headline["value"]
         rec["currency"] = headline["currency"]
@@ -552,6 +787,7 @@ def scrape_provider(prov: dict, cfg: ilang.SiteConfig, settings: dict,
         rec["price_tier"] = headline["tier"]
         rec["price_evidence"] = headline["evidence"]
         rec["price_reason"] = headline["reason"]
+
         term = extract_billing_term(text, headline["start"], headline["end"])
         if term["kind"] != "none":
             rec["billing_term_kind"] = term["kind"]
@@ -559,6 +795,18 @@ def scrape_provider(prov: dict, cfg: ilang.SiteConfig, settings: dict,
             rec["billing_term_months"] = term["months"]
         if term["note"]:
             rec["billing_term_note"] = term["note"]
+        if term.get("evidence"):
+            rec["billing_term_evidence"] = term["evidence"]
+
+        renewal = extract_renewal(text, headline["start"], headline["end"],
+                                  headline["value"], headline["currency"])
+        if renewal:
+            rec["renewal_price"] = renewal["price"]
+            rec["renewal_currency"] = renewal["currency"]
+            rec["renewal_kind"] = renewal["kind"]
+            rec["renewal_evidence"] = renewal["evidence"]
+            if renewal.get("months"):
+                rec["renewal_months"] = renewal["months"]
     elif prices:
         # We saw numbers but none looked like a plan price. Say so; do not guess.
         rec["status"] = "no_price_in_html"
@@ -595,8 +843,12 @@ def carry_forward(prev: dict | None, rec: dict) -> dict:
     merged["price_tier"] = prev.get("price_tier")
     # The carried-forward price keeps whatever commitment it was quoted under;
     # dropping it here would quietly turn a 24-month rate back into a plain
-    # monthly one on the next failed refetch.
-    for k in ("billing_term_kind", "billing_term_months", "billing_term_note"):
+    # monthly one on the next failed refetch. The same goes for the renewal
+    # price: losing it would make a promotional rate look permanent.
+    for k in ("billing_term_kind", "billing_term_months", "billing_term_note",
+              "billing_term_evidence",
+              "renewal_price", "renewal_currency", "renewal_kind", "renewal_evidence",
+              "renewal_months"):
         if prev.get(k):
             merged[k] = prev[k]
     merged["last_verified_at"] = prev.get("fetched_at")
@@ -631,17 +883,30 @@ def update_history(offers: list[dict], now_iso: str) -> tuple[dict, int]:
             pass  # unreadable history must not stop a refresh; we just start again
 
     day = now_iso[:10]
+
+    def same_state(a: dict | None, state: dict) -> bool:
+        return bool(a) and (a.get("price"), a.get("currency"), a.get("status")) == \
+                          (state["price"], state["currency"], state["status"])
+
     appended = 0
     for r in offers:
         state = {"date": day, "price": r.get("price"), "currency": r.get("currency"),
                  "status": r.get("status")}
         entries = hist["providers"].setdefault(r["provider"], [])
         prev = entries[-1] if entries else None
-        if prev and (prev.get("price"), prev.get("currency"), prev.get("status")) == \
-                    (state["price"], state["currency"], state["status"]):
+        if same_state(prev, state):
             continue                       # nothing observable changed
         if prev and prev.get("date") == day:
-            entries[-1] = state            # same day, revised: replace
+            # A revision later the same day. If it lands back on the value that
+            # was already recorded before today, today's entry has nothing to
+            # say and is dropped rather than left behind as a consecutive
+            # duplicate — which is exactly what a transient fetch failure
+            # followed by a successful retry used to leave in this file.
+            before = entries[-2] if len(entries) > 1 else None
+            if same_state(before, state):
+                entries.pop()
+            else:
+                entries[-1] = state
         else:
             entries.append(state)
             appended += 1
