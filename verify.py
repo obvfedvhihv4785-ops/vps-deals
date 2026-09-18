@@ -168,6 +168,104 @@ def check_page(path: str) -> None:
                           "no-price statement")
 
 
+def _long_date(iso: str | None) -> str:
+    """Same rendering as build.fmt_date, so the strings can be compared."""
+    if not iso:
+        return "unknown"
+    try:
+        dt = datetime.fromisoformat(iso.replace("Z", "+00:00"))
+    except ValueError:
+        return iso
+    return dt.strftime("%d %b %Y, %H:%M UTC")
+
+
+def _slugify(name: str) -> str:
+    s = name.lower().replace("&", " and ")
+    s = re.sub(r"[^a-z0-9]+", "-", s)
+    return re.sub(r"-{2,}", "-", s).strip("-")
+
+
+def check_stale_disclosure(doc: dict) -> None:
+    """A stale number must never be dated to the fetch that failed.
+
+    On a stale record fetched_at is the time of the *failed* refetch, while the
+    published price and its quoted evidence come from last_verified_at. Using
+    fetched_at for a freshness claim therefore dates the number to a fetch that
+    returned nothing — a seven-minute lie in the mild case, and a
+    days-old-number-labelled-today lie across a real outage. The data layer
+    already carries the distinction, so what is checked here is that the
+    rendered pages do not throw it away.
+    """
+    home_path = os.path.join(SITE, "index.html")
+    if not os.path.exists(home_path):
+        errors.append("index.html missing — cannot check stale disclosure")
+        return
+    with open(home_path, encoding="utf-8") as fh:
+        home = fh.read()
+
+    # Attribute each card to its provider before looking for a date, because the
+    # same timestamp is legitimately printed on other providers' cards. A plain
+    # substring search over the whole page would flag those instead.
+    cards: dict[str, str] = {}
+    for card in home.split('<article class="card">')[1:]:
+        m = re.search(r'<h3><a href="[^"]*">([^<]+)</a></h3>', card)
+        if m:
+            cards[m.group(1).strip()] = card
+
+    for o in doc.get("offers", []):
+        if o.get("status") != "stale":
+            continue
+        name = o.get("provider", "?")
+        read = _long_date(o.get("last_verified_at"))
+        attempt = _long_date(o.get("fetched_at"))
+        slug = _slugify(name)
+
+        # A missing card is not an error: max_deals_on_index caps the homepage,
+        # so the least competitive providers are legitimately absent from it.
+        # What matters is that a stale card, when it is shown, is labelled with
+        # the read date and not with the failed attempt.
+        card = cards.get(name)
+        if card is not None and attempt != read:
+            if f"verified {attempt}" in card:
+                errors.append(
+                    f"{name}: homepage badge calls a stale price verified at {attempt}, "
+                    f"which is the failed refetch — the read was {read}")
+            if f"last verified {read}" not in card:
+                errors.append(
+                    f"{name}: homepage card does not state the last-verified date ({read})")
+
+        # The evidence line must be dated to the read, not to the attempt. Scope
+        # the search to the evidence section so the footer's run stamp and the
+        # history table cannot satisfy or trip it.
+        for rel, marker in ((f"provider/{slug}.html", "Where this number came from"),
+                            (f"deal/{slug}.html", "The evidence")):
+            path = os.path.join(SITE, rel)
+            if not os.path.exists(path):
+                continue
+            with open(path, encoding="utf-8") as fh:
+                html = fh.read()
+            if marker not in html:
+                continue
+            seg = html.split(marker, 1)[1].split("</section>", 1)[0]
+            if attempt != read and f"on {attempt}" in seg:
+                errors.append(
+                    f"{rel}: evidence is dated to the failed refetch ({attempt}) "
+                    f"instead of the read ({read})")
+            if f"on {read}" not in seg:
+                errors.append(
+                    f"{rel}: evidence line does not carry the read date ({read})")
+
+            # A heading that promises the rejected figures must not be printed
+            # above an empty table.
+            promise = "Figures the pipeline rejected are listed too"
+            if promise in html:
+                body = html.split(promise, 1)[1].split("</table>", 1)[0]
+                body = body.split("</thead>", 1)[-1]
+                if "<tr>" not in body:
+                    errors.append(
+                        f"{rel}: rejected-figures table is empty under its own promise")
+
+
 def check_offers_json() -> None:
     """Integrity checks on the dataset itself, not the rendered HTML.
 
@@ -213,6 +311,17 @@ def check_offers_json() -> None:
 
         if o.get("status") == "stale" and not o.get("last_verified_at"):
             errors.append(f"{name}: stale without last_verified_at")
+        # A stale record's date is only ever inherited from a run that really
+        # read the page, so it can never be the timestamp of the attempt that
+        # failed. The freeze across runs is enforced in carry_forward() and
+        # covered by tests/test_carry_forward.py; what one snapshot can show is
+        # that the date is not the failed attempt's own time.
+        if o.get("status") == "stale":
+            lv, fa = o.get("last_verified_at"), o.get("fetched_at")
+            if lv and fa and lv >= fa:
+                errors.append(
+                    f"{name}: stale but last_verified_at ({lv}) is not earlier than "
+                    f"the failed refetch ({fa}) — the date is drifting")
         if o.get("valid_until") and o["valid_until"] < datetime.date.today().isoformat() \
                 and status == "ok":
             warnings.append(f"{name}: valid_until has passed but status is still ok")
@@ -606,6 +715,11 @@ def main() -> int:
     check_affiliate_marking()
     check_billing_terms()
     check_renewal_claims()
+
+    offers_path = os.path.join(os.path.dirname(SITE), "data", "offers.json")
+    if os.path.exists(offers_path):
+        with open(offers_path, encoding="utf-8") as fh:
+            check_stale_disclosure(json.load(fh))
 
     if not os.path.exists(os.path.join(SITE, "assets", "style.css")):
         errors.append("assets/style.css missing")

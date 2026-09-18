@@ -27,6 +27,9 @@ page it came from.
 - It never invents a price, a discount, a rating, or a review count.
 - It never estimates a missing figure, or substitutes a similar provider's price.
 - It never carries a number forward silently — a failed refresh is labelled `stale` and dated.
+- It never dates a carried-forward number to the refresh that failed. A `stale` record's
+  timestamp is the moment of the last successful read, and that is the date shown next to the
+  quoted evidence and on the card badge — not the time of the attempt that returned nothing.
 - It never publishes `Offer` structured data for a price it cannot quote.
 - It never bypasses anti-bot protection, and it honours `robots.txt`.
 - It never converts between currencies. EUR and USD entries are shown as published and ranked

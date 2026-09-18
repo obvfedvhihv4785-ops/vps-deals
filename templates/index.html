@@ -42,7 +42,7 @@
         </div>
         <div class="card-meta">
 {% if o.show_price %}
-          <span class="badge ok">verified {{ o.fetched_display }}</span>
+          <span class="badge {{ o.freshness_badge_kind }}">{{ o.freshness_badge }}</span>
 {% else %}
           <span class="badge warn">{{ o.status_label }}</span>
 {% endif %}
@@ -54,9 +54,6 @@
 {% endif %}
 {% if o.has_renewal %}
           <span class="badge warn">renews at {{ o.renewal_display }}</span>
-{% endif %}
-{% if o.stale %}
-          <span class="badge warn">stale</span>
 {% endif %}
 {% if o.expired %}
           <span class="badge stop">offer expired</span>

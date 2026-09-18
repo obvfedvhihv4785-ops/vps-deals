@@ -444,6 +444,10 @@ def build_view(offer: dict, cfg: ilang.SiteConfig, site: dict, generated_at: str
         "cta_rel": "sponsored noopener" if is_affiliate else "nofollow noopener",
         "has_price": has_price,
         "show_price": show_price,
+        # The rejected-figures table is only rendered when there is something to
+        # put in it. The template engine has no `and`, so the two conditions are
+        # folded into one flag here rather than spelled out in the template.
+        "show_candidates": bool(cands),
         "price_value": offer.get("price") if has_price else None,
         "price_display": money(offer["price"], currency) if show_price else "",
         "price_currency": currency,
@@ -492,6 +496,23 @@ def build_view(offer: dict, cfg: ilang.SiteConfig, site: dict, generated_at: str
         "last_verified_at": offer.get("last_verified_at") or offer.get("fetched_at", ""),
         "last_verified_display": fmt_date(offer.get("last_verified_at") or offer.get("fetched_at")),
         "fetched_display": fmt_date(offer.get("fetched_at")),
+        # On a stale record fetched_at is this run's *failed* attempt, so dating
+        # the quoted evidence with it would stamp a timestamp on a fetch that
+        # never returned the text. price_evidence comes from the last fetch that
+        # actually read the page, so the evidence line is dated with that one.
+        "evidence_read_display": fmt_date(
+            offer.get("last_verified_at") or offer.get("fetched_at")),
+        "evidence_read_note": (
+            " — the last time this page could be read" if offer.get("stale") else ""),
+        # The card badge is a freshness claim, so it is derived from the record's
+        # status and not from show_price. A stale price under a green
+        # "verified <this run>" badge contradicts the stale label next to it, and
+        # across a multi-day outage it would date a days-old number to today.
+        "freshness_badge": (
+            "stale — last verified " + fmt_date(
+                offer.get("last_verified_at") or offer.get("fetched_at"))
+            if offer.get("stale") else "verified " + fmt_date(offer.get("fetched_at"))),
+        "freshness_badge_kind": "warn" if offer.get("stale") else "ok",
         "candidates": cands,
         "url": make_url(site["base_url"], f"deal/{slug}.html", site["url_style"]),
         "provider_url": make_url(site["base_url"], f"provider/{slug}.html", site["url_style"]),
@@ -737,7 +758,8 @@ def main() -> int:
     # they must not count as a modification.
     _VOLATILE = [generated_at, site["generated_display"]]
     for v in views:
-        _VOLATILE += [v.get("last_verified_display", ""), v.get("fetched_display", "")]
+        _VOLATILE += [v.get("last_verified_display", ""), v.get("fetched_display", ""),
+                      v.get("evidence_read_display", ""), v.get("freshness_badge", "")]
     _VOLATILE = [t for t in dict.fromkeys(_VOLATILE) if t]
 
     priced = [v for v in views if v["show_price"]]

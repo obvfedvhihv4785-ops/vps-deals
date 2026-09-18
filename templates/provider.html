@@ -69,17 +69,18 @@
     <h2>Where this number came from</h2>
     <p class="sub">
       Read from <a href="{{ o.offer_url }}" rel="nofollow noopener" target="_blank">{{ o.offer_url }}</a>
-      on {{ o.fetched_display }}.
+      on {{ o.evidence_read_display }}{{ o.evidence_read_note }}.
     </p>
     <p class="evidence-label">Quoted page text</p>
     <p class="evidence">{{ o.price_evidence }}</p>
   </section>
-
+{% endif %}{% if o.show_candidates %}
   <section>
     <h2>All plan prices found on the page</h2>
     <p class="sub">
       Figures the pipeline rejected are listed too, with the reason — so you can check the
-      filtering rather than trust it.
+      filtering rather than trust it.{% if o.stale %}
+      These are the figures from the last read of the page, the one the price above came from.{% endif %}
     </p>
     <div class="table-wrap">
       <table>

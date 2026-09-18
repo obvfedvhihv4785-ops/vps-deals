@@ -827,9 +827,10 @@ def scrape_provider(prov: dict, cfg: ilang.SiteConfig, settings: dict,
 def carry_forward(prev: dict | None, rec: dict) -> dict:
     """If a refetch failed, keep the last verified price but mark it stale.
 
-    The original fetched_at is preserved as last_verified_at, so the site can say
-    'last verified <date>' instead of pretending the number is fresh. The record
-    is explicitly labelled stale — it is never silently presented as current.
+    The time of the last successful read is preserved as last_verified_at, so the
+    site can say 'last verified <date>' instead of pretending the number is
+    fresh. Repeated failures do not move that date forward. The record is
+    explicitly labelled stale — it is never silently presented as current.
     """
     if not prev or "price" not in prev or rec["status"] == "ok":
         return rec
@@ -845,13 +846,28 @@ def carry_forward(prev: dict | None, rec: dict) -> dict:
     # dropping it here would quietly turn a 24-month rate back into a plain
     # monthly one on the next failed refetch. The same goes for the renewal
     # price: losing it would make a promotional rate look permanent.
+    #
+    # price_candidates is kept for the same reason as the price itself: it is the
+    # evidence for how that figure was chosen, including the figures the filter
+    # rejected. The provider page lists them under a heading that promises to
+    # show the rejected ones, so dropping the list leaves that heading standing
+    # over an empty table — a promise the page then does not keep. The list
+    # belongs to the last successful read, exactly like the price.
     for k in ("billing_term_kind", "billing_term_months", "billing_term_note",
               "billing_term_evidence",
               "renewal_price", "renewal_currency", "renewal_kind", "renewal_evidence",
-              "renewal_months"):
+              "renewal_months",
+              "price_candidates", "price_candidates_count"):
         if prev.get(k):
             merged[k] = prev[k]
-    merged["last_verified_at"] = prev.get("fetched_at")
+    # prev may itself be stale. In that case prev["fetched_at"] is the time of
+    # *its* failed attempt and not of any read, so taking it here would advance
+    # the date on every failed run — after three blocked refreshes a days-old
+    # price would claim it had been verified that morning, which is the exact
+    # falsehood the stale label exists to prevent. The date is therefore only
+    # ever inherited from a record that was really read: once stale, it stays
+    # frozen at the last successful read until a refetch succeeds.
+    merged["last_verified_at"] = prev.get("last_verified_at") or prev.get("fetched_at")
     merged["stale"] = True
     if prev.get("discount") and "discount" not in merged:
         merged["discount"] = prev["discount"]

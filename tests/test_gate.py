@@ -59,6 +59,38 @@ def expect_caught(label: str, path: Path, mutate) -> None:
 ORIGINAL = json.loads(OFFERS.read_text(encoding="utf-8"))
 
 
+def expect_caught_in_html(label: str, rel: str, mutate) -> None:
+    """Same idea as expect_caught, but the fault is injected into a built page.
+
+    The stale-disclosure checks read the rendered output, so they cannot be
+    exercised by editing offers.json alone — the pages would still hold the
+    unmutated HTML. The file is restored in a finally block either way.
+    """
+    path = ROOT / "site" / rel
+    original = path.read_text(encoding="utf-8")
+    try:
+        path.write_text(mutate(original), encoding="utf-8")
+        caught = run_verify()
+    finally:
+        path.write_text(original, encoding="utf-8")
+
+    if caught:
+        PASS.append(label)
+        print(f"  ok   {label}")
+        print(f"         {caught[0].split('FAIL', 1)[1].strip()[:118]}")
+    else:
+        FAIL.append(label)
+        print(f"  FAIL {label} — verify.py accepted it")
+
+
+def _empty_rejected_table(h: str) -> str:
+    """Drop every row between </thead> and </tbody>, keeping the heading."""
+    before, promise, rest = h.partition("Figures the pipeline rejected")
+    head, thead, after = rest.partition("</thead>")
+    body, tbody, tail = after.partition("</tbody>")
+    return before + promise + head + thead + "\n        " + tbody + tail
+
+
 def offer(doc: dict, provider: str) -> dict:
     return next(o for o in doc["offers"] if o["provider"] == provider)
 
@@ -125,6 +157,29 @@ expect_caught(
 expect_caught(
     "a summary that overcounts what was read fresh this run", OFFERS,
     lambda d: d.update(providers_with_price=d["providers_with_price"] + 1))
+
+# A stale record's fetched_at is the time of the *failed* refetch, while the
+# published price and its quoted evidence come from last_verified_at. Dating a
+# freshness claim with fetched_at therefore stamps the number with a fetch that
+# returned nothing: a seven-minute lie in the mild case, and a
+# days-old-number-labelled-today lie across a real outage. These three cases are
+# the exact shapes that shipped before the check existed.
+expect_caught_in_html(
+    "a stale price under a green 'verified' badge dated to the failed refetch",
+    "index.html",
+    lambda h: h.replace("stale — last verified 18 Sep 2026, 11:43 UTC",
+                        "verified 18 Sep 2026, 11:50 UTC"))
+
+expect_caught_in_html(
+    "quoted evidence dated to the refetch that failed, not to the read",
+    "provider/vultr.html",
+    lambda h: h.replace(
+        "on 18 Sep 2026, 11:43 UTC — the last time this page could be read",
+        "on 18 Sep 2026, 11:50 UTC"))
+
+expect_caught_in_html(
+    "a heading promising the rejected figures, standing over an empty table",
+    "provider/vultr.html", _empty_rejected_table)
 
 print()
 print("-" * 72)

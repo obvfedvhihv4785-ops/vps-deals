@@ -55,6 +55,10 @@ TYPE:agents PROJECT:vps-deals-promo-radar LANG:zh
   ::RULE{管线里不许调用任何模型 不许读环境变量里的密钥 除部署那一步}
   ::RULE{抓取失败必须如实记成 blocked 或 error 不许包装成"没有优惠"}
   ::RULE{重抓失败时 保留上一次已验证的价格 但必须标记 stale 并写明验证日期}
+  ::RULE{stale 记录的日期一律写"上次成功读到的时刻" 不许写这次失败的尝试时刻 卡片徽章和证据出处都不许}
+  ::RULE{卡片徽章不许只因为 show_price 就写 verified 必须按状态出 失败的那次抓取不算 verified}
+  ::RULE{给价格配的候选清单和价格同生共死 价格被 carry forward 时清单也必须跟着 carry forward}
+  ::RULE{标题承诺了要列的东西 下面就必须真有 空表配承诺的标题一律算 bug}
   ::RULE{valid_until 已过的优惠 保留记录但必须标成过期 不许当有效展示}
   ::RULE{每个价格必须带 price_evidence 原文和 source_url 和 fetched_at 缺一不可}
   ::RULE{价格附带承诺期或首期促销时 必须把条件一起显示 只写 /mo 不写条件是误导}

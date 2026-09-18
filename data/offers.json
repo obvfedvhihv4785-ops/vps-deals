@@ -1055,8 +1055,119 @@
       "price_evidence": "…e 1 vCPU 0.5 GB Memory 0.50 TB Bandwidth 10 GB Storage $2.50 /mo $0.004 /hr IPv6 Only 1 vCPU 0.5 GB Memory 0.50 TB Band…",
       "price_context": "monthly",
       "price_tier": "plan",
-      "last_verified_at": "2026-09-18T11:50:41Z",
-      "stale": true
+      "last_verified_at": "2026-09-18T11:43:30Z",
+      "stale": true,
+      "price_candidates_count": 125,
+      "price_candidates": [
+        {
+          "currency": "USD",
+          "value": 1.0,
+          "context": "monthly",
+          "tier": "no",
+          "eligible": false,
+          "reason": "accessory unit after the price ('Storage')",
+          "evidence": "…100 250 500 1000 2500 5000 10000+ Vultr Block Storage $1.00 /month 10 GB of Storage Object Storage Reliable S3-compatible…"
+        },
+        {
+          "currency": "USD",
+          "value": 2.5,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…e 1 vCPU 0.5 GB Memory 0.50 TB Bandwidth 10 GB Storage $2.50 /mo $0.004 /hr IPv6 Only 1 vCPU 0.5 GB Memory 0.50 TB Band…"
+        },
+        {
+          "currency": "USD",
+          "value": 3.5,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…y 1 vCPU 0.5 GB Memory 0.50 TB Bandwidth 10 GB Storage $3.50 /mo $0.005 /hr 1 vCPU 1 GB Memory 1.00 TB Bandwidth 25 GB…"
+        },
+        {
+          "currency": "USD",
+          "value": 5.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…/hr 1 vCPU 1 GB Memory 1.00 TB Bandwidth 25 GB Storage $5.00 /mo $0.007 /hr 1 vCPU 2 GB Memory 2.00 TB Bandwidth 55 GB…"
+        },
+        {
+          "currency": "USD",
+          "value": 6.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…ice 1 vCPU 1 GB Memory 2.00 TB Bandwidth 25 GB Storage $6.00 /mo $0.009 /hr 1 vCPU 2 GB Memory 3.00 TB Bandwidth 50 GB…"
+        },
+        {
+          "currency": "USD",
+          "value": 10.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…/hr 1 vCPU 2 GB Memory 2.00 TB Bandwidth 55 GB Storage $10.00 /mo $0.015 /hr 2 vCPUs 2 GB Memory 3.00 TB Bandwidth 65 GB…"
+        },
+        {
+          "currency": "USD",
+          "value": 12.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…/hr 1 vCPU 2 GB Memory 3.00 TB Bandwidth 50 GB Storage $12.00 /mo $0.018 /hr 2 vCPUs 2 GB Memory 4.00 TB Bandwidth 60 GB…"
+        },
+        {
+          "currency": "USD",
+          "value": 15.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…hr 2 vCPUs 2 GB Memory 3.00 TB Bandwidth 65 GB Storage $15.00 /mo $0.022 /hr 2 vCPUs 4 GB Memory 3.00 TB Bandwidth 80 GB…"
+        },
+        {
+          "currency": "USD",
+          "value": 18.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…hr 2 vCPUs 2 GB Memory 4.00 TB Bandwidth 60 GB Storage $18.00 /mo $0.027 /hr 2 vCPUs 4 GB Memory 5.00 TB Bandwidth 100 G…"
+        },
+        {
+          "currency": "USD",
+          "value": 20.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…hr 2 vCPUs 4 GB Memory 3.00 TB Bandwidth 80 GB Storage $20.00 /mo $0.03 /hr 4 vCPUs 8 GB Memory 4.00 TB Bandwidth 160 GB…"
+        },
+        {
+          "currency": "USD",
+          "value": 24.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…r 2 vCPUs 4 GB Memory 5.00 TB Bandwidth 100 GB Storage $24.00 /mo $0.036 /hr 4 vCPUs 8 GB Memory 6.00 TB Bandwidth 180 G…"
+        },
+        {
+          "currency": "USD",
+          "value": 28.0,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…ice 1 vCPU 2 GB Memory 4.00 TB Bandwidth 25 GB Storage $28.00 /mo $0.042 /hr 2 vCPUs 4 GB Memory 5.00 TB Bandwidth 50 GB…"
+        }
+      ]
     },
     {
       "provider": "Bluehost",
@@ -1347,14 +1458,62 @@
       "renewal_currency": "USD",
       "renewal_kind": "renews_at",
       "renewal_evidence": "…ed VPS KVM 4GB 22% OFF $ 89.99 $ 69.99 /mo Choose Plan Renews at $ 89.99/mo. Cancel anytime. 2 vCPU cores 4 GB RAM 80 GB NVMe S…",
-      "last_verified_at": "2026-09-18T11:50:48Z",
+      "last_verified_at": "2026-09-18T11:43:38Z",
       "stale": true,
       "discount": {
         "kind": "percent",
         "value": 77,
         "label": "77% off",
         "evidence": "…PS Hosting with Full Root Access 🎉 Flash Sale: 77% 72% 77% Off Hosting + Free Domain — Ends in 11 h 59 m 59 s View Pl…"
-      }
+      },
+      "price_candidates_count": 5,
+      "price_candidates": [
+        {
+          "currency": "USD",
+          "value": 69.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…lowdowns) Full control with root access & custom setup $ 69.99 /mo View Plans Customer satisfaction is our top priority a…"
+        },
+        {
+          "currency": "USD",
+          "value": 89.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…4GB 22% OFF $ 89.99 $ 69.99 /mo Choose Plan Renews at $ 89.99/mo. Cancel anytime. 2 vCPU cores 4 GB RAM 80 GB NVMe SSD…"
+        },
+        {
+          "currency": "USD",
+          "value": 109.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…8GB 18% OFF $ 109.99 $ 89.99 /mo Choose Plan Renews at $ 109.99/mo. Cancel anytime. 4 vCPU cores 8 GB RAM 160 GB NVMe SSD…"
+        },
+        {
+          "currency": "USD",
+          "value": 129.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…t 1 Gbps network Managed VPS KVM 16GB 13% OFF $ 149.99 $ 129.99 /mo Choose Plan Renews at $ 149.99/mo. Cancel anytime. 6 v…"
+        },
+        {
+          "currency": "USD",
+          "value": 149.99,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…GB 13% OFF $ 149.99 $ 129.99 /mo Choose Plan Renews at $ 149.99/mo. Cancel anytime. 6 vCPU cores 16 GB RAM 320 GB NVMe SS…"
+        }
+      ]
     },
     {
       "provider": "Verpex",
