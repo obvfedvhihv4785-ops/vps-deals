@@ -39,6 +39,10 @@ TYPE:config PROJECT:vps-deals LANG:zh
   MonoVM | https://monovm.com/ | https://monovm.com/vps/ |
   Webdock | https://webdock.io/ | https://webdock.io/en/pricing |
   Civo | https://www.civo.com/ | https://www.civo.com/pricing |
+  # 第三轮扩充：2026-09-18 又实测 21 家，下面 3 家的最低价逐条看过原文证据后收录。
+  Kamatera | https://www.kamatera.com/ | https://www.kamatera.com/Products/46/Cloud-Servers |
+  CloudCone | https://cloudcone.com/ | https://cloudcone.com/vps/ |
+  Hostodo | https://hostodo.com/ | https://hostodo.com/pricing/ |
   # 实测过但**故意不收录**的，原因是抽出来的最低价不是它的 VPS 套餐价：
   #   ChemiCloud  $1.00 是 WordPress 促销价，页面标题写的是 VPS 从 $32.95 起
   #   Namecheap   $2.88 是 cPanel 授权费，不是套餐价（另一处 $3.00 是备份存储）
@@ -50,9 +54,44 @@ TYPE:config PROJECT:vps-deals LANG:zh
   #               品类都不对，删掉，宁可不收录。
   #   Linode/Vultr(旧)/Contabo/InterServer/RackNerd/Liquid Web/HostPapa/Time4VPS/
   #   RamNode/ChicagoVPS/HostUS 等 返回 403 或连接失败
+  # 第三轮扩充（2026-09-18 下午，又实测 21 家）：收录 3 家，其余逐条记下理由。
+  #   Kamatera  $4/mo 通过：定价卡是 "Basic $4 /mo Create server 1 vCPU (2667 MHz) 1 GB RAM
+  #             20 GB NVMe 5 TB Traffic"，前面那串 Web Servers/Firewalls/CMS… 是用途选择器
+  #             的选项名，不是别的套餐名。规格跟在价格后面，是**真套餐价**。
+  #   CloudCone $2.33/mo 通过，但它是**年付**："SSD VPS 1 $2.33 /MO Billed $28 per year"。
+  #             抽出来的 term 正好是 annual/12 个月，站上会标 "annual billing"，
+  #             这正是 Term 列存在的意义 —— 它是本轮新加的三家里唯一带条件的一家。
+  #   Hostodo   $2.99/mo 通过：/pricing/ 上原文 "Hostodo Capacity starts at $5/mo
+  #             Single instances start at $2.99/mo"，另有 $3.50/$7.00/$9.00 的套餐行。
+  #             root 域名页也能读到同一个 $2.99，但 /pricing/ 更对口。
+  # 第三轮**不收录**的，每条都看过原文：
+  #   VirMach     最低价 $2 /Month 挂的是 "Shared"，是**共享主机**不是 VPS，品类不对
+  #   BuyVM       最低价 $0.50/month 是**备份附加费**（原文 "priced at just 10% of the base
+  #               price of the instance (or $0.50/month on the 512MB & 1GB instances)"）；
+  #               它的套餐价被自身的特性列表挡住 —— 原文是 "20 GB SSD Storage Unmetered
+  #               Bandwidth 1 IPv4 Address $3.50 ..."，"1 IPv4 Address" 是**含 1 个**的意思，
+  #               但被 ACCESSORY_LEAD_RE 当成加购 IP 挡掉了。这是抽不准，不是它没有价，
+  #               所以不收录，等哪天把"含 N 个"和"额外加购"分开再说。
+  #   Nocix       /vps/ 页上抽到的 $25/mo 原文是 "Access to Bare Metal Server FREE Setup
+  #               Order Now from $25/mo"，是**独立物理服务器**，不是 VPS。品类不对。
+  #   Ultahost    最低价 $5 原文 "except for Ultahost, the price starts from just $5 per
+  #               month"，是第三人称营销文案，不是定价卡上的价（真定价卡是 $5.51）。
+  #   Namecheap   仍是 cPanel 授权费。原文 "Starts at $2.88 /month for Personal tier"，
+  #               连 "cPanel" 都写在价格**后面**，而 ACCESSORY_LEAD_RE 只看价格前面，
+  #               ACCESSORY_AFTER_RE 里又没有 cpanel/license 这一类词 —— 这是个已知缺口。
+  #               没去补它，因为补了会影响现有 23 家的判定，收益只在这家不收录的站上；
+  #               宁可在配置里写清楚不收录，也不为一个用不上的站点去动分类器。
+  #   Hostens     200 但抽不出任何套餐价（原文是 "$7 .50 per month"，符号和数字之间被
+  #               插了空格，且带 "-50% OFF (not recurring)"），没有可用数字就不收录。
+  #   AWS Lightsail / Aruba Cloud  本机 TLS 握手失败（CERTIFICATE_VERIFY_FAILED），
+  #               拿不到页面就不下结论，既不算可用也不算不可用，留待网络环境正常时重测。
+  #   Gcore 404 / Fasthosts 404 / HostPapa 404  入口页不存在，需另找真实定价页
+  #   Contabo / Linode / InterServer / RackNerd / Liquid Web  403，拒绝本 UA，不绕
+  #   AlexHost    200 但可见文本里**零个**货币符号，价格是 JS 注入的，读不到
   # 宁缺勿造：抽不准就不收录，而不是调正则调到出现一个看着合理的数字。
-  # Hetzner 是唯一一家入口返回 200、但价格确实读不到的厂商，保留是因为它本身有价值。
-  # 2026-09-18 为它单独查过一轮，结论是服务端 HTML 里根本没有套餐价：
+  # Hetzner 是**故意保留的读不到价的一家**（AlexHost 同样读不到，但它是直接不收录）。
+  #   留它是因为它体量大、值得在站上有条目，而且如实标"价格需到官网确认"本身就是信息。
+  #   2026-09-18 为它单独查过一轮，结论是页面里根本没有套餐价：
   #   /cloud/ 163KB、/cloud/cost-optimized/ 263KB、/cloud/general-purpose/ 287KB、
   #   /cloud/regular-performance/ 324KB、hetzner.de/cloud/ 164KB —— 五页**零个**货币符号。
   #   sitemap.xml 只有 7 条 URL，没有定价页。app.js 里也没有价格 API。
