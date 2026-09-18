@@ -30,6 +30,11 @@ page it came from.
 - It never dates a carried-forward number to the refresh that failed. A `stale` record's
   timestamp is the moment of the last successful read, and that is the date shown next to the
   quoted evidence and on the card badge — not the time of the attempt that returned nothing.
+- It never lets the word "verified" sit on a figure whose refresh failed, on any page or in
+  any badge. Freshness is derived from the record's status, never from merely having a number.
+- It never emits structured data that asserts a stale figure is available now: the `InStock`
+  claim carries a qualifier inside the same block, because a search engine reads that block
+  without the surrounding prose.
 - It never publishes `Offer` structured data for a price it cannot quote.
 - It never bypasses anti-bot protection, and it honours `robots.txt`.
 - It never converts between currencies. EUR and USD entries are shown as published and ranked

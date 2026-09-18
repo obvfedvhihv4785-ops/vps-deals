@@ -69,10 +69,9 @@
             <td class="num">{% if o.has_renewal %}{{ o.renewal_display }}<span class="sub">/mo{% if o.renewal_months %} · {{ o.renewal_months }} mo{% endif %}</span>{% else %}<span class="sub">—</span>{% endif %}</td>
             <td>{% if o.discount_label %}{{ o.discount_label }}{% else %}—{% endif %}</td>
             <td>
-{% if o.show_price %}<span class="badge ok">verified</span>
+{% if o.show_price %}<span class="badge {{ o.freshness_badge_kind }}">{{ o.freshness_badge_short }}</span>
 {% else %}<span class="badge warn">no price</span>
 {% endif %}
-{% if o.stale %}<span class="badge warn">stale</span>{% endif %}
 {% if o.expired %}<span class="badge stop">expired</span>{% endif %}
             </td>
             <td>{{ o.last_verified_display }}</td>

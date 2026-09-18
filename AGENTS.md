@@ -59,6 +59,8 @@ TYPE:agents PROJECT:vps-deals-promo-radar LANG:zh
   ::RULE{卡片徽章不许只因为 show_price 就写 verified 必须按状态出 失败的那次抓取不算 verified}
   ::RULE{给价格配的候选清单和价格同生共死 价格被 carry forward 时清单也必须跟着 carry forward}
   ::RULE{标题承诺了要列的东西 下面就必须真有 空表配承诺的标题一律算 bug}
+  ::RULE{同一页上任何"已验证"字样都必须由状态推导 不许由"有没有价格"推导 一行里同时出现 verified 和 stale 一律算 bug}
+  ::RULE{结构化数据里的 InStock 是对当下的断言 stale 记录必须在同一个 JSON-LD 块里写明"这是上次验证的值 不是当前读数" 别指望搜索引擎会去读正文}
   ::RULE{valid_until 已过的优惠 保留记录但必须标成过期 不许当有效展示}
   ::RULE{每个价格必须带 price_evidence 原文和 source_url 和 fetched_at 缺一不可}
   ::RULE{价格附带承诺期或首期促销时 必须把条件一起显示 只写 /mo 不写条件是误导}

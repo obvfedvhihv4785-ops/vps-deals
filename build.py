@@ -513,6 +513,12 @@ def build_view(offer: dict, cfg: ilang.SiteConfig, site: dict, generated_at: str
                 offer.get("last_verified_at") or offer.get("fetched_at"))
             if offer.get("stale") else "verified " + fmt_date(offer.get("fetched_at"))),
         "freshness_badge_kind": "warn" if offer.get("stale") else "ok",
+        # The comparison table carries the date in its own "Last verified"
+        # column, so the badge there is just the word. It still comes from the
+        # status: a bare "verified" next to a failed refresh is the same
+        # contradiction as the long form, and this table is where a buyer scans
+        # prices.
+        "freshness_badge_short": "stale" if offer.get("stale") else "verified",
         "candidates": cands,
         "url": make_url(site["base_url"], f"deal/{slug}.html", site["url_style"]),
         "provider_url": make_url(site["base_url"], f"provider/{slug}.html", site["url_style"]),
@@ -522,6 +528,16 @@ def build_view(offer: dict, cfg: ilang.SiteConfig, site: dict, generated_at: str
 
 def jsonld(obj: dict) -> str:
     return json.dumps(obj, ensure_ascii=False, indent=2)
+
+
+# An Offer node carries `availability: InStock`, which is a claim about the
+# present. For a stale record the most recent refresh *failed*, so the node would
+# be asserting current availability for a figure we could not re-read. schema.org
+# has no "unknown" availability, and dropping the field would break the gate, so
+# the qualifier goes in the description — the same reasoning that puts the term
+# and the renewal there rather than dropping them.
+STALE_NOTE = ("The most recent refresh of that page failed, so this is the last "
+              "verified figure rather than a current reading.")
 
 
 def offer_jsonld(v: dict, site: dict) -> str:
@@ -546,6 +562,7 @@ def offer_jsonld(v: dict, site: dict) -> str:
         "description": (
             f"Lowest server-rendered monthly price found on {v['provider']}'s public "
             f"VPS page, captured {v['last_verified_display']}."
+            + (f" {STALE_NOTE}" if v["stale"] else "")
             # schema.org has no clean field for a minimum commitment, so the
             # caveat goes in the description rather than being dropped. A price
             # that only holds for 24 months should not read as a monthly rate.
@@ -581,6 +598,13 @@ def provider_jsonld(v: dict, site: dict) -> str:
     if not v["show_price"]:
         return jsonld(node)
 
+    # The offers node asserts InStock, so it carries the read date and the stale
+    # qualifier as well. Without that the Product block tells a search engine the
+    # plan is available now, with nothing to say the figure could not be re-read.
+    offers_note = (f"Read from the provider's own public pricing page on "
+                   f"{v['last_verified_display']}."
+                   + (f" {STALE_NOTE}" if v["stale"] else ""))
+
     if len(eligible) >= 2:
         vals = [c["display"] for c in eligible]
         node["offers"] = {
@@ -591,6 +615,7 @@ def provider_jsonld(v: dict, site: dict) -> str:
             "highPrice": f"{max(float(re.sub(r'[^0-9.]', '', x)) for x in vals):.2f}",
             "offerCount": len(eligible),
             "availability": "https://schema.org/InStock",
+            "description": offers_note,
         }
     else:
         node["offers"] = {
@@ -599,6 +624,7 @@ def provider_jsonld(v: dict, site: dict) -> str:
             "price": f"{v['price_value']:.2f}",
             "priceCurrency": v["price_currency"],
             "availability": "https://schema.org/InStock",
+            "description": offers_note,
         }
     return jsonld(node)
 

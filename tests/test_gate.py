@@ -181,6 +181,27 @@ expect_caught_in_html(
     "a heading promising the rejected figures, standing over an empty table",
     "provider/vultr.html", _empty_rejected_table)
 
+# The comparison table is where a buyer scans prices, and it printed its own
+# green "verified" badge on rows whose refresh had failed — the same
+# contradiction as the card, in a second place. The badge there is short because
+# the date lives in its own column, so it needed checking separately.
+expect_caught_in_html(
+    "a comparison row badged verified although its refresh failed",
+    "compare.html",
+    lambda h: h.replace('<span class="badge warn">stale</span>',
+                        '<span class="badge ok">verified</span>', 1))
+
+# The Offer/Product block asserts availability InStock, which is a claim about
+# the present. A search engine reads that block without the surrounding prose,
+# so stripping the qualifier out of it leaves the page asserting, in a machine
+# readable form, that a price we could not re-read is available now.
+expect_caught_in_html(
+    "structured data asserting InStock for a stale figure, with no qualifier",
+    "deal/vultr.html",
+    lambda h: h.replace(
+        "The most recent refresh of that page failed, so this is the last "
+        "verified figure rather than a current reading.", ""))
+
 print()
 print("-" * 72)
 restored = run_verify()

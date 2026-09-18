@@ -255,6 +255,15 @@ def check_stale_disclosure(doc: dict) -> None:
                 errors.append(
                     f"{rel}: evidence line does not carry the read date ({read})")
 
+            # The Offer/Product block asserts availability InStock, which is a
+            # claim about the present. A search engine reads that block on its
+            # own, without the prose, so the qualifier has to be inside it.
+            if ('"availability": "https://schema.org/InStock"' in html
+                    and "last verified figure rather than a current reading" not in html):
+                errors.append(
+                    f"{rel}: structured data asserts InStock for a stale figure with "
+                    f"no qualifier")
+
             # A heading that promises the rejected figures must not be printed
             # above an empty table.
             promise = "Figures the pipeline rejected are listed too"
@@ -264,6 +273,34 @@ def check_stale_disclosure(doc: dict) -> None:
                 if "<tr>" not in body:
                     errors.append(
                         f"{rel}: rejected-figures table is empty under its own promise")
+
+    # The comparison table prints its own status badge, and it is the page a
+    # buyer scans prices on. A bare "verified" there is the same contradiction
+    # as the long form on a card, so it is checked against the status too.
+    compare_path = os.path.join(SITE, "compare.html")
+    if os.path.exists(compare_path):
+        with open(compare_path, encoding="utf-8") as fh:
+            compare = fh.read()
+        rows: dict[str, str] = {}
+        for row in compare.split("<tr")[1:]:
+            m = re.search(r'<a href="[^"]*">([^<]+)</a>', row)
+            if m:
+                rows.setdefault(m.group(1).strip(), row)
+        for o in doc.get("offers", []):
+            if o.get("status") != "stale":
+                continue
+            name = o.get("provider", "?")
+            row = rows.get(name)
+            if row is None:
+                continue
+            if ">verified<" in row:
+                errors.append(
+                    f"compare.html: {name}'s row is badged verified although its "
+                    f"refresh failed")
+            read = _long_date(o.get("last_verified_at"))
+            if read not in row:
+                errors.append(
+                    f"compare.html: {name}'s row does not carry the read date ({read})")
 
 
 def check_offers_json() -> None:
