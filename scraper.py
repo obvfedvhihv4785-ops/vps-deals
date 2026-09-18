@@ -122,6 +122,51 @@ EXPIRES_RE = re.compile(
     re.I,
 )
 
+# How long a buyer must commit before the advertised rate applies.
+#
+# This exists because "/mo" is not one thing. HostGator's "$2.09 /mo" is the
+# 24-month prepay rate and InMotion's "$9.99 /mo" is likewise "For 24 month",
+# while Vultr's "$2.50 /mo" is genuinely month to month. Publishing both as
+# plain per-month figures makes the comparison table wrong: a reader comparing
+# 2.09 against 2.50 would be choosing between a two-year commitment and no
+# commitment at all. The term is already stated next to the number on the page,
+# so it is extracted and shown rather than dropped.
+TERM_EXPLICIT_RE = re.compile(
+    r"(?:for|on|over|with|after|requires?|across)\s+(?:the\s+|a\s+)?"
+    r"(?P<n>\d{1,2})\s*[-\s]?\s*(?:months?|mos?)\b",
+    re.I,
+)
+TERM_AFTER_RE = re.compile(
+    r"(?P<n>\d{1,2})\s*[-\s]?\s*(?:months?|mos?)\s*"
+    r"(?:term|commitment|contract|billing|plan|period|upfront|prepay)",
+    re.I,
+)
+# "First 3 months at $8.99/mo" is not a price, it is a temporary rate. Saying
+# so is the difference between a useful listing and a bait price.
+#
+# The phrase must sit immediately before the figure, joined to it by nothing
+# more than a price connector ("at", "for", "only"). A looser search would also
+# match "free SSL for the first 12 months. Only $4.50/mo" and then label an
+# ordinary price as introductory, which is a fabricated claim about money —
+# worse than the omission it was meant to fix.
+INTRO_NEAR_RE = re.compile(
+    r"\b(?:first|initial|introductory|intro)\s+(?P<n>\d{1,2})\s*[-\s]?\s*months?\b"
+    r"\s*(?:at|for|of|only|just|:)?\s*$",
+    re.I,
+)
+INTRO_WORD_NEAR_RE = re.compile(r"\bintro(?:ductory)?\s+(?:offer|price|rate|pricing)\b.{0,25}$", re.I)
+ANNUAL_RE = re.compile(r"billed\s+(?:annually|yearly|per\s+year)|\bper\s+year\b|/\s*yr\b", re.I)
+# ScalaHosting renders term toggles as "36 M 12 M 1 M" with one price beside
+# them. Which toggle the price belongs to is not in the static HTML, so the
+# honest result is "term not stated", not a guess at one of the three.
+TERM_TOGGLE_RE = re.compile(r"\b\d{1,2}\s*M\b(?=\s+\d{1,2}\s*M\b)", re.I)
+# The term sits immediately beside the figure in every case observed ("$2.09
+# /mo For 24 month", "on the 12-month", "Billed $28 per year"), so the search is
+# tight. A wide window would start attributing a term mentioned elsewhere on the
+# page to the wrong price, which is worse than saying nothing.
+BEFORE_WINDOW = 45
+AFTER_WINDOW = 45
+
 SYM_TO_CURRENCY = {"$": "USD", "US$": "USD", "€": "EUR"}
 
 MONTHS = {m: i + 1 for i, m in enumerate(
@@ -301,6 +346,11 @@ def extract_prices(text: str, min_p: float, max_p: float) -> list[dict]:
                 "eligible": tier != "no",
                 "reason": reason,
                 "evidence": _snippet(text, m.start(), m.end()),
+                # Offsets are kept so the billing term can be read from the same
+                # spot in the page rather than from the truncated snippet. They
+                # are dropped again before the record is written.
+                "start": m.start(),
+                "end": m.end(),
                 "_rank": rank,
             }
     rows = sorted(found.values(), key=lambda r: r["value"])
@@ -340,6 +390,56 @@ def extract_discount(text: str) -> dict | None:
                     "label": f"save {m.group('sym')}{value:g}",
                     "evidence": _snippet(text, m.start(), m.end())}
     return None
+
+
+def extract_billing_term(text: str, start: int, end: int) -> dict:
+    """Read how long a buyer must commit for the quoted rate to apply.
+
+    Returns {"months": int | None, "note": str}. `months` is only set when the
+    page names exactly one term, because a page showing several terms beside a
+    single price does not say which of them that price belongs to — guessing one
+    would be inventing a fact. `note` carries what can honestly be said instead:
+    an introductory rate, an ambiguous term list, or annual billing.
+
+    Both windows are deliberately short. A term read from far away on the page
+    might describe a different plan, and a wrong term is a fabricated claim
+    about money — worse than the silence it would be replacing.
+    """
+    before = text[max(0, start - BEFORE_WINDOW):start]
+    after = text[end:end + AFTER_WINDOW]
+
+    # A temporary rate is not a price, and must never be shown as one silently.
+    intro = INTRO_NEAR_RE.search(before)
+    if intro:
+        n = int(intro.group("n"))
+        return {"kind": "intro", "months": None,
+                "note": f"introductory rate for the first {n} months only"}
+
+    terms: set[int] = set()
+    for chunk in (after, before):
+        for rx in (TERM_EXPLICIT_RE, TERM_AFTER_RE):
+            for m in rx.finditer(chunk):
+                n = int(m.group("n"))
+                if 1 <= n <= 60:
+                    terms.add(n)
+
+    if len(terms) > 1:
+        listed = ", ".join(f"{n}-month" for n in sorted(terms))
+        return {"kind": "ambiguous_terms", "months": None,
+                "note": f"the page lists several terms ({listed}) without saying "
+                        "which one the advertised rate applies to"}
+    if len(terms) == 1:
+        return {"kind": "term", "months": terms.pop(), "note": ""}
+    if ANNUAL_RE.search(after) or ANNUAL_RE.search(before):
+        return {"kind": "annual", "months": 12, "note": "billed annually"}
+    if TERM_TOGGLE_RE.search(before):
+        return {"kind": "ambiguous_toggle", "months": None,
+                "note": "the page shows term toggles beside one price and does not "
+                        "state which term that price applies to"}
+    if INTRO_WORD_NEAR_RE.search(before):
+        return {"kind": "intro_word", "months": None,
+                "note": "advertised as an introductory offer; the ongoing rate is higher"}
+    return {"kind": "none", "months": None, "note": ""}
 
 
 def extract_valid_until(text: str) -> str | None:
@@ -437,7 +537,11 @@ def scrape_provider(prov: dict, cfg: ilang.SiteConfig, settings: dict,
     rec["page_chars"] = len(text)
     rec["price_candidates_count"] = len(prices)
     # Keep the record small: the cheapest dozen candidates is plenty for audit.
-    rec["price_candidates"] = prices[:12]
+    # The match offsets are internal plumbing for the billing-term lookup and
+    # have no meaning in the published data, so they are stripped here.
+    rec["price_candidates"] = [
+        {k: v for k, v in p.items() if k not in ("start", "end")} for p in prices[:12]
+    ]
 
     headline = pick_headline(prices, settings.get("currency", "USD"))
     if headline:
@@ -448,6 +552,13 @@ def scrape_provider(prov: dict, cfg: ilang.SiteConfig, settings: dict,
         rec["price_tier"] = headline["tier"]
         rec["price_evidence"] = headline["evidence"]
         rec["price_reason"] = headline["reason"]
+        term = extract_billing_term(text, headline["start"], headline["end"])
+        if term["kind"] != "none":
+            rec["billing_term_kind"] = term["kind"]
+        if term["months"]:
+            rec["billing_term_months"] = term["months"]
+        if term["note"]:
+            rec["billing_term_note"] = term["note"]
     elif prices:
         # We saw numbers but none looked like a plan price. Say so; do not guess.
         rec["status"] = "no_price_in_html"
@@ -482,6 +593,12 @@ def carry_forward(prev: dict | None, rec: dict) -> dict:
     merged["price_evidence"] = prev.get("price_evidence")
     merged["price_context"] = prev.get("price_context")
     merged["price_tier"] = prev.get("price_tier")
+    # The carried-forward price keeps whatever commitment it was quoted under;
+    # dropping it here would quietly turn a 24-month rate back into a plain
+    # monthly one on the next failed refetch.
+    for k in ("billing_term_kind", "billing_term_months", "billing_term_note"):
+        if prev.get(k):
+            merged[k] = prev[k]
     merged["last_verified_at"] = prev.get("fetched_at")
     merged["stale"] = True
     if prev.get("discount") and "discount" not in merged:

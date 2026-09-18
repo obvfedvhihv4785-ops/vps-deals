@@ -49,6 +49,9 @@
 {% if o.discount_label %}
           <span class="badge deal">{{ o.discount_label }}</span>
 {% endif %}
+{% if o.term_short %}
+          <span class="badge warn">{{ o.term_short }}</span>
+{% endif %}
 {% if o.stale %}
           <span class="badge warn">stale</span>
 {% endif %}

@@ -80,6 +80,28 @@ no competitor has, and it is the part of this dataset that gets more valuable th
 pipeline runs. `verify.py` treats it as append-only: duplicated consecutive entries and
 out-of-order dates fail the build, because a rewritten history is unrecoverable.
 
+### The term is published with the price, not hidden behind it
+
+Not every figure a host writes as "/mo" is a month-to-month price. When this was first checked
+against the live pages, five of the twenty-two priced providers turned out not to be quoting a
+plain monthly rate: two were the rate for prepaying **24 months**, one was a **12-month** rate,
+one was a promotion that holds for the **first three months**, and one showed term toggles
+(`36 M 12 M 1 M`) beside a single price without saying which one it belonged to.
+
+Publishing all five as bare per-month numbers would have made the comparison table wrong in the
+way that matters most — a reader choosing between `$2.09` and `$2.50` would really be choosing
+between a two-year commitment and no commitment at all, and would have no way to see that. So the
+scraper reads the commitment off the page and the site shows it in a **Term** column, on the
+provider and deal pages, and in the page `<title>`.
+
+The extraction is deliberately narrow. The term is only accepted when it sits immediately beside
+the figure and is joined to it by nothing more than a price connector, so "free SSL for the first
+12 months. Only $4.50/mo" is not read as an introductory price. When a page offers several terms
+beside one price, the result is "term not stated" rather than a guess at one of them. A term read
+from the wrong sentence would be a false statement about money, which is worse than the silence it
+replaced — and `verify.py` now checks that any claimed term is actually supported by the text the
+scraper quoted.
+
 ### Why `lastmod` is tracked separately
 
 A full refresh rewrites every page every six hours, so using the run timestamp as `lastmod`

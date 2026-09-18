@@ -29,12 +29,20 @@
       <strong>#</strong> column is a rank inside that currency only: a EUR row is never ranked
       against a USD row, and no claim is made about which currency is worth more.
     </p>
+    <p class="sub">
+      The <strong>Term</strong> column is the part most price tables leave out. Not every figure
+      written "/mo" is a month-to-month price: some are the rate you get for prepaying two years,
+      and one is a rate that only holds for the first three months. {{ stats.with_term_caveat }} of
+      the {{ stats.priced }} priced providers below are not quoting a plain monthly price. Two
+      numbers in this column are only comparable when their terms match, so read the Term column
+      before reading the price.
+    </p>
     <div class="table-wrap">
       <table>
         <thead>
           <tr>
-            <th>#</th><th>Provider</th><th>From</th><th>Cur.</th><th>Advertised discount</th>
-            <th>Status</th><th>Last verified</th><th></th>
+            <th>#</th><th>Provider</th><th>From</th><th>Cur.</th><th>Term</th>
+            <th>Advertised discount</th><th>Status</th><th>Last verified</th><th></th>
           </tr>
         </thead>
         <tbody>
@@ -47,6 +55,7 @@
             </td>
             <td class="num">{% if o.show_price %}{{ o.price_display }}<span class="sub">/mo</span>{% else %}—{% endif %}</td>
             <td>{% if o.show_price %}{{ o.price_currency }}{% else %}—{% endif %}</td>
+            <td>{% if o.show_price %}{% if o.term_short %}<span class="badge warn">{{ o.term_short }}</span>{% else %}<span class="sub">month to month</span>{% endif %}{% else %}—{% endif %}</td>
             <td>{% if o.discount_label %}{{ o.discount_label }}{% else %}—{% endif %}</td>
             <td>
 {% if o.show_price %}<span class="badge ok">verified</span>
@@ -72,6 +81,10 @@
         <li>It does not normalise specs. A $2 plan and a $40 plan are not the same product, and the
           cheapest figure is usually a small entry plan.</li>
         <li>It does not convert currencies. USD and EUR entries are listed as published.</li>
+        <li>It does not compare prices with different terms as though they were alike. Where a
+          provider's rate depends on a commitment — a 24-month prepay, a first-three-months
+          promotion, or a page that offers several terms without saying which one the price
+          belongs to — the Term column says so, and says nothing when the page says nothing.</li>
         <li>It does not fill gaps. A provider with no readable price shows a dash, never an
           estimate.</li>
       </ul>

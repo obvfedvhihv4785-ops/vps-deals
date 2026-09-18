@@ -57,6 +57,8 @@ TYPE:agents PROJECT:vps-deals-promo-radar LANG:zh
   ::RULE{重抓失败时 保留上一次已验证的价格 但必须标记 stale 并写明验证日期}
   ::RULE{valid_until 已过的优惠 保留记录但必须标成过期 不许当有效展示}
   ::RULE{每个价格必须带 price_evidence 原文和 source_url 和 fetched_at 缺一不可}
+  ::RULE{价格附带承诺期或首期促销时 必须把条件一起显示 只写 /mo 不写条件是误导}
+  ::RULE{承诺期只能从紧邻价格的原文里读 读不到或页面给了多个档就写"未注明" 不许猜}
   ::RULE{改完必须本地跑通 scraper.py 和 build.py 再提交}
 
 ::MODULE{FILES|title:每个文件的职责边界}

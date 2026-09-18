@@ -15,6 +15,9 @@
       The lowest monthly price currently readable in {{ o.provider }}'s own HTML is
       <strong>{{ o.price_display }}</strong>. Below is the full set of plan prices the page
       stated, together with the exact text each one was taken from.
+{% if o.has_term_caveat %}
+      That figure is not a month-to-month price: {{ o.billing_term_note }}.
+{% endif %}
 {% else %}
       {{ o.provider }}'s page could not be read as a number on the last run. Rather than publish a
       guess, this entry carries no price. The provider's own page is linked below.
@@ -22,6 +25,7 @@
     </p>
     <div class="facts">
       <div class="fact"><span>Lowest readable price</span><b>{% if o.show_price %}{{ o.price_display }}/mo{% else %}not available{% endif %}</b></div>
+      <div class="fact"><span>Term</span><b>{% if o.show_price %}{% if o.term_short %}{{ o.term_short }}{% else %}month to month{% endif %}{% else %}—{% endif %}</b></div>
       <div class="fact"><span>Status</span><b>{{ o.status_label }}</b></div>
       <div class="fact"><span>Last verified</span><b>{{ o.last_verified_display }}</b></div>
       <div class="fact"><span>Source page</span><b><a href="{{ o.offer_url }}" rel="nofollow noopener" target="_blank">open ↗</a></b></div>

@@ -318,6 +318,66 @@ def check_affiliate_marking() -> None:
                           "rel=sponsored — is the CTA still routed through affiliate_url?")
 
 
+TERM_KINDS = {"term", "intro", "annual", "ambiguous_terms", "ambiguous_toggle",
+              "intro_word", "none", ""}
+
+# How each kind of claim has to be traceable back to the quoted page text. The
+# notes for the ambiguous kinds are paraphrase, so there is nothing to match
+# them against — but the ones that assert a specific commitment must be checkable,
+# because an invented term is a false statement about money.
+TERM_TRACE = {
+    "term": lambda months, ev: str(months) in ev,
+    "annual": lambda months, ev: bool(re.search(r"per\s+year|annually|/\s*yr", ev, re.I)),
+    "intro": lambda months, ev: bool(re.search(r"first\s+\d{1,2}\s*months?", ev, re.I)),
+}
+
+
+def check_billing_terms() -> None:
+    """A billing-term claim must be consistent and traceable to the page text.
+
+    The site tells readers that a price depends on a 24-month commitment. That
+    is a statement about money, so it gets the same treatment as the price
+    itself: it must be present exactly when the data says it is, it must be
+    plausible, and the specific numbers in it must appear in the text the
+    scraper quoted from the provider's own page.
+    """
+    path = os.path.join(os.path.dirname(SITE), "data", "offers.json")
+    if not os.path.exists(path):
+        return
+    with open(path, encoding="utf-8") as fh:
+        doc = json.load(fh)
+
+    for o in doc.get("offers", []):
+        who = o.get("provider", "?")
+        kind = o.get("billing_term_kind", "")
+        months = o.get("billing_term_months")
+        note = o.get("billing_term_note", "")
+
+        if kind not in TERM_KINDS:
+            errors.append(f"{who}: unknown billing_term_kind {kind!r}")
+            continue
+
+        # Presence has to agree with the kind in both directions: a kind with
+        # nothing to say, or a claim with no kind, both mean the renderer and
+        # the data have drifted apart.
+        if kind and kind != "none":
+            if not months and not note:
+                errors.append(f"{who}: billing_term_kind={kind!r} but no months and no note")
+        elif months or note:
+            errors.append(f"{who}: term data present ({months!r}/{note!r}) but kind is empty")
+
+        if months is not None:
+            if not isinstance(months, int) or not 1 <= months <= 60:
+                errors.append(f"{who}: implausible billing_term_months {months!r}")
+                continue
+            ev = o.get("price_evidence") or ""
+            probe = TERM_TRACE.get(kind)
+            if probe and not probe(months, ev):
+                errors.append(
+                    f"{who}: claims a {months}-month term, but that is not supported by its own "
+                    f"price_evidence ({ev[:70]!r}) — the claim is not traceable to the page")
+
+
 def main() -> int:
     global BASE
     with open(os.path.join(SITE, "sitemap.xml"), encoding="utf-8") as fh:
@@ -372,6 +432,7 @@ def main() -> int:
     check_offers_json()
     check_history()
     check_affiliate_marking()
+    check_billing_terms()
 
     if not os.path.exists(os.path.join(SITE, "assets", "style.css")):
         errors.append("assets/style.css missing")

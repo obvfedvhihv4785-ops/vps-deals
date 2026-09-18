@@ -311,6 +311,26 @@ STATUS_LABEL = {
     "error": "fetch error",
 }
 
+# Compact labels for the comparison table, keyed on the kind the scraper read
+# off the page. Kept short because the column has to stay scannable next to the
+# price — the point is that a 24-month rate is visibly not a month-to-month one.
+TERM_SHORT_LABEL = {
+    "intro": "intro rate",
+    "intro_word": "intro offer",
+    "annual": "annual billing",
+    "ambiguous_terms": "term unclear",
+    "ambiguous_toggle": "term unclear",
+}
+
+
+def term_short(offer: dict) -> str:
+    """One or two words describing the commitment, or "" when there is none."""
+    kind = offer.get("billing_term_kind", "")
+    if kind == "term":
+        months = offer.get("billing_term_months")
+        return f"{months}-month term" if months else "term not stated"
+    return TERM_SHORT_LABEL.get(kind, "")
+
 
 # ---------------------------------------------------------------------------
 # View models
@@ -364,6 +384,11 @@ def build_view(offer: dict, cfg: ilang.SiteConfig, site: dict, generated_at: str
         "price_tier": offer.get("price_tier", ""),
         "discount_label": (offer.get("discount") or {}).get("label", ""),
         "discount_evidence": (offer.get("discount") or {}).get("evidence", ""),
+        "billing_term_kind": offer.get("billing_term_kind", ""),
+        "billing_term_months": offer.get("billing_term_months") or 0,
+        "billing_term_note": offer.get("billing_term_note", ""),
+        "term_short": term_short(offer),
+        "has_term_caveat": bool(offer.get("billing_term_kind")),
         "valid_until": valid_until or "",
         "expired": expired,
         "status": status,
@@ -410,6 +435,11 @@ def offer_jsonld(v: dict, site: dict) -> str:
         "description": (
             f"Lowest server-rendered monthly price found on {v['provider']}'s public "
             f"VPS page, captured {v['last_verified_display']}."
+            # schema.org has no clean field for a minimum commitment, so the
+            # caveat goes in the description rather than being dropped. A price
+            # that only holds for 24 months should not read as a monthly rate.
+            + (f" This rate applies to a {v['term_short']}."
+               if v["term_short"] else "")
         ),
     }
     # priceValidUntil is only emitted when the page actually stated a date.
@@ -702,6 +732,11 @@ def main() -> int:
         "priced": len(priced),
         "currencies": sorted({v["price_currency"] for v in priced}),
         "sources": len({v["offer_url"] for v in views}),
+        # How many of the published prices are not plain month-to-month. The
+        # comparison page states this number outright rather than implying the
+        # figures are all alike.
+        "with_term_caveat": sum(1 for v in priced if v["has_term_caveat"]),
+        "plain_monthly": sum(1 for v in priced if not v["has_term_caveat"]),
     }
 
     # No bulk wipe: pages are overwritten in place, then anything not written
@@ -766,11 +801,13 @@ def main() -> int:
                        jsonld_breadcrumb=(breadcrumb_jsonld(trail) if on("jsonld_breadcrumb") else ""),
                        page_title=(f"{v['provider']} VPS pricing — "
                                    f"{v['price_display'] + '/mo' if v['show_price'] else 'no readable price'}"
-                                   f" ({site['month']}) | {site['name']}"),
+                                   + (f", {v['term_short']}" if v["term_short"] else "")
+                                   + f" ({site['month']}) | {site['name']}"),
                        page_description=(
                            f"{v['provider']} VPS pricing as published on their own site. "
                            + (f"Lowest monthly price found: {v['price_display']}. "
                               if v["show_price"] else "No machine-readable monthly price found. ")
+                           + (f"That rate applies to a {v['term_short']}. " if v["term_short"] else "")
                            + f"Last verified {v['last_verified_display']}."),
                        canonical=v["provider_url"],
                        active="")
@@ -785,13 +822,16 @@ def main() -> int:
                        page_title=(
                            f"{v['provider']} VPS deal"
                            + (f" — {v['price_display']}/mo" if v["show_price"] else "")
+                           + (f", {v['term_short']}" if v["term_short"] else "")
                            + (f", {v['discount_label']}" if v["discount_label"] else "")
                            + f" ({site['month']}) | {site['name']}"),
                        page_description=(
                            (f"{v['provider']} VPS from {v['price_display']}/month"
                             + (f", {v['discount_label']}" if v["discount_label"] else "")
-                            + ". " if v["show_price"]
-                            else f"{v['provider']} VPS pricing could not be read as a number. ")
+                            + (f". That rate requires a {v['term_short']}."
+                               if v["term_short"] else ". ")
+                           if v["show_price"]
+                           else f"{v['provider']} VPS pricing could not be read as a number. ")
                            + f"Verified against the provider's own page on {v['last_verified_display']}."),
                        canonical=v["url"],
                        active="")

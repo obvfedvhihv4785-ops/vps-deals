@@ -19,6 +19,13 @@
 {% if o.discount_label %} The same page also advertises <strong>{{ o.discount_label }}</strong>.{% endif %}
       Check the provider's page before buying — hosting prices change often.
     </p>
+{% if o.has_term_caveat %}
+    <p class="note">
+      <strong>Read the term before the price.</strong> {{ o.billing_term_note }} —
+      so this is not a month-to-month figure, and it is not directly comparable with a provider
+      quoting a plain monthly rate.
+    </p>
+{% endif %}
 {% else %}
     <h1>{{ o.provider }} VPS</h1>
     <p class="lede">
@@ -30,6 +37,7 @@
 
     <div class="facts">
       <div class="fact"><span>Price</span><b>{% if o.show_price %}{{ o.price_display }}/mo {{ o.price_currency }}{% else %}not published{% endif %}</b></div>
+      <div class="fact"><span>Term</span><b>{% if o.show_price %}{% if o.term_short %}{{ o.term_short }}{% else %}month to month{% endif %}{% else %}—{% endif %}</b></div>
       <div class="fact"><span>Provider</span><b>{{ o.provider }}</b></div>
       <div class="fact"><span>Verified</span><b>{{ o.last_verified_display }}</b></div>
 {% if o.valid_until %}
@@ -94,6 +102,11 @@
       <ul>
         <li>Prices on hosting sites change frequently and intro rates usually renew higher.
           Confirm the current price, term, and renewal rate on {{ o.provider }}'s own page.</li>
+{% if o.has_term_caveat %}
+        <li>This particular figure is <strong>not a month-to-month price</strong>.
+          {{ o.billing_term_note }}. What you actually pay per month, and how much you pay up
+          front, both depend on the term you choose.</li>
+{% endif %}
         <li>The figure above is the lowest one stated on the page — it may be a small plan or a
           promotional first term, not the plan you actually want.</li>
 {% if site.has_affiliate %}
