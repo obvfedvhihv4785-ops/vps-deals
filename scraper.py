@@ -971,6 +971,17 @@ def main() -> int:
         "site_currency": settings.get("currency", "USD"),
         "providers_configured": len(providers),
         "providers_with_price": sum(1 for r in offers if r.get("status") == "ok"),
+        # Deliberately a different number from the line above, and the
+        # difference is not cosmetic. `providers_with_price` counts what was
+        # read *fresh* this run, and that is what the circuit breaker watches —
+        # so a run where every fetch failed cannot look healthy. This one counts
+        # what the site actually has to show, which includes a price carried
+        # forward and labelled stale. The two disagreed by one for a whole
+        # release: the site published 25 prices while the commit message, the
+        # automation report and the scraper's own summary all said 24, because
+        # one provider had gone stale with its price intact.
+        "providers_with_price_shown": sum(
+            1 for r in offers if isinstance(r.get("price"), (int, float))),
         "previous_providers_with_price": prev_priced,
         "notes": [
             "Every price carries price_evidence: the literal page text it was matched from.",
@@ -993,7 +1004,8 @@ def main() -> int:
     print(f"[scraper] history: {tracked} observation(s) across "
           f"{len(hist['providers'])} provider(s); +{appended} new this run")
 
-    print(f"[scraper] with price: {doc['providers_with_price']}/{len(providers)}")
+    print(f"[scraper] with price: {doc['providers_with_price_shown']}/{len(providers)} "
+          f"({doc['providers_with_price']} read fresh this run)")
     return 0
 
 

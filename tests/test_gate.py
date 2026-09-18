@@ -114,6 +114,18 @@ expect_caught(
     lambda d: d["providers"]["Vultr"].append(
         {"date": "2020-01-01", "price": 9.99, "currency": "USD", "status": "ok"}))
 
+# The two summary counts measure different things and disagreed by one for a
+# release: the site published 25 prices while the commit message, the automation
+# report and the scraper summary all said 24, because a provider had gone stale
+# with its price intact. Both are now recomputed from the records.
+expect_caught(
+    "a summary that undercounts the prices the site will show", OFFERS,
+    lambda d: d.update(providers_with_price_shown=d["providers_with_price_shown"] - 1))
+
+expect_caught(
+    "a summary that overcounts what was read fresh this run", OFFERS,
+    lambda d: d.update(providers_with_price=d["providers_with_price"] + 1))
+
 print()
 print("-" * 72)
 restored = run_verify()

@@ -217,6 +217,24 @@ def check_offers_json() -> None:
                 and status == "ok":
             warnings.append(f"{name}: valid_until has passed but status is still ok")
 
+    # The two summary counts must agree with the records they summarise. They
+    # measure different things on purpose — one is what the site shows, the
+    # other is what was read fresh this run and is what the breaker watches —
+    # and they were off by one for a release, so the site published 25 prices
+    # while every report said 24. Recomputed here rather than trusted.
+    offers = doc.get("offers", [])
+    expected_shown = sum(1 for o in offers if isinstance(o.get("price"), (int, float)))
+    expected_fresh = sum(1 for o in offers if o.get("status") == "ok")
+    for field, expected, what in (
+        ("providers_with_price_shown", expected_shown, "prices to show"),
+        ("providers_with_price", expected_fresh, "read fresh this run"),
+    ):
+        claimed = doc.get(field)
+        if claimed != expected:
+            errors.append(
+                f"offers.json {field}={claimed!r} but the records contain {expected} "
+                f"{what} — the summary and the data disagree")
+
     # Circuit breaker. An unattended job that publishes whatever it manages to
     # fetch will happily publish a gutted site if the runner gets rate-limited or
     # blocked across the board. Losing most of the priced providers in one hop is

@@ -87,7 +87,7 @@ git add -A data site
 if git diff --cached --quiet; then
   log "no changes to commit"
 else
-  MSG="$("$PY" -c 'import json;d=json.load(open("data/offers.json",encoding="utf-8"));print("%d/%d providers priced" % (d["providers_with_price"], d["providers_configured"]))')"
+  MSG="$("$PY" -c 'import json;d=json.load(open("data/offers.json",encoding="utf-8"));print("%d/%d providers priced (%d read fresh this run)" % (d["providers_with_price_shown"], d["providers_configured"], d["providers_with_price"]))')"
   git -c user.name=promo-radar-bot \
       -c user.email=promo-radar-bot@users.noreply.github.com \
       commit -q -m "data: refresh ${MSG} at $(date -u +%Y-%m-%dT%H:%MZ)"
