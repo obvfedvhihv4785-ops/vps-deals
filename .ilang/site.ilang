@@ -112,7 +112,7 @@ TYPE:config PROJECT:vps-deals LANG:zh
   request_timeout_seconds: 25
   request_delay_seconds: 2
   respect_robots: true
-  user_agent: PromoRadarBot/1.0 (+https://github.com/; contact via repo issues)
+  user_agent: PromoRadarBot/1.0 (+https://github.com/obvfedvhihv4785-ops/vps-deals; contact via repo issues)
   max_deals_on_index: 24
   min_plausible_monthly_price: 1.00
   max_plausible_monthly_price: 2000.00

@@ -11,6 +11,11 @@
 #   PY=... WRANGLER=... ./refresh.sh   override tool paths
 #   SKIP_DEPLOY=1 ./refresh.sh         build and commit only
 #
+# Machine-specific paths and the Cloudflare account id are NOT in this file.
+# They live in $HOME/.workbuddy-ai/vps-deals.env, which is sourced if present;
+# see vps-deals.env.example. That keeps local paths and account identifiers out
+# of a public repo and lets the script run unchanged on another machine.
+#
 # Exit codes: 0 ok, 1 scrape/build failed, 2 verify gate failed (nothing shipped),
 #             3 source files are dirty (commit or stash them first)
 # ---------------------------------------------------------------------------
@@ -19,12 +24,26 @@ set -uo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
 cd "$HERE" || exit 1
 
-PY="${PY:-C:/Users/Administrator/.workbuddy-ai/binaries/python/versions/3.13.12/python.exe}"
-WRANGLER="${WRANGLER:-C:/Users/Administrator/.workbuddy-ai/binaries/node/workspace/wranglerproj/node_modules/.bin/wrangler.cmd}"
-CF_DIR="${CF_DIR:-C:/Users/Administrator/.workbuddy-ai/cloudflare}"
+# Machine-local settings, if present. Kept outside the repo so the published
+# script depends on nothing specific to one machine: no absolute interpreter
+# paths, no account identifiers. See vps-deals.env.example.
+LOCAL_ENV="${VPS_DEALS_ENV:-$HOME/.workbuddy-ai/vps-deals.env}"
+if [ -f "$LOCAL_ENV" ]; then
+  # shellcheck disable=SC1090
+  . "$LOCAL_ENV"
+fi
+
+PY="${PY:-python3}"
+WRANGLER="${WRANGLER:-npx wrangler}"
+CF_DIR="${CF_DIR:-$HOME/.workbuddy-ai/cloudflare}"
 PROJECT="${CF_PROJECT:-vps-deals-radar}"
-ACCOUNT="${CF_ACCOUNT:-fc6b63f8415dc700028227a3ba6dd399}"
+ACCOUNT="${CF_ACCOUNT:-}"
 SKIP_DEPLOY="${SKIP_DEPLOY:-}"
+
+if [ -z "$ACCOUNT" ]; then
+  printf '%s  %s\n' "refresh" "FAIL no Cloudflare account id; set CF_ACCOUNT (see vps-deals.env.example)"
+  exit 1
+fi
 
 log() { printf '%s  %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$*"; }
 

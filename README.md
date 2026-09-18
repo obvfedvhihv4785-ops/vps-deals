@@ -200,6 +200,14 @@ bash refresh.sh                 # scrape -> build -> verify -> commit -> publish
 SKIP_DEPLOY=1 bash refresh.sh   # stop before publishing
 ```
 
+Machine-specific settings — interpreter paths, the Cloudflare account id, the directory holding
+the API token — are deliberately **not** in this repository. They live in
+`$HOME/.workbuddy-ai/vps-deals.env`, which `refresh.sh` sources if it exists; see
+`vps-deals.env.example`. Everything falls back to a portable default (`python3`, `npx wrangler`)
+and `refresh.sh` exits `1` rather than deploying when no account id is configured. That way the
+published script carries no local paths, no username, and no account identifier, and it runs
+unchanged on a different machine.
+
 `refresh.sh` exists so any scheduler can drive the pipeline without restating the ordering or
 the safety rules. It refuses to commit or deploy when `verify.py` fails, so a malformed page, a
 price that does not match its own quoted evidence, or a crawl that lost most of its providers
