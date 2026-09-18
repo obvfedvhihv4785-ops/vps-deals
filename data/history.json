@@ -109,12 +109,6 @@
         "price": 4.69,
         "currency": "USD",
         "status": "ok"
-      },
-      {
-        "date": "2026-09-18",
-        "price": 4.69,
-        "currency": "USD",
-        "status": "stale"
       }
     ],
     "HostGator": [
