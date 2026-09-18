@@ -158,13 +158,7 @@
       "renewal_currency": "USD",
       "renewal_kind": "renews_at",
       "renewal_evidence": "…ting plan 67% off KVM 1 $ 19.49 $ 6.49 /mo Choose plan Renews at $11.99/mo for 2 years. Cancel anytime. 1 vCPU core 4 GB RAM 5…",
-      "renewal_months": 24,
-      "discount": {
-        "kind": "percent",
-        "value": 70,
-        "label": "70% off",
-        "evidence": "…building with confidence. Go to Learning lab EN Up to 70% off VPS hosting Virtual Private Servers for more power and…"
-      }
+      "renewal_months": 24
     },
     {
       "provider": "IONOS",
@@ -598,13 +592,7 @@
       "price_context": "monthly",
       "price_tier": "plan",
       "price_evidence": "…RAM 1 GB Storage 30 GB Bandwidth 1 TB Price $ 10.99/mo $ 7.14/mo Order $ 7.14/mo CPU 1 CPU RAM 2 GB Storage 50 GB Bandw…",
-      "price_reason": "server/plan wording nearby",
-      "discount": {
-        "kind": "percent",
-        "value": 50,
-        "label": "50% off",
-        "evidence": "…ged VPS Hosting. Manage your own server and save up to 50% off the price of your server. Explore Unmanaged Linux Feat…"
-      }
+      "price_reason": "server/plan wording nearby"
     },
     {
       "provider": "DreamHost",
@@ -1303,13 +1291,7 @@
       "renewal_price": 5.69,
       "renewal_currency": "USD",
       "renewal_kind": "renews_at",
-      "renewal_evidence": "…#43; API Choose your size $ 4.69 /mo For 24 month term Renews at $ 5.69 /mo $ 9.49 /mo For 24 month term Renews at $ 11.99 /mo…",
-      "discount": {
-        "kind": "percent",
-        "value": 70,
-        "label": "70% off",
-        "evidence": "…3679 Chat with us Help me choose $ 3.99 /mo $ 9.99 /mo 70 % off $ 6.99 /mo $ 13.99 /mo 57 % off $ 14.99 /mo $ 21.99 /m…"
-      }
+      "renewal_evidence": "…#43; API Choose your size $ 4.69 /mo For 24 month term Renews at $ 5.69 /mo $ 9.49 /mo For 24 month term Renews at $ 11.99 /mo…"
     },
     {
       "provider": "HostGator",
@@ -1460,12 +1442,6 @@
       "renewal_evidence": "…ed VPS KVM 4GB 22% OFF $ 89.99 $ 69.99 /mo Choose Plan Renews at $ 89.99/mo. Cancel anytime. 2 vCPU cores 4 GB RAM 80 GB NVMe S…",
       "last_verified_at": "2026-09-18T11:43:38Z",
       "stale": true,
-      "discount": {
-        "kind": "percent",
-        "value": 77,
-        "label": "77% off",
-        "evidence": "…PS Hosting with Full Root Access 🎉 Flash Sale: 77% 72% 77% Off Hosting + Free Domain — Ends in 11 h 59 m 59 s View Pl…"
-      },
       "price_candidates_count": 5,
       "price_candidates": [
         {

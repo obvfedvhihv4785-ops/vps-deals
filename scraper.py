@@ -114,6 +114,23 @@ MARKET_WINDOW = 120
 DISCOUNT_RE = re.compile(
     r"(?P<pct>\d{1,3})\s?%\s?(?:off|discount|savings|cheaper)", re.I)
 SAVE_RE = re.compile(r"save\s+(?P<sym>US\$|\$|€)\s?(?P<amt>\d{1,4}(?:\.\d{1,2})?)", re.I)
+MONEY_RE = re.compile(r"(?:US\$|\$|€|£)\s?(?P<amt>\d{1,4}(?:\.\d{1,2})?)")
+# How far a discounted figure may sit from `original × (1 - pct)` and still be
+# called that discount. Wide enough for a provider that rounds its own
+# arithmetic, tight enough that a percentage from the row next door cannot pass.
+DISCOUNT_ARITH_TOLERANCE = 0.03
+# "Up to 70% off VPS hosting" is a ceiling across a product line, not a
+# statement about any one price. Printing it beside a specific figure converts a
+# maximum into a saving the provider never attached to that figure. Rejected
+# outright rather than trusted at any distance.
+UP_TO_RE = re.compile(
+    r"(?:up\s*to|as\s+much\s+as|upto)\s*(?:US\$|\$|€|£)?\s*\d{1,3}\s?%"
+    r"\s?(?:off|discount|savings)", re.I)
+# How much surrounding page text a quoted claim carries. A discount is tested
+# against the same span the site prints, so the stored evidence and the rule
+# that admits it agree by construction: whatever the page quotes, the reader can
+# check the claim inside it.
+SNIPPET_PAD = 55
 EXPIRES_RE = re.compile(
     r"(?:expires?|ends?|valid\s+until|valid\s+through|offer\s+ends)\s*(?:on|:)?\s*"
     r"(?P<date>[A-Z][a-z]{2,8}\.?\s+\d{1,2}(?:st|nd|rd|th)?,?\s*\d{4}"
@@ -373,7 +390,7 @@ def _to_float(amt: str) -> float | None:
         return None
 
 
-def _snippet(text: str, start: int, end: int, pad: int = 55) -> str:
+def _snippet(text: str, start: int, end: int, pad: int = SNIPPET_PAD) -> str:
     lo = max(0, start - pad)
     hi = min(len(text), end + pad)
     return ("…" if lo > 0 else "") + text[lo:hi].strip() + ("…" if hi < len(text) else "")
@@ -456,22 +473,129 @@ def pick_headline(prices: list[dict], site_currency: str) -> dict | None:
     return None
 
 
-def extract_discount(text: str) -> dict | None:
-    m = DISCOUNT_RE.search(text)
-    if m:
-        pct = int(m.group("pct"))
-        if 1 <= pct <= 95:
-            return {"kind": "percent", "value": pct, "label": f"{pct}% off",
-                    "evidence": _snippet(text, m.start(), m.end())}
-    m = SAVE_RE.search(text)
-    if m:
-        value = _to_float(m.group("amt"))
-        if value:
-            cur = SYM_TO_CURRENCY.get(m.group("sym"), "USD")
-            return {"kind": "amount", "value": value, "currency": cur,
-                    "label": f"save {m.group('sym')}{value:g}",
-                    "evidence": _snippet(text, m.start(), m.end())}
+def _figure_in(text: str, value: float) -> bool:
+    """True when `value` appears in `text` as a figure of its own.
+
+    The boundaries matter: 4.69 must not be "found" inside 14.69 or 4.699.
+    """
+    for s in (f"{value:.2f}", f"{value:g}"):
+        if re.search(r"(?<![\d.,])" + re.escape(s) + r"(?![\d,])", text):
+            return True
+    return False
+
+
+def _pct_supports(evidence: str, price: float, pct: int) -> bool:
+    """True when the quoted text is consistent with `pct` being off `price`.
+
+    Proximity alone lets a percentage leak in from the plan row next door.
+    Bluehost prints "$ 13.99 /mo 57 % off" two rows above the $4.69 figure this
+    site publishes, close enough to land inside the same quoted span — so the
+    badge would have read 57% off a price that the percentage has nothing to do
+    with. Being nearby is therefore not enough: the text must either show no
+    other figure at all, which makes the price the only thing the percentage
+    could apply to, or show one that arrives at the price once the discount is
+    taken off it.
+    """
+    others = []
+    for m in MONEY_RE.finditer(evidence):
+        v = _to_float(m.group("amt"))
+        if v is None or abs(v - price) < 0.005:
+            continue                       # the headline's own mention
+        others.append(v)
+    if not others:
+        return True
+    tol = max(price * DISCOUNT_ARITH_TOLERANCE, 0.05)
+    return any(abs(o * (1 - pct / 100) - price) <= tol for o in others)
+
+
+def discount_rejection(discount: dict, price) -> str | None:
+    """Why this discount may not be published beside this price, or None if it may.
+
+    One rule, three callers: the extractor applies it to each candidate before
+    choosing one, carry_forward re-applies it to a discount inherited from an
+    earlier read, and verify.py reports it. That matters because a discount that
+    stops being supportable must not survive by having been published once —
+    the price is carried forward on a failed refresh, and whatever is printed
+    beside it travels with it.
+    """
+    ev = discount.get("evidence") or ""
+    if not ev:
+        return "no quoted page text behind it"
+    if UP_TO_RE.search(ev):
+        return ("it is an 'up to' maximum across the product line, not a saving "
+                "on this price")
+    value = price if isinstance(price, (int, float)) else _to_float(str(price))
+    if value is None:
+        return "there is no price for it to apply to"
+    if not _figure_in(ev, value):
+        return (f"its own quoted text does not show the {value:g} it would be "
+                f"printed beside")
+    if discount.get("kind") == "percent" and not _pct_supports(
+            ev, value, int(discount.get("value") or 0)):
+        return (f"no figure in its own quoted text arrives at {value:g} once "
+                f"{discount.get('value')}% is taken off, so the percentage belongs "
+                f"to another plan on the page")
     return None
+
+
+def discount_tied_to_price(discount: dict | None, price) -> bool:
+    """True when the discount's own quoted text also shows the price."""
+    return bool(discount) and discount_rejection(discount, price) is None
+
+
+def extract_discount(text: str, headline: dict | None = None) -> dict | None:
+    """Read an advertised discount, but only one this price can be shown with.
+
+    Taking the first "N% off" anywhere on the page is how a site-wide campaign
+    ends up beside a specific figure. Hostinger's page opens with "Up to 70% off
+    VPS hosting" above a $6.49 plan whose own row reads "67% off"; MilesWeb runs
+    a banner saying "77% Off Hosting" above a plan discounted 22%; Bluehost's
+    "70% off" sits on a $3.99 plan row, not the $4.69 one we publish. Each of
+    those is a real number on the page and none of them is a fact about the
+    price printed under it, so publishing any of them invents a saving.
+
+    A discount is therefore only taken when the text around it also carries the
+    headline figure — the sentence that supports the claim is the sentence the
+    site quotes, so a reader can verify it without re-fetching anything. Where
+    several qualify, the nearest to the price wins. With no price there is no
+    discount: a badge beside an empty price slot claims nothing checkable.
+    """
+    if not headline or headline.get("value") is None:
+        return None
+    value = float(headline["value"])
+    mid = (headline["start"] + headline["end"]) // 2
+
+    # The rule is applied to the snippet the site would print, so the
+    # justification for publishing a claim is the same text the reader sees.
+    def admitted(cand: dict) -> bool:
+        return discount_rejection(cand, value) is None
+
+    cands: list[tuple[int, dict]] = []
+    for m in DISCOUNT_RE.finditer(text):
+        pct = int(m.group("pct"))
+        if not 1 <= pct <= 95:
+            continue
+        cand = {"kind": "percent", "value": pct, "label": f"{pct}% off",
+                "evidence": _snippet(text, m.start(), m.end())}
+        if not admitted(cand):
+            continue
+        cands.append((abs((m.start() + m.end()) // 2 - mid), cand))
+    if cands:
+        return min(cands, key=lambda c: c[0])[1]
+
+    for m in SAVE_RE.finditer(text):
+        amt = _to_float(m.group("amt"))
+        if not amt:
+            continue
+        sym = m.group("sym")
+        cand = {"kind": "amount", "value": amt,
+                "currency": SYM_TO_CURRENCY.get(sym, "USD"),
+                "label": f"save {sym}{amt:g}",
+                "evidence": _snippet(text, m.start(), m.end())}
+        if not admitted(cand):
+            continue
+        cands.append((abs((m.start() + m.end()) // 2 - mid), cand))
+    return min(cands, key=lambda c: c[0])[1] if cands else None
 
 
 def extract_billing_term(text: str, start: int, end: int) -> dict:
@@ -754,7 +878,6 @@ def scrape_provider(prov: dict, cfg: ilang.SiteConfig, settings: dict,
     text = strip_to_visible_text(html)
     prices = extract_prices(text, float(settings["min_plausible_monthly_price"]),
                             float(settings["max_plausible_monthly_price"]))
-    discount = extract_discount(text)
     valid_until = extract_valid_until(text)
 
     rec["http_status"] = status
@@ -817,6 +940,10 @@ def scrape_provider(prov: dict, cfg: ilang.SiteConfig, settings: dict,
         rec["note"] = ("page returned 200 but exposes no server-rendered monthly price "
                        "(likely JS-injected); not inventing a figure")
 
+    # Only after the headline is known: a discount is admitted on the strength of
+    # the figure it will be printed beside, so there is nothing to judge it
+    # against before this point.
+    discount = extract_discount(text, headline)
     if discount:
         rec["discount"] = discount
     if valid_until:
@@ -869,8 +996,13 @@ def carry_forward(prev: dict | None, rec: dict) -> dict:
     # frozen at the last successful read until a refetch succeeds.
     merged["last_verified_at"] = prev.get("last_verified_at") or prev.get("fetched_at")
     merged["stale"] = True
+    # A carried discount is re-checked against the price it would be printed
+    # beside. The old page's text is the only evidence for it, so when that text
+    # does not show the figure, the claim goes too: a discount that was never
+    # supported would otherwise outlive the run that produced it.
     if prev.get("discount") and "discount" not in merged:
-        merged["discount"] = prev["discount"]
+        if discount_tied_to_price(prev["discount"], merged.get("price", prev.get("price"))):
+            merged["discount"] = prev["discount"]
     return merged
 
 

@@ -21,6 +21,10 @@ import sys
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 
+# The rule a discount must satisfy to be printed beside a price. Imported rather
+# than restated: two copies of a rule about money is one copy waiting to drift.
+from scraper import discount_rejection  # noqa: E402
+
 SITE = "site"
 BASE = None
 errors: list[str] = []
@@ -406,6 +410,45 @@ def check_offers_json() -> None:
                 "re-run, or delete data/offers.json to accept the new baseline")
 
 
+def check_discount_claims() -> None:
+    """A discount badge sits directly under a price, so it is a claim about it.
+
+    That claim has to be checkable in the sentence the page quotes beside it,
+    because a percentage pulled from anywhere on the page is how a site-wide
+    campaign gets printed under a specific figure: Hostinger's "Up to 70% off VPS
+    hosting" belongs to no plan, and Bluehost's "70% off" belongs to the $3.99
+    row rather than the $4.69 one we publish. Both are real numbers on the page
+    and neither is a saving on the price shown next to it, which makes the badge
+    a discount the provider never offered.
+
+    The rule is the one the extractor applies, so a discount that was admitted
+    once can be re-checked forever after — including after a failed refresh has
+    carried the price forward with it.
+    """
+    path = os.path.join(os.path.dirname(SITE), "data", "offers.json")
+    if not os.path.exists(path):
+        return                       # its absence is already reported elsewhere
+    with open(path, encoding="utf-8") as fh:
+        doc = json.load(fh)
+
+    for o in doc.get("offers", []):
+        name = o.get("provider", "?")
+        disc = o.get("discount")
+        if not disc:
+            continue
+        label = disc.get("label") or disc.get("kind") or "?"
+        price = o.get("price")
+        if not isinstance(price, (int, float)):
+            errors.append(
+                f"{name}: advertises {label!r} with no price for it to apply to — "
+                f"a discount beside an empty price slot asserts nothing checkable")
+            continue
+        reason = discount_rejection(disc, price)
+        if reason:
+            errors.append(
+                f"{name}: discount {label!r} may not be published — {reason}")
+
+
 def check_history() -> None:
     """The price history is append-only and cannot be rebuilt, so guard it.
 
@@ -758,6 +801,7 @@ def main() -> int:
         errors.append("robots.txt does not reference the sitemap")
 
     check_offers_json()
+    check_discount_claims()
     check_history()
     check_affiliate_marking()
     check_billing_terms()

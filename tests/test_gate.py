@@ -212,6 +212,39 @@ expect_caught_in_html(
     lambda h: h.replace("whenever a provider's price or status changes",
                         "on every run", 1))
 
+# A discount badge sits under the price on the card and in its own column of the
+# comparison table, so it reads as a claim about that figure. Four of the five
+# discounts this site ever published were percentages taken from elsewhere on
+# the page: two "up to" ceilings that belong to no plan, one belonging to a
+# different plan row, and one site-wide flash sale. All four were real numbers
+# on a real page, and none was a saving on the price printed beside it.
+expect_caught(
+    "an 'up to' ceiling presented as a discount on a specific price", OFFERS,
+    lambda d: offer(d, "Hostinger").update(discount={
+        "kind": "percent", "value": 70, "label": "70% off",
+        "evidence": "…Go to Learning lab EN Up to 70% off VPS hosting Virtual "
+                    "Private Servers for more power and…"}))
+
+expect_caught(
+    "a percentage from another plan row, beside a price it does not apply to",
+    OFFERS,
+    lambda d: offer(d, "Bluehost").update(discount={
+        "kind": "percent", "value": 70, "label": "70% off",
+        "evidence": "…Help me choose $ 3.99 /mo $ 9.99 /mo 70 % off $ 6.99 /mo…"}))
+
+expect_caught(
+    "a discount whose quoted text never mentions the price it sits beside",
+    OFFERS,
+    lambda d: offer(d, "MilesWeb").update(discount={
+        "kind": "percent", "value": 77, "label": "77% off",
+        "evidence": "…Flash Sale: 77% Off Hosting + Free Domain — Ends in 12 h…"}))
+
+expect_caught(
+    "a discount kept on a record that no longer has a price", OFFERS,
+    lambda d: offer(d, "Hetzner").update(discount={
+        "kind": "percent", "value": 30, "label": "30% off",
+        "evidence": "…30% off the €4.51 plan…"}))
+
 print()
 print("-" * 72)
 restored = run_verify()

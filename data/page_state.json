@@ -6,7 +6,7 @@
   },
   "about.html": {
    "lastmod": "2026-09-18T12:33:50Z",
-   "sha256_16": "535856b081d7dca7"
+   "sha256_16": "d6df2c5b1f1573d1"
   },
   "assets/style.css": {
    "lastmod": "2026-09-17T23:08:47Z",
@@ -14,7 +14,7 @@
   },
   "compare.html": {
    "lastmod": "2026-09-18T12:33:50Z",
-   "sha256_16": "107f523578b80673"
+   "sha256_16": "b42b21afd54f38cc"
   },
   "deal/accuweb-hosting.html": {
    "lastmod": "2026-09-18T08:28:44Z",
@@ -26,7 +26,7 @@
   },
   "deal/bluehost.html": {
    "lastmod": "2026-09-18T12:33:50Z",
-   "sha256_16": "20c7e3170f8d73b3"
+   "sha256_16": "97d0f72bdc0e7b8a"
   },
   "deal/civo.html": {
    "lastmod": "2026-09-18T08:28:44Z",
@@ -61,16 +61,16 @@
    "sha256_16": "47571f60d7a6869e"
   },
   "deal/hostinger.html": {
-   "lastmod": "2026-09-18T08:28:44Z",
-   "sha256_16": "54522cbc0a63c71d"
+   "lastmod": "2026-09-18T12:33:50Z",
+   "sha256_16": "0d5c3994a06a3cc6"
   },
   "deal/hostodo.html": {
    "lastmod": "2026-09-18T08:28:44Z",
    "sha256_16": "039eec149cb6a92c"
   },
   "deal/hostwinds.html": {
-   "lastmod": "2026-09-18T08:28:44Z",
-   "sha256_16": "872df0f6a12284b2"
+   "lastmod": "2026-09-18T12:33:50Z",
+   "sha256_16": "bd9502a8a796e522"
   },
   "deal/inmotion-hosting.html": {
    "lastmod": "2026-09-18T08:28:44Z",
@@ -86,7 +86,7 @@
   },
   "deal/milesweb.html": {
    "lastmod": "2026-09-18T12:33:50Z",
-   "sha256_16": "3d3f03d5cc2b9c08"
+   "sha256_16": "78503a0058877b0b"
   },
   "deal/monovm.html": {
    "lastmod": "2026-09-18T08:28:44Z",
@@ -122,7 +122,7 @@
   },
   "index.html": {
    "lastmod": "2026-09-18T12:33:50Z",
-   "sha256_16": "57f7cebfafc6beb4"
+   "sha256_16": "82f040f3a9bcabd8"
   },
   "provider/accuweb-hosting.html": {
    "lastmod": "2026-09-18T12:33:50Z",

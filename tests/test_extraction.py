@@ -5,12 +5,13 @@ Run with:  python tests/test_extraction.py
 Every string below is a verbatim excerpt from a live provider page, kept as it
 appeared (including the odd spacing around currency symbols, which is how these
 pages render). The point of the suite is not coverage for its own sake. It is
-that two specific claims on the published site are claims about money:
+that three claims on the published site are claims about money:
 
   * the *term*  — "this rate requires a 24-month prepay"
   * the *renewal* — "this rate becomes $4.68/mo later"
+  * the *discount* — "this price is N% off"
 
-Both are read out of prose. A regex that is one character too loose turns a
+All are read out of prose. A regex that is one character too loose turns a
 marketing sentence into a fabricated price, which is worse than the omission it
 replaced. So the suite is weighted towards the cases that must stay *silent*.
 
@@ -24,7 +25,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from scraper import extract_billing_term, extract_renewal  # noqa: E402
+from scraper import (  # noqa: E402
+    discount_rejection, extract_billing_term, extract_discount, extract_renewal)
 
 
 def at(text: str, needle: str) -> tuple[int, int]:
@@ -234,6 +236,102 @@ check_renewal(
     "$ 9.99 /mo Renews at €12.99 /mo",
     "$ 9.99", None, "USD",
 )
+
+def headline(text: str, price: str, value: float) -> dict:
+    """The shape pick_headline hands to extract_discount."""
+    s, e = at(text, price)
+    return {"value": value, "currency": "USD", "start": s, "end": e}
+
+
+def check_discount(label: str, text: str, price: str, value: float, want) -> None:
+    got = extract_discount(text, headline(text, price, value))
+    check(label, got["label"] if got else None, want)
+
+
+print()
+print("advertised discount — only what the page attaches to *this* price")
+print("-" * 72)
+
+# Cloudzy: the site-wide line names the figure it belongs to, so the badge is
+# checkable in the sentence printed beside it.
+check_discount(
+    "a percentage whose sentence names the price",
+    "Skip to main content 50% off all plans, limited time. Starting at $2.48/mo Support",
+    "$2.48", 2.48, "50% off")
+
+# Hostinger. The hero says "Up to 70% off VPS hosting" — a ceiling across the
+# whole product line, attached to no plan. The plan row for this very figure
+# says 67% off, and names $6.49, so that is the one that must be published.
+# The old extractor took the first match on the page and printed 70% instead.
+check_discount(
+    "a site-wide 'up to' ceiling, with the plan's own discount further down",
+    "Go to Learning lab EN Up to 70% off VPS hosting Virtual Private Servers for "
+    "more power and Choose your VPS hosting plan 67% off KVM 1 $ 19.49 $ 6.49 /mo "
+    "Choose plan Renews at $11.99/mo for 2 years",
+    "$ 6.49", 6.49, "67% off")
+
+# Hostwinds: "save up to 50% off" is a ceiling, and $7.14 appears nowhere near
+# it. Nothing on this page ties a percentage to our figure, so nothing is shown.
+check_discount(
+    "a ceiling with the price elsewhere on the page",
+    "Unmanaged VPS Hosting. Manage your own server and save up to 50% off the "
+    "price of your server. Explore Unmanaged Linux Features $ 10.99/mo $ 7.14/mo",
+    "$ 7.14", 7.14, None)
+
+# Bluehost: the 70% belongs to the $3.99 row, not to the $4.69 we publish. The
+# digits 4.69 are nowhere in that sentence.
+check_discount(
+    "a percentage belonging to a different plan row",
+    "Chat with us Help me choose $ 3.99 /mo $ 9.99 /mo 70 % off $ 6.99 /mo "
+    "$ 13.99 /mo 57 % off Choose your size $ 4.69 /mo For 24 month term",
+    "$ 4.69", 4.69, None)
+
+# MilesWeb: a flash-sale banner for hosting in general, above a plan discounted
+# 22%. Only the 22% is a fact about $69.99.
+check_discount(
+    "a banner campaign, with the plan's real discount in its own row",
+    "Managed VPS KVM 4GB 22% OFF $ 89.99 $ 69.99 /mo Choose Plan Renews at "
+    "$ 89.99/mo. Cancel anytime. 2 vCPU 🎉 Flash Sale: 77% Off Hosting",
+    "$ 69.99", 69.99, "22% off")
+check_discount(
+    "the same banner when no plan row near it supports the figure",
+    "VPS Hosting with Full Root Access 🎉 Flash Sale: 77% 72% 77% Off Hosting "
+    "+ Free Domain — Ends in 11 h 59 m 59 s View Plans and pricing, further down, "
+    "for a plan of its own: $ 69.99 /mo",
+    "$ 69.99", 69.99, None)
+
+# A saving stated in money, in the same breath as the figure.
+check_discount(
+    "an amount rather than a percentage",
+    "Starter Personal projects, dev sandboxes $2.48 /mo $4.95/mo save $30/yr Deploy",
+    "$2.48", 2.48, "save $30")
+
+# A percentage is not inherited by a figure that merely sits on the same page.
+check_discount(
+    "a percentage attached to a different figure in the same sentence",
+    "70% off the $9.99 plan, while the $4.69 plan is billed at list price",
+    "$4.69", 4.69, None)
+
+# With no price there is nothing for a discount to describe, and a badge beside
+# an empty price slot asserts nothing a reader could check.
+check("no headline price at all", extract_discount("70% off everything"), None)
+check("no headline price, amount form",
+      extract_discount("save $30 on all plans"), None)
+
+# The rule is also what re-admits a discount carried across a failed refresh,
+# so it has to answer from a stored record and not only from live page text.
+check("a stored discount is re-checked against the carried price",
+      discount_rejection(
+          {"label": "50% off",
+           "evidence": "…50% off all plans, limited time. Starting at $2.48/mo Su…"},
+          2.48),
+      None)
+check("the same rule rejects a stored record once the price moves on",
+      discount_rejection(
+          {"label": "50% off",
+           "evidence": "…50% off all plans, limited time. Starting at $2.48/mo Su…"},
+          9.99) is None,
+      False)
 
 print()
 print("-" * 72)

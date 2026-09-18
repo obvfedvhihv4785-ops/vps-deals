@@ -99,6 +99,35 @@ check("a later success carries no inherited date",
 check("a later success dates to its own read", recovered["fetched_at"],
       "2026-09-19T06:17:00Z")
 
+# A discount rides along with the price it was attached to. If it is no longer
+# supported by the text that is its only evidence, it goes with the price rather
+# than outliving it — otherwise a claim that stopped being true the moment the
+# page changed would keep being published for as long as the fetch kept failing.
+tied = dict(first, price=2.5, discount={
+    "kind": "percent", "value": 50, "label": "50% off",
+    "evidence": "…50% off all plans, limited time. Starting at $2.50/mo…"})
+loose = dict(first, price=2.5, discount={
+    "kind": "percent", "value": 70, "label": "70% off",
+    "evidence": "…Up to 70% off VPS hosting for more power and…"})
+
+carried = carry_forward(tied, failed_record("2026-09-18T12:33:09Z"))
+check("a supported discount survives with the price",
+      carried.get("discount", {}).get("label"), "50% off")
+dropped = carry_forward(loose, failed_record("2026-09-18T12:33:09Z"))
+check("an unsupported discount does not survive a failed refresh",
+      "discount" in dropped, False)
+check("dropping the discount leaves the price alone", dropped["price"], 2.5)
+
+# The text is checked against the figure it would be printed beside, so a
+# discount that names some other plan's price is dropped even though it was
+# recorded on a record that did have a price.
+other_plan = dict(first, price=2.5, discount={
+    "kind": "percent", "value": 70, "label": "70% off",
+    "evidence": "…70 % off $ 3.99 /mo $ 9.99 /mo Choose your size…"})
+check("a discount naming another plan's price is dropped",
+      "discount" in carry_forward(other_plan, failed_record("2026-09-18T12:33:09Z")),
+      False)
+
 print()
 print("-" * 72)
 print(f"{len(PASS)} passed, {len(FAIL)} failed")

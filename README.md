@@ -42,6 +42,10 @@ current numbers.
 - It never emits structured data that asserts a stale figure is available now: the `InStock`
   claim carries a qualifier inside the same block, because a search engine reads that block
   without the surrounding prose.
+- It never prints a discount beside a price unless the sentence it quotes contains that price
+  and the percentage is arithmetically consistent with it. A site-wide "up to N% off" ceiling,
+  a flash-sale banner, or the neighbouring plan row are all real numbers on the page and none
+  of them is a saving on the figure they would be printed beside.
 - It never publishes `Offer` structured data for a price it cannot quote.
 - It never bypasses anti-bot protection, and it honours `robots.txt`.
 - It never converts between currencies. EUR and USD entries are shown as published and ranked

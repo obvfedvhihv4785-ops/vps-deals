@@ -145,5 +145,7 @@ TYPE:config PROJECT:vps-deals LANG:zh
 ::RULE{厂商写了续费价⇒必须和首期价一起显示 只登首期价等于只登了半张报价单}
 ::RULE{续费价必须高于首期价 且与价格之间不许夹着别的价格 否则多半是下一档方案的续费价}
 ::RULE{页面沉默⇒写"未注明" 不许写"按月付费" 沉默不等于月付}
+::RULE{折扣必须和价格出现在同一句话里且算得平 原价×(1-N%)≈这个价 才写得上去}
+::RULE{"up to N%" 全站横幅 隔壁套餐行的百分比 都是页面上的真数字 但都不许搬到另一个价旁边}
 ::BOUNDARY{never:编优惠 编价格 编佣金|scope:permanent}
 ::BOUNDARY{never:绕反爬 抓登录后内容 冒充用户|scope:permanent}
