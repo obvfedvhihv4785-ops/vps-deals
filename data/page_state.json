@@ -13,8 +13,8 @@
    "sha256_16": "27e0737c1a91b0c3"
   },
   "compare.html": {
-   "lastmod": "2026-09-18T08:28:44Z",
-   "sha256_16": "81e72ff99fd5549c"
+   "lastmod": "2026-09-18T08:32:08Z",
+   "sha256_16": "29915f63e8665486"
   },
   "deal/accuweb-hosting.html": {
    "lastmod": "2026-09-18T08:28:44Z",
@@ -33,12 +33,12 @@
    "sha256_16": "349e3b3959f2d755"
   },
   "deal/cloudcone.html": {
-   "lastmod": "2026-09-18T08:28:44Z",
-   "sha256_16": "0f48e825d3b7ea57"
+   "lastmod": "2026-09-18T08:32:08Z",
+   "sha256_16": "a1b597044700996a"
   },
   "deal/cloudzy.html": {
-   "lastmod": "2026-09-18T08:28:44Z",
-   "sha256_16": "8a2206f22649867c"
+   "lastmod": "2026-09-18T08:32:08Z",
+   "sha256_16": "0fb07b103176fa17"
   },
   "deal/digitalocean.html": {
    "lastmod": "2026-09-18T08:28:44Z",
@@ -57,8 +57,8 @@
    "sha256_16": "39072a23955e8e96"
   },
   "deal/hostgator.html": {
-   "lastmod": "2026-09-18T08:28:44Z",
-   "sha256_16": "47571f60d7a6869e"
+   "lastmod": "2026-09-18T08:32:08Z",
+   "sha256_16": "385760f34646ba48"
   },
   "deal/hostinger.html": {
    "lastmod": "2026-09-18T08:28:44Z",
@@ -121,8 +121,8 @@
    "sha256_16": "1fee180c3fe71e39"
   },
   "index.html": {
-   "lastmod": "2026-09-18T08:28:44Z",
-   "sha256_16": "047e340a3ae24f5f"
+   "lastmod": "2026-09-18T08:32:08Z",
+   "sha256_16": "08d9368db7a7778a"
   },
   "provider/accuweb-hosting.html": {
    "lastmod": "2026-09-18T08:28:44Z",
@@ -141,12 +141,12 @@
    "sha256_16": "dc8870c058d534ee"
   },
   "provider/cloudcone.html": {
-   "lastmod": "2026-09-18T08:28:44Z",
-   "sha256_16": "1dc97c56cf0e231c"
+   "lastmod": "2026-09-18T08:32:08Z",
+   "sha256_16": "e7b85ba5015b0af7"
   },
   "provider/cloudzy.html": {
-   "lastmod": "2026-09-18T08:28:44Z",
-   "sha256_16": "bb9ebf2534bcefe2"
+   "lastmod": "2026-09-18T08:32:08Z",
+   "sha256_16": "002aa48739d5fcd9"
   },
   "provider/digitalocean.html": {
    "lastmod": "2026-09-18T08:28:44Z",
@@ -165,8 +165,8 @@
    "sha256_16": "3f0660f151714589"
   },
   "provider/hostgator.html": {
-   "lastmod": "2026-09-18T08:28:44Z",
-   "sha256_16": "93592accfe583a2b"
+   "lastmod": "2026-09-18T08:32:08Z",
+   "sha256_16": "e34bb12ab0271878"
   },
   "provider/hostinger.html": {
    "lastmod": "2026-09-18T08:28:44Z",
@@ -238,5 +238,5 @@
   }
  },
  "schema": "page-state/1",
- "updated_at": "2026-09-18T08:28:44Z"
+ "updated_at": "2026-09-18T08:32:08Z"
 }
