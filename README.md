@@ -84,16 +84,18 @@ out-of-order dates fail the build, because a rewritten history is unrecoverable.
 ### The term is published with the price, not hidden behind it
 
 Not every figure a host writes as "/mo" is a month-to-month price. When this was first checked
-against the live pages, five of the twenty-two priced providers turned out not to be quoting a
-plain monthly rate: two were the rate for prepaying **24 months**, one was a **12-month** rate,
-one was a promotion that holds for the **first three months**, and one showed term toggles
-(`36 M 12 M 1 M`) beside a single price without saying which one it belonged to.
+against the live pages, several priced providers turned out not to be quoting a plain monthly rate
+at all: two were the rate for prepaying **24 months**, one was a **12-month** rate, one was a
+promotion that holds for the **first three months**, one showed term toggles (`36 M 12 M 1 M`)
+beside a single price without saying which one it belonged to, and one was an **annual** prepay.
+The comparison table states the current count rather than this paragraph, because the count moves
+whenever a provider is added.
 
-Publishing all five as bare per-month numbers would have made the comparison table wrong in the
-way that matters most — a reader choosing between `$2.09` and `$2.50` would really be choosing
-between a two-year commitment and no commitment at all, and would have no way to see that. So the
-scraper reads the commitment off the page and the site shows it in a **Term** column, on the
-provider and deal pages, and in the page `<title>`.
+Publishing them as bare per-month numbers would have made the comparison table wrong in the way
+that matters most — a reader choosing between `$2.09` and `$2.50` would really be choosing between
+a two-year commitment and no commitment at all, and would have no way to see that. So the scraper
+reads the commitment off the page and the site shows it in a **Term** column, on the provider and
+deal pages, and in the page `<title>`.
 
 The extraction is deliberately narrow. The term is only accepted when it sits immediately beside
 the figure and is joined to it by nothing more than a price connector, so "free SSL for the first
@@ -123,8 +125,9 @@ month". Those are different claims, and only one of them is supported by a page 
 ### The renewal price is published too
 
 The headline figure on a hosting page is usually a first-term price, and the provider almost
-always says so within a few words of it. Nine of the twenty-two priced providers state a renewal
-price beside the advertised one, and the gap is not small:
+always says so within a few words of it. A large share of the tracked providers state a renewal
+price beside the advertised one, and the gap is not small. The comparison table carries the live
+count; these are the figures as first recorded:
 
 | Provider | Advertised | Renews at |
 | --- | --- | --- |

@@ -332,13 +332,18 @@ def term_short(offer: dict) -> str:
     """
     kind = offer.get("billing_term_kind", "")
     months = offer.get("billing_term_months") or 0
+    label = TERM_SHORT_LABEL.get(kind)
+    # Annual billing is its own phrasing. "12-month term" would be true, but the
+    # provider's own words are clearer and the number adds nothing a reader
+    # cannot infer — CloudCone's "$2.33 /MO Billed $28 per year" reads as annual
+    # billing, and calling it a 12-month term makes it sound like a contract
+    # rather than a billing frequency.
+    if kind == "annual":
+        return label or (f"{months}-month term" if months else "")
     parts = []
     if months:
         parts.append(f"{months}-month term")
-    label = TERM_SHORT_LABEL.get(kind)
-    if label and not months:
-        parts.append(label)
-    elif label and months and kind in ("intro", "intro_word"):
+    if label and (not months or kind in ("intro", "intro_word")):
         parts.append(label)
     return ", ".join(parts)
 
