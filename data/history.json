@@ -123,6 +123,12 @@
         "price": 2.09,
         "currency": "USD",
         "status": "ok"
+      },
+      {
+        "date": "2026-09-19",
+        "price": 2.09,
+        "currency": "USD",
+        "status": "stale"
       }
     ],
     "MilesWeb": [
@@ -192,6 +198,12 @@
         "date": "2026-09-17",
         "price": 3.0,
         "currency": "EUR",
+        "status": "ok"
+      },
+      {
+        "date": "2026-09-19",
+        "price": 3.5,
+        "currency": "USD",
         "status": "ok"
       }
     ],
