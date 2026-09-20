@@ -13,8 +13,8 @@
    "sha256_16": "27e0737c1a91b0c3"
   },
   "compare.html": {
-   "lastmod": "2026-09-19T18:29:50Z",
-   "sha256_16": "970733bb10f946d3"
+   "lastmod": "2026-09-20T00:36:48Z",
+   "sha256_16": "3b605358caf20298"
   },
   "deal/accuweb-hosting.html": {
    "lastmod": "2026-09-19T06:32:52Z",
@@ -57,8 +57,8 @@
    "sha256_16": "39072a23955e8e96"
   },
   "deal/hostgator.html": {
-   "lastmod": "2026-09-19T18:29:50Z",
-   "sha256_16": "017018ee401b2423"
+   "lastmod": "2026-09-20T00:36:48Z",
+   "sha256_16": "e61d6be1fe5990d5"
   },
   "deal/hostinger.html": {
    "lastmod": "2026-09-19T06:32:52Z",
@@ -121,8 +121,8 @@
    "sha256_16": "1fee180c3fe71e39"
   },
   "index.html": {
-   "lastmod": "2026-09-19T18:29:50Z",
-   "sha256_16": "c1cdff25a77e199a"
+   "lastmod": "2026-09-20T00:36:48Z",
+   "sha256_16": "2a2bcc52db9b5ebc"
   },
   "provider/accuweb-hosting.html": {
    "lastmod": "2026-09-19T06:32:52Z",
@@ -165,8 +165,8 @@
    "sha256_16": "a9668b456e7db14f"
   },
   "provider/hostgator.html": {
-   "lastmod": "2026-09-19T18:29:50Z",
-   "sha256_16": "d8a449973e1cb6e2"
+   "lastmod": "2026-09-20T00:36:48Z",
+   "sha256_16": "c3ef142db17c6b76"
   },
   "provider/hostinger.html": {
    "lastmod": "2026-09-19T06:32:52Z",
@@ -233,10 +233,10 @@
    "sha256_16": "48432318b2082505"
   },
   "sitemap.xml": {
-   "lastmod": "2026-09-19T06:32:52Z",
-   "sha256_16": "d09b3f6cd2e51e32"
+   "lastmod": "2026-09-20T00:36:48Z",
+   "sha256_16": "2758bc48a39e0ecc"
   }
  },
  "schema": "page-state/1",
- "updated_at": "2026-09-19T18:29:50Z"
+ "updated_at": "2026-09-20T00:36:48Z"
 }
