@@ -235,12 +235,6 @@
         "price": 3.0,
         "currency": "EUR",
         "status": "ok"
-      },
-      {
-        "date": "2026-09-21",
-        "price": 3.5,
-        "currency": "USD",
-        "status": "ok"
       }
     ],
     "netcup": [
