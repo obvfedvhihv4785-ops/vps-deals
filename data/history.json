@@ -81,6 +81,12 @@
         "price": 5.99,
         "currency": "USD",
         "status": "ok"
+      },
+      {
+        "date": "2026-09-21",
+        "price": 8.99,
+        "currency": "USD",
+        "status": "ok"
       }
     ],
     "InMotion Hosting": [
@@ -133,6 +139,12 @@
         "price": 4.69,
         "currency": "USD",
         "status": "stale"
+      },
+      {
+        "date": "2026-09-21",
+        "price": 4.69,
+        "currency": "USD",
+        "status": "ok"
       }
     ],
     "HostGator": [
@@ -153,12 +165,6 @@
         "price": 2.09,
         "currency": "USD",
         "status": "ok"
-      },
-      {
-        "date": "2026-09-21",
-        "price": 2.09,
-        "currency": "USD",
-        "status": "stale"
       }
     ],
     "MilesWeb": [
