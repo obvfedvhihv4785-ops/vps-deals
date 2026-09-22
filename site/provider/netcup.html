@@ -36,7 +36,7 @@
     "highPrice": "47.95",
     "offerCount": 5,
     "availability": "https://schema.org/InStock",
-    "description": "Read from the provider's own public pricing page on 22 Sep 2026, 12:34 UTC."
+    "description": "Read from the provider's own public pricing page on 22 Sep 2026, 12:34 UTC. The most recent refresh of that page failed, so this is the last verified figure rather than a current reading."
   }
 }
 </script>
@@ -102,7 +102,7 @@
       <div class="fact"><span>Lowest readable price</span><b>€5.91/mo</b></div>
       <div class="fact"><span>Term</span><b>not stated</b></div>
       <div class="fact"><span>Renews at</span><b>not stated</b></div>
-      <div class="fact"><span>Status</span><b>verified</b></div>
+      <div class="fact"><span>Status</span><b>stale — last verified earlier</b></div>
       <div class="fact"><span>Last verified</span><b>22 Sep 2026, 12:34 UTC</b></div>
       <div class="fact"><span>Source page</span><b><a href="https://www.netcup.com/en/server/vps" rel="nofollow noopener" target="_blank">open ↗</a></b></div>
     </div>
@@ -113,6 +113,14 @@
   </div>
 
 
+  <section>
+    <p class="note">
+      The most recent refresh of netcup failed (no_price_in_html), so the price above
+      is the last one we verified, on 22 Sep 2026, 12:34 UTC. It is shown as stale rather
+      than silently refreshed from memory.
+    </p>
+  </section>
+
 
 
 
@@ -121,7 +129,7 @@
     <h2>Where this number came from</h2>
     <p class="sub">
       Read from <a href="https://www.netcup.com/en/server/vps" rel="nofollow noopener" target="_blank">https://www.netcup.com/en/server/vps</a>
-      on 22 Sep 2026, 12:34 UTC.
+      on 22 Sep 2026, 12:34 UTC — the last time this page could be read.
     </p>
     <p class="evidence-label">Quoted page text</p>
     <p class="evidence">…d much more... Details &amp;gt; €0.010 per hour or monthly starting at €5.91 (incl. 19% VAT) Order now &amp;gt; VPS 1000 G12 4 vCore (x…</p>
@@ -132,6 +140,7 @@
     <p class="sub">
       Figures the pipeline rejected are listed too, with the reason — so you can check the
       filtering rather than trust it.
+      These are the figures from the last read of the page, the one the price above came from.
     </p>
     <div class="table-wrap">
       <table>
@@ -197,6 +206,8 @@
       2026-09-17. A run that finds no change adds no row, so a gap is a run where nothing
       moved rather than a run that did not happen. Each date shows the last state recorded that
       day. History cannot be reconstructed after the fact, so it only grows from here.
+      Over the period recorded so far the lowest figure seen was €5.91 and the
+      highest was €5.91.
     </p>
     <div class="table-wrap">
       <table>
@@ -207,12 +218,11 @@
 
           <tr><td>2026-09-17</td><td class="num">€5.91</td><td>ok</td></tr>
 
+          <tr><td>2026-09-22</td><td class="num">€5.91</td><td>stale</td></tr>
+
         </tbody>
       </table>
     </div>
-
-    <p class="sub">No change has been recorded since the first reading, so this holds a single
-      row. The table grows only when the price or status moves.</p>
 
   </section>
 
@@ -247,7 +257,7 @@
       <strong>VPS Deals Radar</strong> tracks 26 VPS providers.
       25 have a machine-readable monthly price. Every price is quoted from the
       provider's own public page and shown with the exact text it came from.
-      Last pipeline run 22 Sep 2026, 12:34 UTC.
+      Last pipeline run 22 Sep 2026, 18:33 UTC.
     </p>
     <p class="foot-note dim">
       Prices are read automatically and can change at any time — always confirm on the

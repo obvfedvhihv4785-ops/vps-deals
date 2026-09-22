@@ -177,12 +177,6 @@
         "price": 2.09,
         "currency": "USD",
         "status": "ok"
-      },
-      {
-        "date": "2026-09-22",
-        "price": 2.09,
-        "currency": "USD",
-        "status": "stale"
       }
     ],
     "MilesWeb": [
@@ -261,6 +255,12 @@
         "price": 5.91,
         "currency": "EUR",
         "status": "ok"
+      },
+      {
+        "date": "2026-09-22",
+        "price": 5.91,
+        "currency": "EUR",
+        "status": "stale"
       }
     ],
     "Kamatera": [
