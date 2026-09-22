@@ -55,12 +55,6 @@
         "price": 7.14,
         "currency": "USD",
         "status": "ok"
-      },
-      {
-        "date": "2026-09-22",
-        "price": 7.14,
-        "currency": "USD",
-        "status": "stale"
       }
     ],
     "DreamHost": [
@@ -91,6 +85,12 @@
       {
         "date": "2026-09-21",
         "price": 8.99,
+        "currency": "USD",
+        "status": "ok"
+      },
+      {
+        "date": "2026-09-22",
+        "price": 5.99,
         "currency": "USD",
         "status": "ok"
       }
