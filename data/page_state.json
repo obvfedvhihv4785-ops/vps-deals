@@ -13,8 +13,8 @@
    "sha256_16": "27e0737c1a91b0c3"
   },
   "compare.html": {
-   "lastmod": "2026-09-23T06:35:36Z",
-   "sha256_16": "3e8066d50ae66628"
+   "lastmod": "2026-09-23T18:32:41Z",
+   "sha256_16": "fa822df495d7e297"
   },
   "deal/accuweb-hosting.html": {
    "lastmod": "2026-09-23T06:35:36Z",
@@ -25,8 +25,8 @@
    "sha256_16": "8a4ed45d5c875cc9"
   },
   "deal/bluehost.html": {
-   "lastmod": "2026-09-23T00:34:20Z",
-   "sha256_16": "5aa1ca5afd41b5fa"
+   "lastmod": "2026-09-23T18:32:41Z",
+   "sha256_16": "3c3be121fce71122"
   },
   "deal/civo.html": {
    "lastmod": "2026-09-23T06:35:36Z",
@@ -57,8 +57,8 @@
    "sha256_16": "39072a23955e8e96"
   },
   "deal/hostgator.html": {
-   "lastmod": "2026-09-22T18:33:06Z",
-   "sha256_16": "e61d6be1fe5990d5"
+   "lastmod": "2026-09-23T18:32:41Z",
+   "sha256_16": "15c0a974dd4d0245"
   },
   "deal/hostinger.html": {
    "lastmod": "2026-09-23T06:35:36Z",
@@ -121,8 +121,8 @@
    "sha256_16": "1fee180c3fe71e39"
   },
   "index.html": {
-   "lastmod": "2026-09-23T06:35:36Z",
-   "sha256_16": "2f8e04e79621d5e8"
+   "lastmod": "2026-09-23T18:32:41Z",
+   "sha256_16": "fd54c0b6ad557422"
   },
   "provider/accuweb-hosting.html": {
    "lastmod": "2026-09-23T06:35:36Z",
@@ -133,8 +133,8 @@
    "sha256_16": "9e44606345a8adf3"
   },
   "provider/bluehost.html": {
-   "lastmod": "2026-09-23T00:34:20Z",
-   "sha256_16": "5a105702a655db8a"
+   "lastmod": "2026-09-23T18:32:41Z",
+   "sha256_16": "ee3f4603b286ac62"
   },
   "provider/civo.html": {
    "lastmod": "2026-09-23T06:35:36Z",
@@ -165,8 +165,8 @@
    "sha256_16": "a9668b456e7db14f"
   },
   "provider/hostgator.html": {
-   "lastmod": "2026-09-22T18:33:06Z",
-   "sha256_16": "c3ef142db17c6b76"
+   "lastmod": "2026-09-23T18:32:41Z",
+   "sha256_16": "7e737c61a2e02f3e"
   },
   "provider/hostinger.html": {
    "lastmod": "2026-09-23T06:35:36Z",
@@ -233,10 +233,10 @@
    "sha256_16": "48432318b2082505"
   },
   "sitemap.xml": {
-   "lastmod": "2026-09-23T00:34:20Z",
-   "sha256_16": "db71668d799fb482"
+   "lastmod": "2026-09-23T18:32:41Z",
+   "sha256_16": "4b72c03dfe763409"
   }
  },
  "schema": "page-state/1",
- "updated_at": "2026-09-23T06:35:36Z"
+ "updated_at": "2026-09-23T18:32:41Z"
 }
