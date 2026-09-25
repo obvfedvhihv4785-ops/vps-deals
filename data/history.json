@@ -99,12 +99,6 @@
         "price": 8.99,
         "currency": "USD",
         "status": "ok"
-      },
-      {
-        "date": "2026-09-25",
-        "price": 5.99,
-        "currency": "USD",
-        "status": "ok"
       }
     ],
     "InMotion Hosting": [
@@ -276,6 +270,12 @@
         "date": "2026-09-17",
         "price": 3.0,
         "currency": "EUR",
+        "status": "ok"
+      },
+      {
+        "date": "2026-09-25",
+        "price": 3.5,
+        "currency": "USD",
         "status": "ok"
       }
     ],
