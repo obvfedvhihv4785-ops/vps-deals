@@ -99,6 +99,12 @@
         "price": 8.99,
         "currency": "USD",
         "status": "ok"
+      },
+      {
+        "date": "2026-09-26",
+        "price": 5.99,
+        "currency": "USD",
+        "status": "ok"
       }
     ],
     "InMotion Hosting": [
@@ -123,6 +129,12 @@
         "price": 6.33,
         "currency": "USD",
         "status": "ok"
+      },
+      {
+        "date": "2026-09-26",
+        "price": 6.33,
+        "currency": "USD",
+        "status": "stale"
       }
     ],
     "Vultr": [
@@ -201,12 +213,6 @@
         "price": 2.09,
         "currency": "USD",
         "status": "ok"
-      },
-      {
-        "date": "2026-09-26",
-        "price": 2.09,
-        "currency": "USD",
-        "status": "stale"
       }
     ],
     "MilesWeb": [
@@ -282,6 +288,12 @@
         "date": "2026-09-25",
         "price": 3.5,
         "currency": "USD",
+        "status": "ok"
+      },
+      {
+        "date": "2026-09-26",
+        "price": 3.0,
+        "currency": "EUR",
         "status": "ok"
       }
     ],
