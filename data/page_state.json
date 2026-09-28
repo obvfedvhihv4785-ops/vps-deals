@@ -13,12 +13,12 @@
    "sha256_16": "27e0737c1a91b0c3"
   },
   "compare.html": {
-   "lastmod": "2026-09-28T00:39:24Z",
-   "sha256_16": "1d47ace092fa5250"
+   "lastmod": "2026-09-28T06:39:28Z",
+   "sha256_16": "e0e07eaba0d6ea4b"
   },
   "deal/accuweb-hosting.html": {
-   "lastmod": "2026-09-28T00:39:24Z",
-   "sha256_16": "d8866b99c7cf0628"
+   "lastmod": "2026-09-28T06:39:28Z",
+   "sha256_16": "9bf346fc7275f6fb"
   },
   "deal/atlantic-net.html": {
    "lastmod": "2026-09-28T00:39:24Z",
@@ -121,12 +121,12 @@
    "sha256_16": "1fee180c3fe71e39"
   },
   "index.html": {
-   "lastmod": "2026-09-28T00:39:24Z",
-   "sha256_16": "c41817ebaa3fee5c"
+   "lastmod": "2026-09-28T06:39:28Z",
+   "sha256_16": "02c5654ddcc0d17c"
   },
   "provider/accuweb-hosting.html": {
-   "lastmod": "2026-09-28T00:39:24Z",
-   "sha256_16": "2778e1270cd6dbed"
+   "lastmod": "2026-09-28T06:39:28Z",
+   "sha256_16": "1ee73cf5050cc480"
   },
   "provider/atlantic-net.html": {
    "lastmod": "2026-09-28T00:39:24Z",
@@ -238,5 +238,5 @@
   }
  },
  "schema": "page-state/1",
- "updated_at": "2026-09-28T00:39:24Z"
+ "updated_at": "2026-09-28T06:39:28Z"
 }
