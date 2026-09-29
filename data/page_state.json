@@ -101,8 +101,8 @@
    "sha256_16": "c348d97426e6f5bd"
   },
   "deal/scalahosting.html": {
-   "lastmod": "2026-09-29T00:37:57Z",
-   "sha256_16": "17b85d422c38d548"
+   "lastmod": "2026-09-29T06:37:43Z",
+   "sha256_16": "659085f3eead842b"
   },
   "deal/upcloud.html": {
    "lastmod": "2026-09-29T00:37:57Z",
@@ -209,8 +209,8 @@
    "sha256_16": "52fe596fc4bbc27e"
   },
   "provider/scalahosting.html": {
-   "lastmod": "2026-09-29T00:37:57Z",
-   "sha256_16": "37756e779d403216"
+   "lastmod": "2026-09-29T06:37:43Z",
+   "sha256_16": "f18699c9dc3eadc0"
   },
   "provider/upcloud.html": {
    "lastmod": "2026-09-29T00:37:57Z",
@@ -238,5 +238,5 @@
   }
  },
  "schema": "page-state/1",
- "updated_at": "2026-09-29T00:37:57Z"
+ "updated_at": "2026-09-29T06:37:43Z"
 }
