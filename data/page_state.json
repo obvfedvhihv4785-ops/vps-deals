@@ -37,8 +37,8 @@
    "sha256_16": "9f996b9fab526183"
   },
   "deal/cloudzy.html": {
-   "lastmod": "2026-10-03T22:50:00Z",
-   "sha256_16": "2e61a8a6c013dd21"
+   "lastmod": "2026-10-04T13:43:12Z",
+   "sha256_16": "5695bc8c26e4ba59"
   },
   "deal/digitalocean.html": {
    "lastmod": "2026-10-03T22:50:00Z",
@@ -233,10 +233,10 @@
    "sha256_16": "48432318b2082505"
   },
   "sitemap.xml": {
-   "lastmod": "2026-10-04T03:52:18Z",
-   "sha256_16": "d7df9be9bceae4a8"
+   "lastmod": "2026-10-04T13:43:12Z",
+   "sha256_16": "56c34def69c0ff4a"
   }
  },
  "schema": "page-state/1",
- "updated_at": "2026-10-04T03:52:18Z"
+ "updated_at": "2026-10-04T13:43:12Z"
 }
