@@ -13,8 +13,8 @@
    "sha256_16": "27e0737c1a91b0c3"
   },
   "compare.html": {
-   "lastmod": "2026-10-05T12:40:37Z",
-   "sha256_16": "a3060befa85c84e0"
+   "lastmod": "2026-10-05T18:38:50Z",
+   "sha256_16": "e46a3cb3a0c18394"
   },
   "deal/accuweb-hosting.html": {
    "lastmod": "2026-10-05T12:40:37Z",
@@ -25,8 +25,8 @@
    "sha256_16": "184cd02522d67caf"
   },
   "deal/bluehost.html": {
-   "lastmod": "2026-10-05T12:40:37Z",
-   "sha256_16": "2a950337b9e3c8d8"
+   "lastmod": "2026-10-05T18:38:50Z",
+   "sha256_16": "d6801f53ca2ef1c8"
   },
   "deal/civo.html": {
    "lastmod": "2026-10-05T12:40:37Z",
@@ -121,8 +121,8 @@
    "sha256_16": "68533ae639ae4710"
   },
   "index.html": {
-   "lastmod": "2026-10-05T12:40:37Z",
-   "sha256_16": "1f2df8f168b464b0"
+   "lastmod": "2026-10-05T18:38:50Z",
+   "sha256_16": "2eabeccde568f856"
   },
   "provider/accuweb-hosting.html": {
    "lastmod": "2026-10-05T12:40:37Z",
@@ -133,8 +133,8 @@
    "sha256_16": "4635e8f1d609da91"
   },
   "provider/bluehost.html": {
-   "lastmod": "2026-10-05T12:40:37Z",
-   "sha256_16": "cde4f3bd01233f13"
+   "lastmod": "2026-10-05T18:38:50Z",
+   "sha256_16": "f61d9a4b042d6787"
   },
   "provider/civo.html": {
    "lastmod": "2026-10-05T12:40:37Z",
@@ -238,5 +238,5 @@
   }
  },
  "schema": "page-state/1",
- "updated_at": "2026-10-05T12:40:37Z"
+ "updated_at": "2026-10-05T18:38:50Z"
 }
