@@ -73,8 +73,8 @@
    "sha256_16": "0e23885f282a424d"
   },
   "deal/inmotion-hosting.html": {
-   "lastmod": "2026-10-07T06:38:54Z",
-   "sha256_16": "4ce4a47354f1f2a6"
+   "lastmod": "2026-10-07T18:38:07Z",
+   "sha256_16": "344fc7966234f0c1"
   },
   "deal/ionos.html": {
    "lastmod": "2026-10-06T12:38:57Z",
@@ -121,8 +121,8 @@
    "sha256_16": "68533ae639ae4710"
   },
   "index.html": {
-   "lastmod": "2026-10-07T06:38:54Z",
-   "sha256_16": "1f2df8f168b464b0"
+   "lastmod": "2026-10-07T18:38:07Z",
+   "sha256_16": "e4be43c98231c00a"
   },
   "provider/accuweb-hosting.html": {
    "lastmod": "2026-10-07T06:38:54Z",
@@ -181,8 +181,8 @@
    "sha256_16": "95ba2adac12159f9"
   },
   "provider/inmotion-hosting.html": {
-   "lastmod": "2026-10-07T06:38:54Z",
-   "sha256_16": "bb2716464c60a552"
+   "lastmod": "2026-10-07T18:38:07Z",
+   "sha256_16": "e097759855d5ec2d"
   },
   "provider/ionos.html": {
    "lastmod": "2026-10-06T12:38:57Z",
@@ -238,5 +238,5 @@
   }
  },
  "schema": "page-state/1",
- "updated_at": "2026-10-07T12:41:25Z"
+ "updated_at": "2026-10-07T18:38:07Z"
 }
