@@ -285,12 +285,6 @@
         "price": 2.09,
         "currency": "USD",
         "status": "ok"
-      },
-      {
-        "date": "2026-10-08",
-        "price": 2.09,
-        "currency": "USD",
-        "status": "stale"
       }
     ],
     "MilesWeb": [
