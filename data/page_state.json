@@ -5,32 +5,32 @@
    "sha256_16": "551581c0acd1e94d"
   },
   "about.html": {
-   "lastmod": "2026-10-16T00:55:35Z",
-   "sha256_16": "0b5e51b672f7491c"
+   "lastmod": "2026-10-16T06:59:43Z",
+   "sha256_16": "d6df2c5b1f1573d1"
   },
   "assets/style.css": {
    "lastmod": "2026-09-17T23:08:47Z",
    "sha256_16": "27e0737c1a91b0c3"
   },
   "compare.html": {
-   "lastmod": "2026-10-16T00:55:35Z",
-   "sha256_16": "af719e1d4a249ea4"
+   "lastmod": "2026-10-16T06:59:43Z",
+   "sha256_16": "fc9658b587c66a29"
   },
   "deal/accuweb-hosting.html": {
-   "lastmod": "2026-10-16T00:55:35Z",
-   "sha256_16": "ea008a1537a61918"
+   "lastmod": "2026-10-16T06:59:43Z",
+   "sha256_16": "045f1ff74fe94d8c"
   },
   "deal/atlantic-net.html": {
-   "lastmod": "2026-10-16T00:55:35Z",
-   "sha256_16": "6997b12af78ecbb0"
+   "lastmod": "2026-10-16T06:59:43Z",
+   "sha256_16": "184cd02522d67caf"
   },
   "deal/bluehost.html": {
    "lastmod": "2026-10-16T00:55:35Z",
    "sha256_16": "c43b29bd5f63b1e7"
   },
   "deal/civo.html": {
-   "lastmod": "2026-10-16T00:55:35Z",
-   "sha256_16": "baf3411eee959927"
+   "lastmod": "2026-10-16T06:59:43Z",
+   "sha256_16": "df0e581d430d0f5b"
   },
   "deal/cloudcone.html": {
    "lastmod": "2026-10-14T06:59:17Z",
@@ -45,8 +45,8 @@
    "sha256_16": "1a24485ea580b433"
   },
   "deal/dreamhost.html": {
-   "lastmod": "2026-10-16T00:55:35Z",
-   "sha256_16": "31990f1bbbfef786"
+   "lastmod": "2026-10-16T06:59:43Z",
+   "sha256_16": "f6920da282f5ce0f"
   },
   "deal/greengeeks.html": {
    "lastmod": "2026-10-14T06:59:17Z",
@@ -61,20 +61,20 @@
    "sha256_16": "f2bd404ca73502c2"
   },
   "deal/hostinger.html": {
-   "lastmod": "2026-10-16T00:55:35Z",
-   "sha256_16": "e89a7d3f98b347ae"
+   "lastmod": "2026-10-16T06:59:43Z",
+   "sha256_16": "879dd4f9bbab00e2"
   },
   "deal/hostodo.html": {
    "lastmod": "2026-10-14T06:59:17Z",
    "sha256_16": "8acc16ee31cc2979"
   },
   "deal/hostwinds.html": {
-   "lastmod": "2026-10-16T00:55:35Z",
-   "sha256_16": "a45401382c04519b"
+   "lastmod": "2026-10-16T06:59:43Z",
+   "sha256_16": "0e23885f282a424d"
   },
   "deal/inmotion-hosting.html": {
-   "lastmod": "2026-10-16T00:55:35Z",
-   "sha256_16": "2bc1aa04008ff7ce"
+   "lastmod": "2026-10-16T06:59:43Z",
+   "sha256_16": "344fc7966234f0c1"
   },
   "deal/ionos.html": {
    "lastmod": "2026-10-15T13:00:14Z",
@@ -89,8 +89,8 @@
    "sha256_16": "6def001be8b43b76"
   },
   "deal/monovm.html": {
-   "lastmod": "2026-10-16T00:55:35Z",
-   "sha256_16": "ee9874520258f5a0"
+   "lastmod": "2026-10-16T06:59:43Z",
+   "sha256_16": "c29db4460ca96788"
   },
   "deal/netcup.html": {
    "lastmod": "2026-10-14T06:59:17Z",
@@ -121,24 +121,24 @@
    "sha256_16": "68533ae639ae4710"
   },
   "index.html": {
-   "lastmod": "2026-10-16T00:55:35Z",
-   "sha256_16": "96abd1f9f9edc07a"
+   "lastmod": "2026-10-16T06:59:43Z",
+   "sha256_16": "79de4c6cacff7963"
   },
   "provider/accuweb-hosting.html": {
-   "lastmod": "2026-10-16T00:55:35Z",
-   "sha256_16": "0b0e75e2d5298b4a"
+   "lastmod": "2026-10-16T06:59:43Z",
+   "sha256_16": "82c659a0f00f940d"
   },
   "provider/atlantic-net.html": {
-   "lastmod": "2026-10-16T00:55:35Z",
-   "sha256_16": "44d8a0d3cde397a1"
+   "lastmod": "2026-10-16T06:59:43Z",
+   "sha256_16": "93a04daffabda49a"
   },
   "provider/bluehost.html": {
    "lastmod": "2026-10-16T00:55:35Z",
    "sha256_16": "8cc66e6da4c9809d"
   },
   "provider/civo.html": {
-   "lastmod": "2026-10-16T00:55:35Z",
-   "sha256_16": "dcca1b10fe423498"
+   "lastmod": "2026-10-16T06:59:43Z",
+   "sha256_16": "e5e7971fe34fe358"
   },
   "provider/cloudcone.html": {
    "lastmod": "2026-10-14T06:59:17Z",
@@ -153,8 +153,8 @@
    "sha256_16": "74aa5ef8b099e282"
   },
   "provider/dreamhost.html": {
-   "lastmod": "2026-10-16T00:55:35Z",
-   "sha256_16": "4c1e61002b6c830d"
+   "lastmod": "2026-10-16T06:59:43Z",
+   "sha256_16": "d0207a79b1e09541"
   },
   "provider/greengeeks.html": {
    "lastmod": "2026-10-14T06:59:17Z",
@@ -169,20 +169,20 @@
    "sha256_16": "83c85baed87ad72c"
   },
   "provider/hostinger.html": {
-   "lastmod": "2026-10-16T00:55:35Z",
-   "sha256_16": "db7eca0cbf30dda1"
+   "lastmod": "2026-10-16T06:59:43Z",
+   "sha256_16": "67ca35b286cfedd2"
   },
   "provider/hostodo.html": {
    "lastmod": "2026-10-14T06:59:17Z",
    "sha256_16": "b1b8149c5a527947"
   },
   "provider/hostwinds.html": {
-   "lastmod": "2026-10-16T00:55:35Z",
-   "sha256_16": "8a62b4329a87fad7"
+   "lastmod": "2026-10-16T06:59:43Z",
+   "sha256_16": "95ba2adac12159f9"
   },
   "provider/inmotion-hosting.html": {
-   "lastmod": "2026-10-16T00:55:35Z",
-   "sha256_16": "902c745a01aafe8b"
+   "lastmod": "2026-10-16T06:59:43Z",
+   "sha256_16": "e097759855d5ec2d"
   },
   "provider/ionos.html": {
    "lastmod": "2026-10-15T13:00:14Z",
@@ -197,8 +197,8 @@
    "sha256_16": "122ac0b371c8bd66"
   },
   "provider/monovm.html": {
-   "lastmod": "2026-10-16T00:55:35Z",
-   "sha256_16": "22e84928feef1c35"
+   "lastmod": "2026-10-16T06:59:43Z",
+   "sha256_16": "4a258d318b3dbe19"
   },
   "provider/netcup.html": {
    "lastmod": "2026-10-14T06:59:17Z",
@@ -238,5 +238,5 @@
   }
  },
  "schema": "page-state/1",
- "updated_at": "2026-10-16T00:55:35Z"
+ "updated_at": "2026-10-16T06:59:43Z"
 }
