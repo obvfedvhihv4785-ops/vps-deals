@@ -159,6 +159,12 @@
         "price": 6.33,
         "currency": "USD",
         "status": "ok"
+      },
+      {
+        "date": "2026-10-17",
+        "price": 6.33,
+        "currency": "USD",
+        "status": "stale"
       }
     ],
     "Vultr": [
