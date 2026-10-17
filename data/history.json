@@ -39,6 +39,12 @@
         "price": 29.95,
         "currency": "USD",
         "status": "ok"
+      },
+      {
+        "date": "2026-10-17",
+        "price": 29.95,
+        "currency": "USD",
+        "status": "stale"
       }
     ],
     "GreenGeeks": [
@@ -159,12 +165,6 @@
         "price": 6.33,
         "currency": "USD",
         "status": "ok"
-      },
-      {
-        "date": "2026-10-17",
-        "price": 6.33,
-        "currency": "USD",
-        "status": "stale"
       }
     ],
     "Vultr": [

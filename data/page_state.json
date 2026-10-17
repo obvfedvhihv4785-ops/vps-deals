@@ -13,12 +13,12 @@
    "sha256_16": "27e0737c1a91b0c3"
   },
   "compare.html": {
-   "lastmod": "2026-10-17T12:50:34Z",
-   "sha256_16": "5fd7c723d4d39ead"
+   "lastmod": "2026-10-17T18:44:42Z",
+   "sha256_16": "e1f8ceb7591d0da3"
   },
   "deal/accuweb-hosting.html": {
-   "lastmod": "2026-10-17T12:50:34Z",
-   "sha256_16": "ec965bc42d68f149"
+   "lastmod": "2026-10-17T18:44:42Z",
+   "sha256_16": "045f1ff74fe94d8c"
   },
   "deal/atlantic-net.html": {
    "lastmod": "2026-10-17T06:55:03Z",
@@ -101,8 +101,8 @@
    "sha256_16": "eb53f51419efad9c"
   },
   "deal/scalahosting.html": {
-   "lastmod": "2026-10-17T06:55:03Z",
-   "sha256_16": "6800c6315c5ea202"
+   "lastmod": "2026-10-17T18:44:42Z",
+   "sha256_16": "72bd1d674d0cef4d"
   },
   "deal/upcloud.html": {
    "lastmod": "2026-10-17T06:55:03Z",
@@ -121,12 +121,12 @@
    "sha256_16": "68533ae639ae4710"
   },
   "index.html": {
-   "lastmod": "2026-10-17T12:50:34Z",
-   "sha256_16": "07951681209951b9"
+   "lastmod": "2026-10-17T18:44:42Z",
+   "sha256_16": "5e4385f3d9f4cfc3"
   },
   "provider/accuweb-hosting.html": {
-   "lastmod": "2026-10-17T12:50:34Z",
-   "sha256_16": "6e859eb7c7eff128"
+   "lastmod": "2026-10-17T18:44:42Z",
+   "sha256_16": "82c659a0f00f940d"
   },
   "provider/atlantic-net.html": {
    "lastmod": "2026-10-17T06:55:03Z",
@@ -209,8 +209,8 @@
    "sha256_16": "59abac05878702f0"
   },
   "provider/scalahosting.html": {
-   "lastmod": "2026-10-17T06:55:03Z",
-   "sha256_16": "a699d8c3a6ddf129"
+   "lastmod": "2026-10-17T18:44:42Z",
+   "sha256_16": "7bbe04da88351fb4"
   },
   "provider/upcloud.html": {
    "lastmod": "2026-10-17T06:55:03Z",
@@ -238,5 +238,5 @@
   }
  },
  "schema": "page-state/1",
- "updated_at": "2026-10-17T12:50:34Z"
+ "updated_at": "2026-10-17T18:44:42Z"
 }
