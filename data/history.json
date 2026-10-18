@@ -45,6 +45,12 @@
         "price": 29.95,
         "currency": "USD",
         "status": "stale"
+      },
+      {
+        "date": "2026-10-18",
+        "price": 29.95,
+        "currency": "USD",
+        "status": "ok"
       }
     ],
     "GreenGeeks": [
