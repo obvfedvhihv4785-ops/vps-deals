@@ -1,6 +1,6 @@
 {
   "schema": "vps-deals-promo-radar/offers@1",
-  "generated_at": "2026-10-19T04:45:01Z",
+  "generated_at": "2026-10-19T13:22:30Z",
   "config_path": ".ilang/site.ilang",
   "config_sha256_16": "a847f78d7d1106fd",
   "brand": "vps-deals",
@@ -9,9 +9,9 @@
   "locale": "en-US",
   "site_currency": "USD",
   "providers_configured": 26,
-  "providers_with_price": 21,
+  "providers_with_price": 22,
   "providers_with_price_shown": 25,
-  "previous_providers_with_price": 22,
+  "previous_providers_with_price": 21,
   "notes": [
     "Every price carries price_evidence: the literal page text it was matched from.",
     "A provider with no price key means no machine-readable monthly price was found; no figure was invented.",
@@ -24,7 +24,7 @@
       "offer_url": "https://www.digitalocean.com/pricing/droplets",
       "affiliate_url": "",
       "source_url": "https://www.digitalocean.com/pricing/droplets",
-      "fetched_at": "2026-10-19T04:43:50Z",
+      "fetched_at": "2026-10-19T13:21:17Z",
       "http_status": 200,
       "title": "Droplet Pricing | DigitalOcean",
       "summary": "Helping millions of developers easily build, test, manage, and scale applications of any size - faster than ever before.",
@@ -64,12 +64,12 @@
       "offer_url": "https://www.hostinger.com/vps-hosting",
       "affiliate_url": "",
       "source_url": "https://www.hostinger.com/vps-hosting",
-      "fetched_at": "2026-10-19T04:43:52Z",
+      "fetched_at": "2026-10-19T13:21:20Z",
       "http_status": 200,
       "title": "VPS Hosting | Fast, AI-Ready KVM VPS up to 70% off - Hostinger",
       "summary": "Virtual private servers for more power and control. AMD EPYC processors, NVMe SSD storage, free weekly backups and AI-ready VPS management with up to 70% off.",
-      "page_chars": 34084,
-      "price_candidates_count": 8,
+      "page_chars": 35027,
+      "price_candidates_count": 9,
       "price_candidates": [
         {
           "currency": "USD",
@@ -78,16 +78,16 @@
           "tier": "plan",
           "eligible": true,
           "reason": "server/plan wording nearby",
-          "evidence": "…plan. Upgrade when you need more 67% off KVM 1 $ 19.49 $ 6.49 /mo Choose plan Renews at $11.99/mo for 2 years. Cancel an…"
+          "evidence": "…freedom to configure your server your way. From $19.49 $6.49/mo Claim deal 30-day money-back guarantee Fast compute an…"
         },
         {
           "currency": "USD",
-          "value": 8.99,
+          "value": 8.79,
           "context": "monthly",
           "tier": "plan",
           "eligible": true,
           "reason": "server/plan wording nearby",
-          "evidence": "…pace 4 TB bandwidth MOST POPULAR 63% off KVM 2 $ 24.49 $ 8.99 /mo Choose plan Renews at $14.99/mo for 2 years. Cancel an…"
+          "evidence": "…dth MOST POPULAR Special offer • 64% off KVM 2 $ 24.49 $ 8.79 /mo Choose plan Renews at $14.99/mo for 2 years. Cancel an…"
         },
         {
           "currency": "USD",
@@ -114,7 +114,16 @@
           "tier": "plan",
           "eligible": true,
           "reason": "server/plan wording nearby",
-          "evidence": "…63% off KVM 2 $ 24.49 $ 8.99 /mo Choose plan Renews at $14.99/mo for 2 years. Cancel anytime. 2 vCPU cores 8 GB RAM 100…"
+          "evidence": "…64% off KVM 2 $ 24.49 $ 8.79 /mo Choose plan Renews at $14.99/mo for 2 years. Cancel anytime. 2 vCPU cores 8 GB RAM 100…"
+        },
+        {
+          "currency": "USD",
+          "value": 19.49,
+          "context": "from",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…ss, and the freedom to configure your server your way. From $19.49 $6.49/mo Claim deal 30-day money-back guarantee Fast c…"
         },
         {
           "currency": "USD",
@@ -149,7 +158,7 @@
       "currency": "USD",
       "price_context": "monthly",
       "price_tier": "plan",
-      "price_evidence": "…plan. Upgrade when you need more 67% off KVM 1 $ 19.49 $ 6.49 /mo Choose plan Renews at $11.99/mo for 2 years. Cancel an…",
+      "price_evidence": "…ntee Cancel anytime 24/7 support 67% off KVM 1 $ 19.49 $ 6.49 /mo Choose plan Renews at $11.99/mo for 2 years. Cancel an…",
       "price_reason": "server/plan wording nearby",
       "billing_term_kind": "prepay",
       "billing_term_note": "the provider states all plans are paid upfront and the monthly rate is the total plan price divided by the number of months",
@@ -157,13 +166,13 @@
       "renewal_price": 11.99,
       "renewal_currency": "USD",
       "renewal_kind": "renews_at",
-      "renewal_evidence": "…need more 67% off KVM 1 $ 19.49 $ 6.49 /mo Choose plan Renews at $11.99/mo for 2 years. Cancel anytime. 1 vCPU core 4 GB RAM 5…",
+      "renewal_evidence": "…7 support 67% off KVM 1 $ 19.49 $ 6.49 /mo Choose plan Renews at $11.99/mo for 2 years. Cancel anytime. 1 vCPU core 4 GB RAM 5…",
       "renewal_months": 24,
       "discount": {
         "kind": "percent",
         "value": 67,
         "label": "67% off",
-        "evidence": "…language. Choose your plan. Upgrade when you need more 67% off KVM 1 $ 19.49 $ 6.49 /mo Choose plan Renews at $11.99/…"
+        "evidence": "…0-day money-back guarantee Cancel anytime 24/7 support 67% off KVM 1 $ 19.49 $ 6.49 /mo Choose plan Renews at $11.99/…"
       }
     },
     {
@@ -172,11 +181,11 @@
       "offer_url": "https://www.ionos.com/servers/vps",
       "affiliate_url": "",
       "source_url": "https://www.ionos.com/servers/vps",
-      "fetched_at": "2026-10-19T04:43:55Z",
+      "fetched_at": "2026-10-19T13:21:22Z",
       "http_status": 200,
       "title": "VPS Hosting | Virtual Private Servers | Starting at $4/month",
       "summary": "Fast, reliable, yet low cost VPS hosting » Unlimited traffic up to 1 Gbit/s ✓ Root access ✓ SSD NVMe storage ✓ Money-back-guarantee ✓",
-      "page_chars": 26119,
+      "page_chars": 26439,
       "price_candidates_count": 7,
       "price_candidates": [
         {
@@ -267,7 +276,7 @@
       "offer_url": "https://www.ovhcloud.com/en/vps/",
       "affiliate_url": "",
       "source_url": "https://www.ovhcloud.com/en/vps/",
-      "fetched_at": "2026-10-19T04:43:57Z",
+      "fetched_at": "2026-10-19T13:21:25Z",
       "http_status": 200,
       "title": "VPS - Your virtual private server in the cloud | OVHcloud Worldwide",
       "summary": "Migrate to the cloud with our VPS – all the advantages of a dedicated server at a lower price. Up to 8 vCores, 32 GB RAM, 640 GB NVMe, unlimited traffic.",
@@ -334,40 +343,39 @@
       "offer_url": "https://www.scalahosting.com/vps-hosting.html",
       "affiliate_url": "",
       "source_url": "https://www.scalahosting.com/vps-hosting.html",
-      "fetched_at": "2026-10-19T04:44:00Z",
-      "status": "stale",
-      "http_status": 301,
-      "note": "HTTP 301",
-      "fetch_status": "error",
-      "price": 29.95,
-      "currency": "USD",
-      "price_evidence": "…ld your own Build #1 Turbo-fast NVMe SSD 12 M 36 M 1 M $ 29.95 /mo INTRO OFFER - SAVE 45 % Get Started $ 54.95 /mo when y…",
-      "price_context": "monthly",
-      "price_tier": "plan",
-      "billing_term_kind": "ambiguous_toggle",
-      "billing_term_note": "the page shows term toggles beside one price and does not state which term that price applies to",
-      "renewal_price": 54.95,
-      "renewal_currency": "USD",
-      "renewal_kind": "renewal_price",
-      "renewal_evidence": "…M 1 M $ 29.95 /mo INTRO OFFER - SAVE 45 % Get Started $ 54.95 /mo when you renew Core Features CPU Cores GB RAM GB NVMe SSD Unmetered B…",
+      "fetched_at": "2026-10-19T13:21:28Z",
+      "http_status": 200,
+      "title": "Managed Cloud Hosting - Rated 5/5 by 2,000+ Users | ScalaHosting",
+      "summary": "Get top-rated managed cloud hosting with ScalaHosting. Boost your site’s speed, security, and scalability with NVMe SSD storage, free SSL, and 24/7 managed support.",
+      "page_chars": 24089,
+      "price_candidates_count": 8,
       "price_candidates": [
         {
           "currency": "USD",
-          "value": 29.95,
+          "value": 22.46,
           "context": "monthly",
           "tier": "plan",
           "eligible": true,
           "reason": "server/plan wording nearby",
-          "evidence": "…ld your own Build #1 Turbo-fast NVMe SSD 12 M 36 M 1 M $ 29.95 /mo INTRO OFFER - SAVE 45 % Get Started $ 54.95 /mo when y…"
+          "evidence": "…ay 59 % OFF Build #1 Turbo-fast NVMe SSD 12 M 36 M 1 M $ 22.46 /mo Get Started $ 54.95 /mo when you renew Core Features C…"
         },
         {
           "currency": "USD",
-          "value": 44.95,
+          "value": 33.71,
           "context": "monthly",
           "tier": "plan",
           "eligible": true,
           "reason": "server/plan wording nearby",
-          "evidence": "…Get Started Build #2 Turbo-fast NVMe SSD 12 M 36 M 1 M $ 44.95 /mo INTRO OFFER - SAVE 54 % Get Started $ 96.95 /mo when y…"
+          "evidence": "…ay 65 % OFF Build #2 Turbo-fast NVMe SSD 12 M 36 M 1 M $ 33.71 /mo Get Started $ 96.95 /mo when you renew Core Features C…"
+        },
+        {
+          "currency": "USD",
+          "value": 52.46,
+          "context": "monthly",
+          "tier": "plan",
+          "eligible": true,
+          "reason": "server/plan wording nearby",
+          "evidence": "…ay 69 % OFF Build #3 Turbo-fast NVMe SSD 12 M 36 M 1 M $ 52.46 /mo Get Started $ 170.95 /mo when you renew Core Features…"
         },
         {
           "currency": "USD",
@@ -376,25 +384,16 @@
           "tier": "plan",
           "eligible": true,
           "reason": "server/plan wording nearby",
-          "evidence": "…M 1 M $ 29.95 /mo INTRO OFFER - SAVE 45 % Get Started $ 54.95 /mo when you renew Core Features CPU Cores GB RAM GB NVMe…"
+          "evidence": "…bo-fast NVMe SSD 12 M 36 M 1 M $ 22.46 /mo Get Started $ 54.95 /mo when you renew Core Features CPU Cores GB RAM GB NVMe…"
         },
         {
           "currency": "USD",
-          "value": 69.95,
+          "value": 71.21,
           "context": "monthly",
           "tier": "plan",
           "eligible": true,
           "reason": "server/plan wording nearby",
-          "evidence": "…Get Started Build #3 Turbo-fast NVMe SSD 12 M 36 M 1 M $ 69.95 /mo INTRO OFFER - SAVE 59 % Get Started $ 170.95 /mo when…"
-        },
-        {
-          "currency": "USD",
-          "value": 94.95,
-          "context": "monthly",
-          "tier": "plan",
-          "eligible": true,
-          "reason": "server/plan wording nearby",
-          "evidence": "…Get Started Build #4 Turbo-fast NVMe SSD 12 M 36 M 1 M $ 94.95 /mo INTRO OFFER - SAVE 61 % Get Started $ 244.95 /mo when…"
+          "evidence": "…ay 71 % OFF Build #4 Turbo-fast NVMe SSD 12 M 36 M 1 M $ 71.21 /mo Get Started $ 244.95 /mo when you renew Core Features…"
         },
         {
           "currency": "USD",
@@ -403,7 +402,7 @@
           "tier": "plan",
           "eligible": true,
           "reason": "server/plan wording nearby",
-          "evidence": "…M 1 M $ 44.95 /mo INTRO OFFER - SAVE 54 % Get Started $ 96.95 /mo when you renew Core Features CPU Cores GB RAM GB NVMe…"
+          "evidence": "…bo-fast NVMe SSD 12 M 36 M 1 M $ 33.71 /mo Get Started $ 96.95 /mo when you renew Core Features CPU Cores GB RAM GB NVMe…"
         },
         {
           "currency": "USD",
@@ -412,7 +411,7 @@
           "tier": "plan",
           "eligible": true,
           "reason": "server/plan wording nearby",
-          "evidence": "…M 1 M $ 69.95 /mo INTRO OFFER - SAVE 59 % Get Started $ 170.95 /mo when you renew Core Features CPU Cores GB RAM GB NVMe…"
+          "evidence": "…bo-fast NVMe SSD 12 M 36 M 1 M $ 52.46 /mo Get Started $ 170.95 /mo when you renew Core Features CPU Cores GB RAM GB NVMe…"
         },
         {
           "currency": "USD",
@@ -421,12 +420,28 @@
           "tier": "plan",
           "eligible": true,
           "reason": "server/plan wording nearby",
-          "evidence": "…M 1 M $ 94.95 /mo INTRO OFFER - SAVE 61 % Get Started $ 244.95 /mo when you renew Core Features CPU Cores GB RAM GB NVMe…"
+          "evidence": "…bo-fast NVMe SSD 12 M 36 M 1 M $ 71.21 /mo Get Started $ 244.95 /mo when you renew Core Features CPU Cores GB RAM GB NVMe…"
         }
       ],
-      "price_candidates_count": 8,
-      "last_verified_at": "2026-10-18T20:46:29Z",
-      "stale": true
+      "status": "ok",
+      "price": 22.46,
+      "currency": "USD",
+      "price_context": "monthly",
+      "price_tier": "plan",
+      "price_evidence": "…ay 59 % OFF Build #1 Turbo-fast NVMe SSD 12 M 36 M 1 M $ 22.46 /mo Get Started $ 54.95 /mo when you renew Core Features C…",
+      "price_reason": "server/plan wording nearby",
+      "billing_term_kind": "ambiguous_toggle",
+      "billing_term_note": "the page shows term toggles beside one price and does not state which term that price applies to",
+      "renewal_price": 54.95,
+      "renewal_currency": "USD",
+      "renewal_kind": "renewal_price",
+      "renewal_evidence": "…bo-fast NVMe SSD 12 M 36 M 1 M $ 22.46 /mo Get Started $ 54.95 /mo when you renew Core Features CPU Cores GB RAM GB NVMe SSD Unmetered B…",
+      "discount": {
+        "kind": "percent",
+        "value": 59,
+        "label": "59% off",
+        "evidence": "…s Need a custom cloud VPS? Build your own Black Friday 59 % OFF Build #1 Turbo-fast NVMe SSD 12 M 36 M 1 M $ 22.46 /mo…"
+      }
     },
     {
       "provider": "GreenGeeks",
@@ -434,7 +449,7 @@
       "offer_url": "https://www.greengeeks.com/vps-hosting/",
       "affiliate_url": "",
       "source_url": "https://www.greengeeks.com/vps-hosting/",
-      "fetched_at": "2026-10-19T04:44:02Z",
+      "fetched_at": "2026-10-19T13:21:31Z",
       "http_status": 200,
       "title": "VPS Hosting - Fast Managed VPS Hosting - GreenGeeks",
       "summary": "GreenGeeks® VPS Hosting on enterprise grade hardware with SSD storage, 24x7x365 support, 99.9% uptime and 30-day money back guarantee.",
@@ -483,7 +498,7 @@
       "offer_url": "https://www.hostwinds.com/vps/",
       "affiliate_url": "",
       "source_url": "https://www.hostwinds.com/vps/",
-      "fetched_at": "2026-10-19T04:44:05Z",
+      "fetched_at": "2026-10-19T13:21:33Z",
       "http_status": 200,
       "title": "Linux VPS Hosting, SSD Virtual Private Servers | Hostwinds",
       "summary": "Deploy Linux VPS hosting with root access, SSD storage, scalable resources, and multiple Linux operating systems.",
@@ -613,97 +628,99 @@
       "offer_url": "https://www.dreamhost.com/hosting/vps/",
       "affiliate_url": "",
       "source_url": "https://www.dreamhost.com/hosting/vps/",
-      "fetched_at": "2026-10-19T04:44:07Z",
+      "fetched_at": "2026-10-19T13:21:36Z",
       "http_status": 200,
       "title": "VPS Hosting with Full Root Access | DreamHost",
       "summary": "VPS hosting with full root access and unmetered bandwidth — no overage bills. Install any OS and run any app on AMD EPYC + NVMe servers you control.",
-      "page_chars": 18952,
+      "page_chars": 18961,
       "price_candidates_count": 8,
       "price_candidates": [
         {
           "currency": "USD",
-          "value": 5.99,
+          "value": 8.99,
           "context": "monthly",
           "tier": "plan",
           "eligible": true,
           "reason": "server/plan wording nearby",
-          "evidence": "…weight apps and solo projects On Sale First 2 years at $5.99 /mo SAVE 62% Sign Up Now Auto-renews at $10.99 /mo after 2…"
+          "evidence": "…eight apps and solo projects On Sale First 3 months at $8.99 /mo SAVE 43% Sign Up Now Auto-renews at $15.99 /mo after 3…"
         },
         {
           "currency": "USD",
-          "value": 9.49,
+          "value": 13.99,
           "context": "monthly",
           "tier": "plan",
           "eligible": true,
           "reason": "server/plan wording nearby",
-          "evidence": "…or apps running in production On Sale First 2 years at $9.49 /mo SAVE 56% Sign Up Now Auto-renews at $14.99 /mo after 2…"
+          "evidence": "…r apps running in production On Sale First 3 months at $13.99 /mo SAVE 36% Sign Up Now Auto-renews at $21.99 /mo after 3…"
         },
         {
           "currency": "USD",
-          "value": 10.99,
+          "value": 15.99,
           "context": "monthly",
           "tier": "plan",
           "eligible": true,
           "reason": "server/plan wording nearby",
-          "evidence": "…years at $5.99 /mo SAVE 62% Sign Up Now Auto-renews at $10.99 /mo after 2 years. 2 vCPU AMD EPYC 4 GB RAM 75 GB NVMe SSD…"
+          "evidence": "…onths at $8.99 /mo SAVE 43% Sign Up Now Auto-renews at $15.99 /mo after 3 months. 2 vCPU AMD EPYC 4 GB RAM 75 GB NVMe SS…"
         },
         {
           "currency": "USD",
-          "value": 14.99,
+          "value": 21.99,
           "context": "monthly",
           "tier": "plan",
           "eligible": true,
           "reason": "server/plan wording nearby",
-          "evidence": "…years at $9.49 /mo SAVE 56% Sign Up Now Auto-renews at $14.99 /mo after 2 years. 2 vCPU AMD EPYC 8 GB RAM 150 GB NVMe SS…"
+          "evidence": "…nths at $13.99 /mo SAVE 36% Sign Up Now Auto-renews at $21.99 /mo after 3 months. 2 vCPU AMD EPYC 8 GB RAM 150 GB NVMe S…"
         },
         {
           "currency": "USD",
-          "value": 15.49,
+          "value": 22.99,
           "context": "monthly",
           "tier": "plan",
           "eligible": true,
           "reason": "server/plan wording nearby",
-          "evidence": "…rkloads and multiple services On Sale First 2 years at $15.49 /mo SAVE 55% Sign Up Now Auto-renews at $23.49 /mo after 2…"
+          "evidence": "…kloads and multiple services On Sale First 3 months at $22.99 /mo SAVE 34% Sign Up Now Auto-renews at $34.99 /mo after 3…"
         },
         {
           "currency": "USD",
-          "value": 23.49,
+          "value": 34.99,
           "context": "monthly",
           "tier": "plan",
           "eligible": true,
           "reason": "server/plan wording nearby",
-          "evidence": "…ears at $15.49 /mo SAVE 55% Sign Up Now Auto-renews at $23.49 /mo after 2 years. 4 vCPU AMD EPYC 16 GB RAM 250 GB NVMe S…"
+          "evidence": "…nths at $22.99 /mo SAVE 34% Sign Up Now Auto-renews at $34.99 /mo after 3 months. 4 vCPU AMD EPYC 16 GB RAM 250 GB NVMe…"
         },
         {
           "currency": "USD",
-          "value": 30.99,
+          "value": 45.99,
           "context": "monthly",
           "tier": "plan",
           "eligible": true,
           "reason": "server/plan wording nearby",
-          "evidence": "…forms and data-intensive apps On Sale First 2 years at $30.99 /mo SAVE 48% Sign Up Now Auto-renews at $39.99 /mo after 2…"
+          "evidence": "…orms and data-intensive apps On Sale First 3 months at $45.99 /mo SAVE 23% Sign Up Now Auto-renews at $59.99 /mo after 3…"
         },
         {
           "currency": "USD",
-          "value": 39.99,
+          "value": 59.99,
           "context": "monthly",
           "tier": "plan",
           "eligible": true,
           "reason": "server/plan wording nearby",
-          "evidence": "…ears at $30.99 /mo SAVE 48% Sign Up Now Auto-renews at $39.99 /mo after 2 years. 8 vCPU AMD EPYC 32 GB RAM 450 GB NVMe S…"
+          "evidence": "…nths at $45.99 /mo SAVE 23% Sign Up Now Auto-renews at $59.99 /mo after 3 months. 8 vCPU AMD EPYC 32 GB RAM 450 GB NVMe…"
         }
       ],
       "status": "ok",
-      "price": 5.99,
+      "price": 8.99,
       "currency": "USD",
       "price_context": "monthly",
       "price_tier": "plan",
-      "price_evidence": "…weight apps and solo projects On Sale First 2 years at $5.99 /mo SAVE 62% Sign Up Now Auto-renews at $10.99 /mo after 2…",
+      "price_evidence": "…eight apps and solo projects On Sale First 3 months at $8.99 /mo SAVE 43% Sign Up Now Auto-renews at $15.99 /mo after 3…",
       "price_reason": "server/plan wording nearby",
-      "renewal_price": 10.99,
+      "billing_term_kind": "intro",
+      "billing_term_note": "introductory rate for the first 3 months only",
+      "renewal_price": 15.99,
       "renewal_currency": "USD",
       "renewal_kind": "renews_at",
-      "renewal_evidence": "…n Sale First 2 years at $5.99 /mo SAVE 62% Sign Up Now Auto-renews at $10.99 /mo after 2 years. 2 vCPU AMD EPYC 4 GB RAM 75 GB NVMe…"
+      "renewal_evidence": "…Sale First 3 months at $8.99 /mo SAVE 43% Sign Up Now Auto-renews at $15.99 /mo after 3 months. 2 vCPU AMD EPYC 4 GB RAM 75 GB NVM…"
     },
     {
       "provider": "InMotion Hosting",
@@ -711,7 +728,7 @@
       "offer_url": "https://www.inmotionhosting.com/vps-hosting",
       "affiliate_url": "",
       "source_url": "https://www.inmotionhosting.com/vps-hosting",
-      "fetched_at": "2026-10-19T04:44:10Z",
+      "fetched_at": "2026-10-19T13:21:38Z",
       "http_status": 200,
       "title": "Linux VPS Hosting with Full Root Access 2026 | InMotion Hosting",
       "summary": "VPS hosting that let’s you deploy a virtual private server with full root access, NVMe storage, dedicated CPU and RAM and 99.99% uptime.",
@@ -847,7 +864,7 @@
       "offer_url": "https://www.atlantic.net/vps-hosting/",
       "affiliate_url": "",
       "source_url": "https://www.atlantic.net/vps-hosting/",
-      "fetched_at": "2026-10-19T04:44:12Z",
+      "fetched_at": "2026-10-19T13:21:43Z",
       "http_status": 200,
       "title": "Cloud VPS Hosting with Full Root Access - Atlantic.Net",
       "summary": "Deploy Linux, Windows or FreeBSD VPS instances with guaranteed resources, RAID-10 protected SSD storage, full server access, and 24/7 US-based support.",
@@ -977,7 +994,7 @@
       "offer_url": "https://accuwebhosting.com/vps-hosting",
       "affiliate_url": "",
       "source_url": "https://accuwebhosting.com/vps-hosting",
-      "fetched_at": "2026-10-19T04:44:15Z",
+      "fetched_at": "2026-10-19T13:21:45Z",
       "http_status": 200,
       "title": "VPS Hosting with SSD | Get Cheap VPS Hosting for $4.99 Only",
       "summary": "Scalable VPS for developers, businesses, and traders. Deploy with SSD, root access, auto-backups, and low-latency networks - ideal for apps, websites, and Forex platforms.",
@@ -1026,7 +1043,7 @@
       "offer_url": "https://www.vultr.com/pricing/",
       "affiliate_url": "",
       "source_url": "https://www.vultr.com/pricing/",
-      "fetched_at": "2026-10-19T04:44:17Z",
+      "fetched_at": "2026-10-19T13:21:48Z",
       "status": "stale",
       "http_status": 403,
       "note": "HTTP 403",
@@ -1156,11 +1173,11 @@
       "offer_url": "https://www.bluehost.com/hosting/vps",
       "affiliate_url": "",
       "source_url": "https://www.bluehost.com/hosting/vps",
-      "fetched_at": "2026-10-19T04:44:19Z",
+      "fetched_at": "2026-10-19T13:21:50Z",
       "http_status": 200,
       "title": "#1 Ranked VPS Hosting | Next-Gen Virtual Servers with NVMe Storage",
       "summary": "Get full control with Bluehost VPS hosting. Enjoy NVMe SSD speed, full root access, scalable resources, and DDoS protection for fast-growing websites and apps.",
-      "page_chars": 31589,
+      "page_chars": 31488,
       "price_candidates_count": 27,
       "price_candidates": [
         {
@@ -1298,7 +1315,7 @@
       "offer_url": "https://www.hostgator.com/vps-hosting",
       "affiliate_url": "",
       "source_url": "https://www.hostgator.com/vps-hosting",
-      "fetched_at": "2026-10-19T04:44:22Z",
+      "fetched_at": "2026-10-19T13:21:52Z",
       "http_status": 200,
       "title": "VPS Hosting - VPS with SDD Storage",
       "summary": "HostGator is a leading provider of fast and secure VPS hosting. Discover why millions of sites trust us for their VPS needs.",
@@ -1425,7 +1442,7 @@
       "offer_url": "https://www.milesweb.com/vps-hosting.php",
       "affiliate_url": "",
       "source_url": "https://www.milesweb.com/vps-hosting.php",
-      "fetched_at": "2026-10-19T04:44:24Z",
+      "fetched_at": "2026-10-19T13:21:54Z",
       "status": "stale",
       "http_status": 403,
       "note": "HTTP 403",
@@ -1496,7 +1513,7 @@
       "offer_url": "https://verpex.com/vps-hosting",
       "affiliate_url": "",
       "source_url": "https://verpex.com/vps-hosting",
-      "fetched_at": "2026-10-19T04:44:26Z",
+      "fetched_at": "2026-10-19T13:21:57Z",
       "http_status": 200,
       "title": "Premium VPS Hosting – Root Access, Dedicated vCPUs, NVMe",
       "summary": "Premium Linux and Windows VPS Hosting with dedicated vCPUs, NVMe storage, full root access, and optional cPanel/WHM.",
@@ -1542,7 +1559,7 @@
       "offer_url": "https://cloudzy.com/vps-hosting/",
       "affiliate_url": "",
       "source_url": "https://cloudzy.com/vps-hosting/",
-      "fetched_at": "2026-10-19T04:44:28Z",
+      "fetched_at": "2026-10-19T13:21:59Z",
       "http_status": 200,
       "title": "Cloudzy. Independent Cloud for Builders, Since 2008",
       "summary": "The independent cloud for builders, since 2008. AI-ready VPS on AMD EPYC and pure NVMe across 13 global regions. Real human support. From $2.48/mo.",
@@ -1654,7 +1671,7 @@
       "offer_url": "https://monovm.com/vps/",
       "affiliate_url": "",
       "source_url": "https://monovm.com/vps/",
-      "fetched_at": "2026-10-19T04:44:30Z",
+      "fetched_at": "2026-10-19T13:22:01Z",
       "http_status": 200,
       "title": "Buy VPS Hosting – 25+ Global Datacenters ⚡ | Virtual Private Server",
       "summary": "Buy VPS hosting in 25+ worldwide locations. Buy your Virtual Private Server (VPS) with full root access, scalability & 24/7 expert support.",
@@ -1784,7 +1801,7 @@
       "offer_url": "https://webdock.io/en/pricing",
       "affiliate_url": "",
       "source_url": "https://webdock.io/en/pricing",
-      "fetched_at": "2026-10-19T04:44:34Z",
+      "fetched_at": "2026-10-19T13:22:05Z",
       "http_status": 200,
       "title": "VPS Pricing, Flat-Rate Cloud Plans From EUR 2.15 | Webdock",
       "summary": "Simple, predictable cloud hosting pricing. Flat-rate plans with NVMe storage, daily backups, and human support, no hidden fees.",
@@ -1833,7 +1850,7 @@
       "offer_url": "https://www.civo.com/pricing",
       "affiliate_url": "",
       "source_url": "https://www.civo.com/pricing",
-      "fetched_at": "2026-10-19T04:44:42Z",
+      "fetched_at": "2026-10-19T13:22:10Z",
       "http_status": 200,
       "title": "Civo Prices - Transparent Cloud Pricing - Civo.com",
       "summary": "Civo's transparent pricing lets you enjoy cost-effective cloud infrastructure. Plans start at $5.43/month. Explore our pricing page now to find the perfect plan for your needs!",
@@ -1963,7 +1980,7 @@
       "offer_url": "https://www.kamatera.com/Products/46/Cloud-Servers",
       "affiliate_url": "",
       "source_url": "https://www.kamatera.com/Products/46/Cloud-Servers",
-      "fetched_at": "2026-10-19T04:44:45Z",
+      "fetched_at": "2026-10-19T13:22:13Z",
       "http_status": 200,
       "title": "Cloud Servers | Kamatera",
       "summary": "Affordable, enterprise-class cloud infrastructure for a variety of computing requirements. Scale up and scale down as needed with no long-term commitments or contracts.",
@@ -2021,7 +2038,7 @@
       "offer_url": "https://cloudcone.com/vps/",
       "affiliate_url": "",
       "source_url": "https://cloudcone.com/vps/",
-      "fetched_at": "2026-10-19T04:44:48Z",
+      "fetched_at": "2026-10-19T13:22:17Z",
       "http_status": 200,
       "title": "Virtual Private Servers (VPS) - CloudCone",
       "summary": "Affordable, yet powerful Virtual Private Servers deployed instantly. For quick, general-purpose VPS computing.",
@@ -2100,7 +2117,7 @@
       "offer_url": "https://hostodo.com/pricing/",
       "affiliate_url": "",
       "source_url": "https://hostodo.com/pricing/",
-      "fetched_at": "2026-10-19T04:44:52Z",
+      "fetched_at": "2026-10-19T13:22:20Z",
       "http_status": 200,
       "title": "Pricing - Hostodo Capacity and NVMe KVM Instances | Hostodo",
       "summary": "Compare Hostodo Capacity and single NVMe KVM instance pricing. Use capacity plans for multi-server workloads, staging, client projects, and agent sandboxes.",
@@ -2230,7 +2247,7 @@
       "offer_url": "https://www.hetzner.com/cloud/",
       "affiliate_url": "",
       "source_url": "https://www.hetzner.com/cloud/",
-      "fetched_at": "2026-10-19T04:44:54Z",
+      "fetched_at": "2026-10-19T13:22:22Z",
       "http_status": 200,
       "title": "Cloud-hosting provider for developers & teams",
       "summary": "Cloud-hosting provider for developers & teams. Scalable cloud hosting services – join 1,000,000+ customers ✓ GDPR-compliant",
@@ -2246,7 +2263,7 @@
       "offer_url": "https://upcloud.com/pricing/",
       "affiliate_url": "",
       "source_url": "https://upcloud.com/pricing/",
-      "fetched_at": "2026-10-19T04:44:57Z",
+      "fetched_at": "2026-10-19T13:22:26Z",
       "http_status": 200,
       "title": "UpCloud Pricing | Fixed Prices And Zero-cost Data Transfer",
       "summary": "Discover UpCloud’s flexible and transparent pricing for cloud infrastructure. Choose from a range of plans with pay-as-you-go options and no hidden fees.",
@@ -2376,7 +2393,7 @@
       "offer_url": "https://www.netcup.com/en/server/vps",
       "affiliate_url": "",
       "source_url": "https://www.netcup.com/en/server/vps",
-      "fetched_at": "2026-10-19T04:44:59Z",
+      "fetched_at": "2026-10-19T13:22:28Z",
       "http_status": 200,
       "title": "VPS hosting with top performance & best conditions | netcup",
       "summary": "vServer (VPS) with lots of compute power at the best price, hourly billing, preconfigured images, DDoS protection & remote console.",
