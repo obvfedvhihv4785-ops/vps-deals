@@ -425,6 +425,12 @@
         "price": null,
         "currency": null,
         "status": "no_price_in_html"
+      },
+      {
+        "date": "2026-10-20",
+        "price": 5.99,
+        "currency": "EUR",
+        "status": "ok"
       }
     ],
     "UpCloud": [
@@ -480,6 +486,12 @@
         "date": "2026-10-19",
         "price": 3.0,
         "currency": "EUR",
+        "status": "ok"
+      },
+      {
+        "date": "2026-10-20",
+        "price": 3.5,
+        "currency": "USD",
         "status": "ok"
       }
     ],
